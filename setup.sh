@@ -9,55 +9,76 @@ fi
 #set -x
 #set +x
 
+#Color Codes
+RED='\033[0;31m'
+LG='\033[0m'
+YELLOW='\033[1;33m'
+GREEN='\033[0;32m'
+BLUE='\033[1;34m'
+LGREEN='\033[1;32m'
+WHITE='\033[1;37m'
+LG='\033[0;37m'
+
 #Log File
 logfile="setup.log"
 
-#Setup Bash
-
 #Setup Updates for New Server
-sudo apt --assume-yes -qq update
-sudo apt --assume-yes -qq upgrade
-sudo apt --assume-yes -qq autoremove
+echo -e "${BLUE} Updates & Upgrades"
+sudo apt --assume-yes -qq update >> ${logfile} 2>&1
+sudo apt --assume-yes -qq upgrade >> ${logfile} 2>&1
+sudo apt --assume-yes -qq autoremove >> ${logfile} 2>&1
 
 #Setup user
+echo -e "${GREEN} Setup User: clovisd"
 adduser clovisd -q
+echo -e "${GREEN} Setup User: cl6web"
 adduser cl6web -q 
 
+#Setup Bash
+echo -e "${LGREEN} Setting Up Bash for All Users"
+cp /home/scripts/setup/.bashrc /home/clovisd/
+cp /home/scripts/setup/.bashrc /home/cl6web/
+cp /home/scripts/setup/.bashrc /home/root/
+
 #Setup permissions
-sudo /usr/sbin/visudo | tee -a "$logfile"
+echo -e "${GREEN} Setup Sudo Permissions"
+sudo /usr/sbin/visudo
 ​
 #Setup SSH Port
-sudo nano /etc/ssh/sshd_config | tee -a "$logfile"
+echo -e "${GREEN} Setup SSH Settings"
+sudo nano /etc/ssh/sshd_config
 #sudo vi /etc/ssh/sshd_config
-sudo service sshd restart | tee -a "$logfile"
+echo -e "${YELLOW} Restarting SSHD Service"
+sudo service sshd restart
 ​
 #Setup Hosts
-nano /etc/hostname | tee -a "$logfile"
-nano /etc/hosts | tee -a "$logfile"
+nano /etc/hostname
+nano /etc/hosts
 ​
 #Install Packages
+echo -e "${BLUE} Setting up CertBot Repo"
 sudo add-apt-repository -y ppa:certbot/certbot
-sudo apt --assume-yes -qq update
-sudo apt --assume-yes -qq upgrade
+echo -e "${BLUE} Installing Apache / SQL / CertBot"
 sudo apt --assume-yes -qq install apache2 mysql-server python-certbot-apache | tee -a "$logfile"
-sudo apt --assume-yes -qq update
+sudo apt --assume-yes -qq update >> ${logfile} 2>&1
+sudo apt --assume-yes -qq upgrade >> ${logfile} 2>&1
 sudo mysql_secure_installation --use-default
+echo -e "${YELLOW} Restarting Apache/MySQL"
 sudo service apache2 mysql-server restart | tee -a "$logfile"
-sudo apt --assume-yes -qq install php libapache2-mod-php php-mcrypt php-mysql | tee -a "$logfile"
-sudo apt --assume-yes -qq install php-cli php-curl php-pear php7.2-dev php7.2-zip php7.2-curl php7.2-gd php7.2-mysql php7.2-mcrypt php7.2-xml libapache2-mod-php7.2  | tee -a "$logfile"
+echo -e "${BLUE} Installing PHP Packages"
+sudo apt --assume-yes -qq install hp php7.2-mysql php7.2-curl php7.2-xml php7.2-zip  php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-mbstring php-pear | tee -a "$logfile"
+echo -e "${YELLOW} Restarting Apache/MySQL"
 sudo service apache2 mysql-server restart | tee -a "$logfile"
+echo -e "${BLUE} Installing Personal Packages"
 sudo apt --assume-yes -qq install mc sl screen htop | tee -a "$logfile"
 
 #SetupPHPAdmin
-sudo apt --assume-yes -qq update
-sudo apt --assume-yes -qq upgrade
-sudo apt --assume-yes -qq autoremove
-sudo apt --assume-yes -qq install phpmyadmin php-mbstring php-gettext
-​
-sudo phpenmod mcrypt
-sudo phpenmod mbstring
-​
-#Setup Directories
+echo -e "${BLUE} Updates & Upgrades"
+sudo apt --assume-yes -qq update >> ${logfile} 2>&1
+sudo apt --assume-yes -qq upgrade >> ${logfile} 2>&1
+sudo apt --assume-yes -qq autoremove >> ${logfile} 2>&1
+echo -e "${BLUE} Installing PHPMyAdmin"
+sudo apt --assume-yes -qq install phpmyadmin
 
 #setup universal status files
 #setup host directoies
