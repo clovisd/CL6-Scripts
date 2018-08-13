@@ -78,6 +78,8 @@ echo -e "${LGREEN}== Done == ${NC}"
 echo -e "${BLUE}<== 7. Install Apps & Packages ==> ${NC}"
 echo -e "${YELLOW} Setting up CertBot Repo ${NC}"
 add-apt-repository -y ppa:certbot/certbot
+echo -e "${YELLOW} Setting up PHPMyAdmin Repo ${NC}"
+sudo add-apt-repository ppa:nijel/phpmyadmin
 echo -e "${YELLOW} Installing Apache / SQL / CertBot ${NC}"
 apt-get --assume-yes -qq -y install apache2 mysql-server python-certbot-apache >> ${logfile} 2>&1
 apt-get --assume-yes -qq -y update >> ${logfile} 2>&1
