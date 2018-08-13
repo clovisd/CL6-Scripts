@@ -95,8 +95,7 @@ echo -e "${YELLOW} Setup User: clovisd ${NC}"
 useradd clovisd -m -s /bin/bash
 chpasswd<<<"clovisd:${clpasswd}"
 htpasswd -c -b /home/cl6web/.htpasswd clovisd ${clpasswd}
-​
-echo -e "${YELLOW} Setup User: cl6web ${NC}"
+​echo -e "${YELLOW} Setup User: cl6web ${NC}"
 useradd cl6web -G www-data -s /bin/bash
 chpasswd<<<"cl6web:${c6passwd}"
 htpasswd -b /home/cl6web/.htpasswd cl6web ${c6passwd}
