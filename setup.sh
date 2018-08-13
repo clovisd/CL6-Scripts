@@ -88,12 +88,12 @@ apt --assume-yes -qq upgrade
 echo -e "${YELLOW} Setup SQL Security ${NC}"
 mysql_secure_installation --use-default
 echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
-service mysql-server restart | tee -a "$logfile"
+service mysql restart | tee -a "$logfile"
 service apache2 restart | tee -a "$logfile"
 echo -e "${YELLOW} Installing PHP Packages ${NC}"
 apt --assume-yes -qq install hp php7.2-mysql php7.2-curl php7.2-xml php7.2-zip  php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-mbstring php-pear | tee -a "$logfile"
 echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
-service mysql-server restart | tee -a "$logfile"
+service mysql restart | tee -a "$logfile"
 service apache2 restart | tee -a "$logfile"
 echo -e "${YELLOW} Installing Personal Packages ${NC}"
 apt --assume-yes -qq install mc sl screen htop | tee -a "$logfile"
@@ -109,6 +109,7 @@ apt --assume-yes -qq install phpmyadmin
 echo -e "${LGREEN}== Done == ${NC}"
 
 #Setup Host Directories
+echo -e "${BLUE}<== 9. Setting Up Host Directories ==> ${NC}"
 if [ ! -d /home/cl6web ]; then mkdir /home/cl6web ; fi
 if [ ! -d /home/cl6web/s${SERVERNUM}.cl6.us ]; then mkdir /home/cl6web/s${SERVERNUM}.cl6.us ; fi
 if [ ! -d /home/cl6web/example.com ]; then mkdir /home/cl6web/example.com ; fi
@@ -116,23 +117,34 @@ if [ ! -d /home/cl6web/example.com/logs ]; then mkdir /home/cl6web/example.com/l
 if [ ! -d /home/cl6web/example.com/html ]; then mkdir /home/cl6web/example.com/html ; fi
 if [ ! -d /home/cl6web/example.com/backup ]; then mkdir /home/cl6web/example.com/backup ; fi
 if [ ! -d /home/cl6web/example.com/automation ]; then mkdir /home/cl6web/example.com/automation ; fi
+echo -e "${LGREEN}== Done == ${NC}"
 
 #Setup CL6 Greeter Page
+echo -e "${BLUE}<== 10. Setup Greeting Error Page ==> ${NC}"
 if [ ! -d /home/scripts/setup/greeter ]; then mkdir /home/scripts/setup/greeter ; fi
+echo -e "${YELLOW} Moving Archive ${NC}"
 cp /home/scripts/setup/greeter.tar.gz /home/scripts/setup/greeter
 cd /home/scripts/setup/
+echo -e "${YELLOW} Extracting Archive ${NC}"
 tar -zxvf /home/scripts/setup/greeter.tar.gz
 if [ ! -d /home/cl6web/s${SERVERNUM}.cl6.us/greeting ]; then mkdir /home/cl6web/s${SERVERNUM}.cl6.us/greeting ; fi
+echo -e "${YELLOW} Moving Files ${NC}"
 cp -R /home/scripts/setup/status/ /home/cl6web/s${SERVERNUM}.cl6.us/greeter
 nano /etc/apache2/sites-available/util.cl6.us.conf
+echo -e "${LGREEN}== Done == ${NC}"
 
 #Setup Server Status
+echo -e "${BLUE}<== 110. Setup Status Page ==> ${NC}"
 if [ ! -d /home/scripts/setup/status ]; then mkdir /home/scripts/setup/status ; fi
+echo -e "${YELLOW} Moving Archive ${NC}"
 cp /home/scripts/setup/status.tar.gz /home/scripts/setup/status
 cd /home/scripts/setup/
-tar -zxvf /home/scripts/setup/status.tar.gz /home/scripts/setup/status
+echo -e "${YELLOW} Extracting Archive ${NC}"
+tar -zxvf /home/scripts/setup/status.tar.gz
 if [ ! -d /home/cl6web/s${SERVERNUM}.cl6.us/status ]; then mkdir /home/cl6web/s${SERVERNUM}.cl6.us/status ; fi
+echo -e "${YELLOW} Moving Files ${NC}"
 cp -R /home/scripts/setup/status/ /home/cl6web/s${SERVERNUM}.cl6.us/status
 nano /etc/apache2/sites-available/s${SERVERNUM}.cl6.us.conf
+echo -e "${LGREEN}== Done == ${NC}"
 
 #CRON SSL Renew
