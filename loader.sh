@@ -27,7 +27,7 @@ if [ ! -d /home/scripts ]; then mkdir /home/scripts ; fi
 if [ ! -d /home/scripts/setup ]; then mkdir /home/scripts/setup ; fi
 if [ ! -d /home/scripts/logs ]; then mkdir /home/scripts/logs ; fi
 
-git clone https://github.com/clovisd/CL6-Scripts.git /home/scripts/setup >> ${log} 2>&1
+git clone https://github.com/clovisd/CL6-Scripts.git /home/scripts/setup >> ${logfile} 2>&1
 
 chmod a+x -R /home/scripts
 
