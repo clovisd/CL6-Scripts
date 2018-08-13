@@ -23,9 +23,9 @@ fi
 
 #Setup Updates for New Server
 echo -e "${BLUE}<== 1. Updates & Upgrades ==> ${NC}"
-apt --assume-yes -qq update >> ${logfile} 2>&1
-apt --assume-yes -qq upgrade >> ${logfile} 2>&1
-apt --assume-yes -qq autoremove >> ${logfile} 2>&1
+apt --assume-yes -qq update
+apt --assume-yes -qq upgrade
+apt --assume-yes -qq autoremove
 echo -e "${LGREEN}== Done == ${NC}"
 #Setup user
 echo -e "${BLUE}<== 2. Users & Passwords ==> ${NC}"
@@ -67,8 +67,8 @@ echo -e "${YELLOW} Setting up CertBot Repo ${NC}"
 add-apt-repository -y ppa:certbot/certbot
 echo -e "${YELLOW} Installing Apache / SQL / CertBot ${NC}"
 apt --assume-yes -qq install apache2 mysql-server python-certbot-apache | tee -a "$logfile"
-apt --assume-yes -qq update >> ${logfile} 2>&1
-apt --assume-yes -qq upgrade >> ${logfile} 2>&1
+apt --assume-yes -qq update
+apt --assume-yes -qq upgrade
 echo -e "${YELLOW} Setup SQL Security ${NC}"
 mysql_secure_installation --use-default
 echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
@@ -82,9 +82,9 @@ apt --assume-yes -qq install mc sl screen htop | tee -a "$logfile"
 echo -e "${LGREEN}== Done == ${NC}"
 #SetupPHPAdmin
 echo -e "${BLUE}<== 8. PHPMyAdmin ==> ${NC}"
-apt --assume-yes -qq update >> ${logfile} 2>&1
-apt --assume-yes -qq upgrade >> ${logfile} 2>&1
-apt --assume-yes -qq autoremove >> ${logfile} 2>&1
+apt --assume-yes -qq update
+apt --assume-yes -qq upgrade
+apt --assume-yes -qq autoremove
 echo -e "${YELLOW} Installing PHPMyAdmin ${NC}"
 apt --assume-yes -qq install phpmyadmin
 echo -e "${LGREEN}== Done == ${NC}"

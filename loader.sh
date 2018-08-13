@@ -2,6 +2,8 @@
 #set -x
 #set +x
 
+#bash <(wget -O- -q https://raw.githubusercontent.com/clovisd/CL6-Scripts/master/loader.sh)
+
 #Color Codes
 RED='\033[0;31m'
 NC='\033[0m'
