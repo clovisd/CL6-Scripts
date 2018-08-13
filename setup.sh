@@ -297,3 +297,7 @@ echo "${AUTH}" > /home/cl6web/s${SERVERNUM}.cl6.us/status/.htaccess
 #CRON SSL Renew
 crontab="0 0 1 * * certbot renew  >/dev/null 2>&1"
 crontab -u root -l; echo "$crontab"  | crontab -u root -
+
+#Reboot
+echo -ne "${WHITE}Press Enter when Reboot Ready!" ; read input
+reboot

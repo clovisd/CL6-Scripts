@@ -44,4 +44,4 @@ echo -e "${LGREEN} >> Done"
 
 #Run Install
 echo -e "${BLUE} ===>> Running Setup Script <<==="
-cd /home/scripts/setup && ./setup.sh
+cd /home/scripts/setup && ./setup.sh >> ${logfile} 2>&1
