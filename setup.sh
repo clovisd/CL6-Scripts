@@ -1,84 +1,100 @@
 #!/bin/bash
 
+#set -x
+#set +x
+
+#Color Codes
+RED='\033[0;31m' #Error
+YELLOW='\033[1;33m' #Doing Something
+GREEN='\033[0;32m' #Auto Something
+BLUE='\033[1;34m' #Headline
+LGREEN='\033[1;32m' #Completed
+NC='\033[0m'
+WHITE='\033[1;37m'
+
+#Log File
+logfile="/home/scripts/logs/setup.log"
+
 #Check Root
 if [[ $EUID -ne 0 ]]; then
   echo "Need Root to Run! Please try running as Root again."
   exit 1
 fi
 
-#set -x
-#set +x
-
-#Color Codes
-RED='\033[0;31m'
-LG='\033[0m'
-YELLOW='\033[1;33m'
-GREEN='\033[0;32m'
-BLUE='\033[1;34m'
-LGREEN='\033[1;32m'
-WHITE='\033[1;37m'
-LG='\033[0;37m'
-
-#Log File
-logfile="setup.log"
 
 #Setup Updates for New Server
-echo -e "${BLUE} Updates & Upgrades"
+echo -e "${BLUE}<== 1. Updates & Upgrades ==>"
 sudo apt --assume-yes -qq update >> ${logfile} 2>&1
 sudo apt --assume-yes -qq upgrade >> ${logfile} 2>&1
 sudo apt --assume-yes -qq autoremove >> ${logfile} 2>&1
+echo -e "${LGREEN}== Done =="
 
 #Setup user
-echo -e "${GREEN} Setup User: clovisd"
+echo -e "${BLUE}<== 2. Users & Passwords ==>"
+echo -e "${YELLOW} Setup User: clovisd"
 adduser clovisd -q
-echo -e "${GREEN} Setup User: cl6web"
+echo -e "${YELLOW} Setup User: cl6web"
 adduser cl6web -q 
+echo -e "${LGREEN}== Done =="
 
 #Setup Bash
-echo -e "${LGREEN} Setting Up Bash for All Users"
+echo -e "${BLUE}<== 3. Setup Bash ==>"
+echo -e "${YELLOW} Setting Up Bash for All Users"
 cp /home/scripts/setup/.bashrc /home/clovisd/
 cp /home/scripts/setup/.bashrc /home/cl6web/
 cp /home/scripts/setup/.bashrc /home/root/
+echo -e "${LGREEN}== Done =="
 
 #Setup permissions
-echo -e "${GREEN} Setup Sudo Permissions"
+echo -e "${BLUE}<== 4. Setup User Permissions ==>"
 sudo /usr/sbin/visudo
+echo -e "${LGREEN}== Done =="
 ​
 #Setup SSH Port
-echo -e "${GREEN} Setup SSH Settings"
+echo -e "${BLUE}<== 5. Setup SSH Settings ==>"
+echo -e "${YELLOW} Setting settings"
 sudo nano /etc/ssh/sshd_config
 #sudo vi /etc/ssh/sshd_config
-echo -e "${YELLOW} Restarting SSHD Service"
+echo -e "${YELLOW} Restarting SSH Service"
 sudo service sshd restart
+echo -e "${LGREEN}== Done =="
 ​
 #Setup Hosts
+echo -e "${BLUE}<== 6. Set Server Name & Hosts ==>"
+echo -e "${YELLOW} Set Hostname"
 nano /etc/hostname
+echo -e "${YELLOW} Set Hosts"
 nano /etc/hosts
+echo -e "${LGREEN}== Done =="
 ​
 #Install Packages
-echo -e "${BLUE} Setting up CertBot Repo"
+echo -e "${BLUE}<== 7. Install Apps & Packages ==>"
+echo -e "${YELLOW} Setting up CertBot Repo"
 sudo add-apt-repository -y ppa:certbot/certbot
-echo -e "${BLUE} Installing Apache / SQL / CertBot"
+echo -e "${YELLOW} Installing Apache / SQL / CertBot"
 sudo apt --assume-yes -qq install apache2 mysql-server python-certbot-apache | tee -a "$logfile"
 sudo apt --assume-yes -qq update >> ${logfile} 2>&1
 sudo apt --assume-yes -qq upgrade >> ${logfile} 2>&1
+echo -e "${YELLOW} Setup SQL Security"
 sudo mysql_secure_installation --use-default
 echo -e "${YELLOW} Restarting Apache/MySQL"
 sudo service apache2 mysql-server restart | tee -a "$logfile"
-echo -e "${BLUE} Installing PHP Packages"
+echo -e "${YELLOW} Installing PHP Packages"
 sudo apt --assume-yes -qq install hp php7.2-mysql php7.2-curl php7.2-xml php7.2-zip  php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-mbstring php-pear | tee -a "$logfile"
 echo -e "${YELLOW} Restarting Apache/MySQL"
 sudo service apache2 mysql-server restart | tee -a "$logfile"
-echo -e "${BLUE} Installing Personal Packages"
+echo -e "${YELLOW} Installing Personal Packages"
 sudo apt --assume-yes -qq install mc sl screen htop | tee -a "$logfile"
+echo -e "${LGREEN}== Done =="
 
 #SetupPHPAdmin
-echo -e "${BLUE} Updates & Upgrades"
+echo -e "${BLUE}<== 8. PHPMyAdmin ==>"
 sudo apt --assume-yes -qq update >> ${logfile} 2>&1
 sudo apt --assume-yes -qq upgrade >> ${logfile} 2>&1
 sudo apt --assume-yes -qq autoremove >> ${logfile} 2>&1
-echo -e "${BLUE} Installing PHPMyAdmin"
+echo -e "${YELLOW} Installing PHPMyAdmin"
 sudo apt --assume-yes -qq install phpmyadmin
+echo -e "${LGREEN}== Done =="
 
 #setup universal status files
 #setup host directoies
