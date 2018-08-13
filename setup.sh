@@ -21,7 +21,7 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
-#Prompt for Server Number
+#Prompt for Server Info
 echo -ne "${WHITE}Please enter the S# name scheme: " ; read input
 if [[ -z $input ]]; then
     echo "No Value Entered. Exiting."
@@ -30,6 +30,26 @@ else
     SERVERNUM=${input}
     echo "Server Name Set to: S${input}.CL6.US (S${SERVERNUM}.CL6WEB.COM)"
 fi
+echo -ne "${RED}>> clovisd account info:${NC}"
+echo ""
+read -s -p "Enter Password:" clpasswd
+if [[ -z $clpasswd ]]; then
+    echo "No Value Entered. Exiting."
+	exit 1
+else
+    echo "clovisd:$clpasswd" > /home/scripts/setup/clovisd.info
+fi
+echo ""
+echo -ne "${RED}>> Cl6Web account info:${NC}"
+echo ""
+read -s -p "Enter Password:" c6passwd
+if [[ -z $c6passwd ]]; then
+    echo "No Value Entered. Exiting."
+	exit 1
+else
+    echo "cl6web:$c6passwd" > /home/scripts/setup/cl6web.info
+fi
+echo ""
 
 #FigureOut IP
 SERVERIP="$(dig +short myip.opendns.com @resolver1.opendns.com)"
@@ -44,10 +64,19 @@ echo -e "${LGREEN}== Done == ${NC}"
 
 #Setup user
 echo -e "${BLUE}<== 2. Users & Passwords ==> ${NC}"
+
+if [ ! -d /home/cl6web ]; then mkdir /home/cl6web ; fi
+
 echo -e "${YELLOW} Setup User: clovisd ${NC}"
-adduser clovisd -q
+useradd clovisd -m -s /bin/bash
+chpasswd<<<"clovisd:${clpasswd}"
+htpasswd -c -b /home/cl6web/.htpasswd clovisd ${clpasswd}
+​
 echo -e "${YELLOW} Setup User: cl6web ${NC}"
-adduser cl6web -q 
+useradd cl6web -m -G www-data -s /bin/bash
+chpasswd<<<"cl6web:${c6passwd}"
+htpasswd -b /home/cl6web/.htpasswd cl6web ${c6passwd}
+
 echo -e "${LGREEN}== Done == ${NC}"
 
 #Setup Bash
@@ -61,13 +90,29 @@ echo -e "${LGREEN}== Done == ${NC}"
 
 #Setup permissions
 echo -e "${BLUE}<== 4. Setup User Permissions ==> ${NC}"
-/usr/sbin/visudo
+
+SUDO="clovisd    ALL=(ALL:ALL) NOPASSWD:ALL
+cl6web    ALL=(ALL:ALL) ALL
+"
+
+echo "${SUDO}" > /etc/sudoers.d/cl6
 echo -e "${LGREEN}== Done == ${NC}"
 
 #Setup SSH Port
 echo -e "${BLUE}<== 5. Setup SSH Settings ==> ${NC}"
 echo -e "${YELLOW} Setting settings ${NC}"
-nano /etc/ssh/sshd_config
+
+SSHD="Port 42806
+ChallengeResponseAuthentication no
+UsePAM yes
+X11Forwarding yes
+PrintMotd no
+AcceptEnv LANG LC_*
+Subsystem sftp	/usr/lib/openssh/sftp-server"
+
+echo "${SSHD}" > /etc/ssh/sshd_config
+
+#nano /etc/ssh/sshd_config
 #vi /etc/ssh/sshd_config
 echo -e "${YELLOW} Restarting SSH Service ${NC}"
 service sshd restart
@@ -131,8 +176,16 @@ apt --assume-yes -qq upgrade
 apt --assume-yes -qq autoremove
 echo -e "${YELLOW} Installing PHPMyAdmin ${NC}"
 apt --assume-yes -qq install phpmyadmin
-echo -e "${LGREEN}== Done == ${NC}"
-
+echo -e "${YELLOW}Setting Auth File ${NC}"
+AUTH="AuthType Basic
+AuthName "Restricted Files"
+AuthUserFile /home/cl6web/.htpasswd
+Require valid-user"
+echo "${AUTH}" > /usr/share/phpmyadmin/.htaccess
+echo -e "${YELLOW} Set AllowOverride All for PHPMYAdmin ${NC}"
+nano /etc/apache2/conf-available/phpmyadmin.conf
+​echo -e "${LGREEN}== Done == ${NC}"
+​
 #Cleanup Apache
 echo -e "${BLUE}<== 9. Cleanup Apache Configs ==> ${NC}"
 cd /var/ && rm -R www
@@ -232,6 +285,8 @@ service apache2 restart | tee -a "$logfile"
 echo -ne "${WHITE}Press Enter when DNS ready!" ; read input
 echo -e "${YELLOW} Generating Certificate ${NC}"
 certbot --installer apache -d s${SERVERNUM}.cl6.us s${SERVERNUM}.cl6web.com
+echo -e "${YELLOW} Setting HTACCESS File ${NC}"
+echo "${AUTH}" > /home/cl6web/s${SERVERNUM}.cl6.us/status/.htaccess
 ​echo -e "${LGREEN}== Done == ${NC}"
 
 #CRON SSL Renew
