@@ -108,6 +108,12 @@ echo -e "${YELLOW} Installing PHPMyAdmin ${NC}"
 apt --assume-yes -qq install phpmyadmin
 echo -e "${LGREEN}== Done == ${NC}"
 
+#Cleanup Apache
+echo -e "${BLUE}<== 9. Cleanup Apache Configs ==> ${NC}"
+cd /var/ && rm -R www
+cd /etc/apache2/sites-enabled/ && rm -R *
+cd /etc/apache2/sites-available/ && rm -R *
+
 #Setup Host Directories
 echo -e "${BLUE}<== 9. Setting Up Host Directories ==> ${NC}"
 if [ ! -d /home/cl6web ]; then mkdir /home/cl6web ; fi
@@ -120,31 +126,89 @@ if [ ! -d /home/cl6web/example.com/automation ]; then mkdir /home/cl6web/example
 echo -e "${LGREEN}== Done == ${NC}"
 
 #Setup CL6 Greeter Page
-echo -e "${BLUE}<== 10. Setup Greeting Error Page ==> ${NC}"
+echo -e "${BLUE}<== 11. Setup Greeter Page ==> ${NC}"
 if [ ! -d /home/scripts/setup/greeter ]; then mkdir /home/scripts/setup/greeter ; fi
 echo -e "${YELLOW} Moving Archive ${NC}"
 cp /home/scripts/setup/greeter.tar.gz /home/scripts/setup/greeter
-cd /home/scripts/setup/
+cd /home/scripts/setup/greeter
 echo -e "${YELLOW} Extracting Archive ${NC}"
-tar -zxvf /home/scripts/setup/greeter.tar.gz
-if [ ! -d /home/cl6web/s${SERVERNUM}.cl6.us/greeting ]; then mkdir /home/cl6web/s${SERVERNUM}.cl6.us/greeting ; fi
+tar -zxvf /home/scripts/setup/greeter.tar.gz | tee -a "$logfile"
+if [ ! -d /home/cl6web/s${SERVERNUM}.cl6.us/greeter ]; then mkdir /home/cl6web/s${SERVERNUM}.cl6.us/greeter ; fi
 echo -e "${YELLOW} Moving Files ${NC}"
-cp -R /home/scripts/setup/status/ /home/cl6web/s${SERVERNUM}.cl6.us/greeter
-nano /etc/apache2/sites-available/util.cl6.us.conf
+cp -R /home/scripts/setup/greeter/ /home/cl6web/s${SERVERNUM}.cl6.us/greeter
+echo -e "${YELLOW} Creating Apache Conf ${NC}"
+
+STATUSPAGE="<VirtualHost *:80>
+	ServerName lost.cl6.us
+	ServerAlias *.cl6.us
+	ServerAlias *.cl6web.com
+	ServerAlias www.*.cl6web.com
+	ServerAlias www.*.cl6.us
+
+	ServerAdmin webmaster@cl6.us
+	DocumentRoot /home/cl6web/s${SERVERNUM}.cl6.us/greeter
+	
+	ErrorLog /home/cl6web/s${SERVERNUM}.cl6.us/logs/greeterpage.log
+	CustomLog /home/cl6web/s${SERVERNUM}.cl6.us/logs/greeterpage-custom.log combined
+
+	<Directory /home/cl6web/s${SERVERNUM}.cl6.us/greeter>
+		AllowOverride All
+		Require all granted
+	</Directory>
+</VirtualHost>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet"
+
+echo "${STATUSPAGE}" > /etc/apache2/sites-available/util.cl6.us.conf
+echo -e "${YELLOW} Creating SymLink ${NC}"
+cd /etc/apache2/sites-enabled && ln -s /etc/apache2/sites-available/util.cl6.us.conf
+echo -e "${YELLOW} Restarting Apache ${NC}"
+service apache2 restart | tee -a "$logfile"
 echo -e "${LGREEN}== Done == ${NC}"
 
 #Setup Server Status
-echo -e "${BLUE}<== 110. Setup Status Page ==> ${NC}"
+echo -e "${BLUE}<== 12. Setup Status Page ==> ${NC}"
 if [ ! -d /home/scripts/setup/status ]; then mkdir /home/scripts/setup/status ; fi
 echo -e "${YELLOW} Moving Archive ${NC}"
 cp /home/scripts/setup/status.tar.gz /home/scripts/setup/status
-cd /home/scripts/setup/
+cd /home/scripts/setup/status
 echo -e "${YELLOW} Extracting Archive ${NC}"
-tar -zxvf /home/scripts/setup/status.tar.gz
+tar -zxvf /home/scripts/setup/status.tar.gz | tee -a "$logfile"
 if [ ! -d /home/cl6web/s${SERVERNUM}.cl6.us/status ]; then mkdir /home/cl6web/s${SERVERNUM}.cl6.us/status ; fi
 echo -e "${YELLOW} Moving Files ${NC}"
 cp -R /home/scripts/setup/status/ /home/cl6web/s${SERVERNUM}.cl6.us/status
-nano /etc/apache2/sites-available/s${SERVERNUM}.cl6.us.conf
-echo -e "${LGREEN}== Done == ${NC}"
+echo -e "${YELLOW} Creating Apache Conf ${NC}"
+
+STATUSPAGE="<VirtualHost *:80>
+	ServerName s${SERVERNUM}.cl6.us
+	ServerAlias s${SERVERNUM}.cl6web.com
+	ServerAlias www.s${SERVERNUM}.cl6web.com
+	ServerAlias www.s${SERVERNUM}.cl6.us
+
+	ServerAdmin webmaster@cl6.us
+	DocumentRoot /home/cl6web/s${SERVERNUM}.cl6.us/status
+	
+	ErrorLog /home/cl6web/s${SERVERNUM}.cl6.us/logs/statuspage.log
+	CustomLog /home/cl6web/s${SERVERNUM}.cl6.us/logs/statuspage-custom.log combined
+
+	<Directory /home/cl6web/s${SERVERNUM}.cl6.us/status>
+		AllowOverride All
+		Require all granted
+	</Directory>
+</VirtualHost>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet"
+
+echo "${STATUSPAGE}" > /etc/apache2/sites-available/s${SERVERNUM}.cl6.us.conf
+echo -e "${YELLOW} Creating SymLink ${NC}"
+cd /etc/apache2/sites-enabled && ln -s /etc/apache2/sites-available/s${SERVERNUM}.cl6.us.conf
+echo -e "${YELLOW} Restarting Apache ${NC}"
+service apache2 restart | tee -a "$logfile"
+echo -ne "${WHITE}Press Enter when DNS ready!" ; read input
+echo -e "${YELLOW} Generating Certificate ${NC}"
+certbot --installer apache -d s${SERVERNUM}.cl6.us s${SERVERNUM}.cl6web.com
+​echo -e "${LGREEN}== Done == ${NC}"
 
 #CRON SSL Renew
+crontab="0 0 1 * * certbot renew  >/dev/null 2>&1"
+crontab -u root -l; echo "$crontab"  | crontab -u root -
