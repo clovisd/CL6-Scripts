@@ -88,11 +88,13 @@ apt --assume-yes -qq upgrade
 echo -e "${YELLOW} Setup SQL Security ${NC}"
 mysql_secure_installation --use-default
 echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
-service apache2 mysql-server restart | tee -a "$logfile"
+service mysql-server restart | tee -a "$logfile"
+service apache2 restart | tee -a "$logfile"
 echo -e "${YELLOW} Installing PHP Packages ${NC}"
 apt --assume-yes -qq install hp php7.2-mysql php7.2-curl php7.2-xml php7.2-zip  php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-mbstring php-pear | tee -a "$logfile"
 echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
-service apache2 mysql-server restart | tee -a "$logfile"
+service mysql-server restart | tee -a "$logfile"
+service apache2 restart | tee -a "$logfile"
 echo -e "${YELLOW} Installing Personal Packages ${NC}"
 apt --assume-yes -qq install mc sl screen htop | tee -a "$logfile"
 echo -e "${LGREEN}== Done == ${NC}"
@@ -117,15 +119,17 @@ if [ ! -d /home/cl6web/example.com/automation ]; then mkdir /home/cl6web/example
 
 #Setup CL6 Greeter Page
 if [ ! -d /home/scripts/setup/greeter ]; then mkdir /home/scripts/setup/greeter ; fi
-cd /home/scripts/setup/greeter
-tar -zxvf /home/scripts/setup/greeter.tar.gz /home/scripts/setup/greeter
+cp /home/scripts/setup/greeter.tar.gz /home/scripts/setup/greeter
+cd /home/scripts/setup/
+tar -zxvf /home/scripts/setup/greeter.tar.gz
 if [ ! -d /home/cl6web/s${SERVERNUM}.cl6.us/greeting ]; then mkdir /home/cl6web/s${SERVERNUM}.cl6.us/greeting ; fi
 cp -R /home/scripts/setup/status/ /home/cl6web/s${SERVERNUM}.cl6.us/greeter
 nano /etc/apache2/sites-available/util.cl6.us.conf
 
 #Setup Server Status
 if [ ! -d /home/scripts/setup/status ]; then mkdir /home/scripts/setup/status ; fi
-cd /home/scripts/setup/status
+cp /home/scripts/setup/status.tar.gz /home/scripts/setup/status
+cd /home/scripts/setup/
 tar -zxvf /home/scripts/setup/status.tar.gz /home/scripts/setup/status
 if [ ! -d /home/cl6web/s${SERVERNUM}.cl6.us/status ]; then mkdir /home/cl6web/s${SERVERNUM}.cl6.us/status ; fi
 cp -R /home/scripts/setup/status/ /home/cl6web/s${SERVERNUM}.cl6.us/status
