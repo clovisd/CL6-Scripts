@@ -52,6 +52,16 @@ else
     echo "cl6web:$c6passwd" > /home/scripts/setup/cl6web.info
 fi
 echo ""
+echo -ne "${RED}>> Root account info:${NC}"
+echo ""
+read -s -p "Enter Password:" rootpasswd
+if [[ -z $rootpasswd ]]; then
+    echo "No Value Entered. Exiting."
+	exit 1
+else
+    echo "root:$rootpasswd" > /home/scripts/setup/root.info
+fi
+echo ""
 
 #FigureOut IP
 SERVERIP="$(dig +short myip.opendns.com @resolver1.opendns.com)"
@@ -187,6 +197,11 @@ Require valid-user'
 echo "${AUTH}" > /usr/share/phpmyadmin/.htaccess
 echo -e "${YELLOW} Set AllowOverride All for PHPMYAdmin ${NC}"
 nano /etc/apache2/conf-available/phpmyadmin.conf
+echo -e "${YELLOW} Enable Plugin ${NC}"
+phpenmod mbstring
+echo -e "${YELLOW}Configure MySQL ${NC}"
+mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '${rootpasswd}';"
+mysql -u root -p"${rootpasswd}" -e "FLUSH PRIVILEGES;"
 ​echo -e "${LGREEN}== Done == ${NC}"
 ​
 #Cleanup Apache
