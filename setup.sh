@@ -21,13 +21,6 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
-#Setup Updates for New Server
-echo -e "${BLUE}<== 1. Updates & Upgrades ==> ${NC}"
-apt --assume-yes -qq update
-apt --assume-yes -qq upgrade
-apt --assume-yes -qq autoremove
-echo -e "${LGREEN}== Done == ${NC}"
-
 #Prompt for Server Number
 echo -ne "${WHITE}Please enter the S# name scheme: " ; read input
 if [[ -z $input ]]; then
@@ -37,6 +30,17 @@ else
     SERVERNUM=${input}
     echo "Server Name Set to: S${input}.CL6.US (S${SERVERNUM}.CL6WEB.COM)"
 fi
+
+#FigureOut IP
+SERVERIP="$(dig +short myip.opendns.com @resolver1.opendns.com)"
+echo "Server IP is: ${SERVERIP}"
+
+#Setup Updates for New Server
+echo -e "${BLUE}<== 1. Updates & Upgrades ==> ${NC}"
+apt --assume-yes -qq update
+apt --assume-yes -qq upgrade
+apt --assume-yes -qq autoremove
+echo -e "${LGREEN}== Done == ${NC}"
 
 #Setup user
 echo -e "${BLUE}<== 2. Users & Passwords ==> ${NC}"
@@ -71,10 +75,31 @@ echo -e "${LGREEN}== Done == ${NC}"
 
 #Setup Hosts
 echo -e "${BLUE}<== 6. Set Server Name & Hosts ==> ${NC}"
-echo -e "${YELLOW} Set Hostname ${NC}"
-nano /etc/hostname
-echo -e "${YELLOW} Set Hosts ${NC}"
-nano /etc/hosts
+echo -e "${GREEN} Set Hostname ${NC}"
+
+HOSTNAME="S${SERVERNUM}"
+
+echo "${HOSTNAME}" > /etc/hostname
+#nano /etc/hostname
+echo -e "${GREEN} Set Hosts ${NC}"
+
+HOSTS="# Basic Hosts
+127.0.1.1 CL6-${SERVERNUM}.localdomain CL6-${SERVERNUM}
+127.0.1.1 S${SERVERNUM}.cl6.us CL6-${SERVERNUM}
+127.0.0.1 localhost
+# IPv6 Hosts
+::1 ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+ff02::3 ip6-allhosts
+# Net Hosts
+​${SERVERIP} S${SERVERNUM}.CL6.US
+​${SERVERIP} S${SERVERNUM}.CL6WEB.COM"
+
+echo "${HOSTS}" > /etc/hosts
+#nano /etc/hosts
 echo -e "${LGREEN}== Done == ${NC}"
 
 #Install Packages
@@ -139,7 +164,7 @@ cp -R /home/scripts/setup/greeter/ /home/cl6web/s${SERVERNUM}.cl6.us/greeter
 echo -e "${YELLOW} Creating Apache Conf ${NC}"
 
 STATUSPAGE="<VirtualHost *:80>
-	ServerName lost.cl6.us
+	ServerName util.cl6.us
 	ServerAlias *.cl6.us
 	ServerAlias *.cl6web.com
 	ServerAlias www.*.cl6web.com
