@@ -213,10 +213,11 @@ echo -e "${YELLOW} Moving Archive ${NC}"
 cp /home/scripts/setup/greeter.tar.gz /home/scripts/setup/greeter
 cd /home/scripts/setup/greeter
 echo -e "${YELLOW} Extracting Archive ${NC}"
-tar -zxvf /home/scripts/setup/greeter.tar.gz | tee -a "$logfile"
+tar -zxvf greeter.tar.gz | tee -a "$logfile"
+rm greeter.tar.gz
 if [ ! -d /home/cl6web/s${SERVERNUM}.cl6.us/greeter ]; then mkdir /home/cl6web/s${SERVERNUM}.cl6.us/greeter ; fi
 echo -e "${YELLOW} Moving Files ${NC}"
-cp -R /home/scripts/setup/greeter/ /home/cl6web/s${SERVERNUM}.cl6.us/greeter
+cp -R /home/scripts/setup/greeter/ /home/cl6web/s${SERVERNUM}.cl6.us/
 echo -e "${YELLOW} Creating Apache Conf ${NC}"
 
 STATUSPAGE="<VirtualHost *:80>
@@ -254,10 +255,11 @@ echo -e "${YELLOW} Moving Archive ${NC}"
 cp /home/scripts/setup/status.tar.gz /home/scripts/setup/status
 cd /home/scripts/setup/status
 echo -e "${YELLOW} Extracting Archive ${NC}"
-tar -zxvf /home/scripts/setup/status.tar.gz | tee -a "$logfile"
+tar -zxvf status.tar.gz | tee -a "$logfile"
+rm status.tar.gz
 if [ ! -d /home/cl6web/s${SERVERNUM}.cl6.us/status ]; then mkdir /home/cl6web/s${SERVERNUM}.cl6.us/status ; fi
 echo -e "${YELLOW} Moving Files ${NC}"
-cp -R /home/scripts/setup/status/ /home/cl6web/s${SERVERNUM}.cl6.us/status
+cp -R /home/scripts/setup/status/ /home/cl6web/s${SERVERNUM}.cl6.us/
 echo -e "${YELLOW} Creating Apache Conf ${NC}"
 
 STATUSPAGE="<VirtualHost *:80>
@@ -287,7 +289,7 @@ echo -e "${YELLOW} Restarting Apache ${NC}"
 service apache2 restart | tee -a "$logfile"
 echo -ne "${WHITE}Press Enter when DNS ready!" ; read input
 echo -e "${YELLOW} Generating Certificate ${NC}"
-certbot --installer apache -d s${SERVERNUM}.cl6.us s${SERVERNUM}.cl6web.com
+certbot --installer apache -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -n -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
 echo -e "${YELLOW} Setting HTACCESS File ${NC}"
 echo "${AUTH}" > /home/cl6web/s${SERVERNUM}.cl6.us/status/.htaccess
 ​echo -e "${LGREEN}== Done == ${NC}"
