@@ -83,7 +83,7 @@ apt-get --assume-yes -qq -y install apache2 mysql-server python-certbot-apache >
 apt-get --assume-yes -qq -y update >> ${logfile} 2>&1
 apt-get --assume-yes -qq -y upgrade >> ${logfile} 2>&1
 echo -e "${YELLOW} Setup SQL Security ${NC}"
-mysql_secure_installation --use-default
+mysql_secure_installation --use-default --password=${rootpasswd}
 echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
 service mysql restart | tee -a "$logfile"
 service apache2 restart | tee -a "$logfile"
