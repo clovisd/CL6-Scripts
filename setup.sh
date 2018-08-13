@@ -289,7 +289,7 @@ echo -e "${YELLOW} Restarting Apache ${NC}"
 service apache2 restart | tee -a "$logfile"
 echo -ne "${WHITE}Press Enter when DNS ready!" ; read input
 echo -e "${YELLOW} Generating Certificate ${NC}"
-certbot --installer apache -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -n -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
+certbot --apache -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -n -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
 echo -e "${YELLOW} Setting HTACCESS File ${NC}"
 echo "${AUTH}" > /home/cl6web/s${SERVERNUM}.cl6.us/status/.htaccess
 ​echo -e "${LGREEN}== Done == ${NC}"
@@ -299,5 +299,8 @@ crontab="0 0 1 * * certbot renew  >/dev/null 2>&1"
 crontab -u root -l; echo "$crontab"  | crontab -u root -
 
 #Reboot
+apt-get --assume-yes -qq -y update >> ${logfile} 2>&1
+apt-get --assume-yes -qq -y upgrade >> ${logfile} 2>&1
+apt-get --assume-yes -qq -y autoremove >> ${logfile} 2>&1
 echo -ne "${WHITE}Press Enter when Reboot Ready!" ; read input
 reboot
