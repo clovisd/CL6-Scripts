@@ -57,9 +57,31 @@ echo "Server IP is: ${SERVERIP}"
 
 #Setup Updates for New Server
 echo -e "${BLUE}<== 1. Updates & Upgrades ==> ${NC}"
-apt --assume-yes -qq update
-apt --assume-yes -qq upgrade
-apt --assume-yes -qq autoremove
+apt-get --assume-yes -qq update
+apt-get --assume-yes -qq upgrade
+apt-get --assume-yes -qq autoremove
+echo -e "${LGREEN}== Done == ${NC}"
+
+#Install Packages
+echo -e "${BLUE}<== 7. Install Apps & Packages ==> ${NC}"
+echo -e "${YELLOW} Setting up CertBot Repo ${NC}"
+add-apt-get-repository -y ppa:certbot/certbot
+echo -e "${YELLOW} Installing Apache / SQL / CertBot ${NC}"
+apt-get --assume-yes -qq install apache2 mysql-server python-certbot-apache | tee -a "$logfile"
+apt-get --assume-yes -qq update
+apt-get --assume-yes -qq upgrade
+echo -e "${YELLOW} Setup SQL Security ${NC}"
+mysql_secure_installation --use-default
+echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
+service mysql restart | tee -a "$logfile"
+service apache2 restart | tee -a "$logfile"
+echo -e "${YELLOW} Installing PHP Packages ${NC}"
+apt-get --assume-yes -qq install hp php7.2-mysql php7.2-curl php7.2-xml php7.2-zip  php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-mbstring php-pear | tee -a "$logfile"
+echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
+service mysql restart | tee -a "$logfile"
+service apache2 restart | tee -a "$logfile"
+echo -e "${YELLOW} Installing Personal Packages ${NC}"
+apt-get --assume-yes -qq install mc sl screen htop | tee -a "$logfile"
 echo -e "${LGREEN}== Done == ${NC}"
 
 #Setup user
@@ -73,7 +95,7 @@ chpasswd<<<"clovisd:${clpasswd}"
 htpasswd -c -b /home/cl6web/.htpasswd clovisd ${clpasswd}
 ​
 echo -e "${YELLOW} Setup User: cl6web ${NC}"
-useradd cl6web -m -G www-data -s /bin/bash
+useradd cl6web -G www-data -s /bin/bash
 chpasswd<<<"cl6web:${c6passwd}"
 htpasswd -b /home/cl6web/.htpasswd cl6web ${c6passwd}
 
@@ -147,40 +169,20 @@ echo "${HOSTS}" > /etc/hosts
 #nano /etc/hosts
 echo -e "${LGREEN}== Done == ${NC}"
 
-#Install Packages
-echo -e "${BLUE}<== 7. Install Apps & Packages ==> ${NC}"
-echo -e "${YELLOW} Setting up CertBot Repo ${NC}"
-add-apt-repository -y ppa:certbot/certbot
-echo -e "${YELLOW} Installing Apache / SQL / CertBot ${NC}"
-apt --assume-yes -qq install apache2 mysql-server python-certbot-apache | tee -a "$logfile"
-apt --assume-yes -qq update
-apt --assume-yes -qq upgrade
-echo -e "${YELLOW} Setup SQL Security ${NC}"
-mysql_secure_installation --use-default
-echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
-service mysql restart | tee -a "$logfile"
-service apache2 restart | tee -a "$logfile"
-echo -e "${YELLOW} Installing PHP Packages ${NC}"
-apt --assume-yes -qq install hp php7.2-mysql php7.2-curl php7.2-xml php7.2-zip  php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-mbstring php-pear | tee -a "$logfile"
-echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
-service mysql restart | tee -a "$logfile"
-service apache2 restart | tee -a "$logfile"
-echo -e "${YELLOW} Installing Personal Packages ${NC}"
-apt --assume-yes -qq install mc sl screen htop | tee -a "$logfile"
-echo -e "${LGREEN}== Done == ${NC}"
-
 #SetupPHPAdmin
 echo -e "${BLUE}<== 8. PHPMyAdmin ==> ${NC}"
-apt --assume-yes -qq update
-apt --assume-yes -qq upgrade
-apt --assume-yes -qq autoremove
+apt-get --assume-yes -qq update
+apt-get --assume-yes -qq upgrade
+apt-get --assume-yes -qq autoremove
 echo -e "${YELLOW} Installing PHPMyAdmin ${NC}"
-apt --assume-yes -qq install phpmyadmin
+apt-get --assume-yes -qq install phpmyadmin
 echo -e "${YELLOW}Setting Auth File ${NC}"
-AUTH="AuthType Basic
+
+AUTH='AuthType Basic
 AuthName "Restricted Files"
 AuthUserFile /home/cl6web/.htpasswd
-Require valid-user"
+Require valid-user'
+
 echo "${AUTH}" > /usr/share/phpmyadmin/.htaccess
 echo -e "${YELLOW} Set AllowOverride All for PHPMYAdmin ${NC}"
 nano /etc/apache2/conf-available/phpmyadmin.conf
