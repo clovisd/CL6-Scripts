@@ -28,6 +28,16 @@ apt --assume-yes -qq upgrade
 apt --assume-yes -qq autoremove
 echo -e "${LGREEN}== Done == ${NC}"
 
+#Prompt for Server Number
+echo -ne "${WHITE}Please enter the S# name scheme: " ; read input
+if [[ -z $input ]]; then
+    echo "No Value Entered. Exiting."
+	exit 1
+else
+    SERVERNUM=${input}
+    echo "Server Name Set to: S${input}.CL6.US (S${SERVERNUM}.CL6WEB.COM)"
+fi
+
 #Setup user
 echo -e "${BLUE}<== 2. Users & Passwords ==> ${NC}"
 echo -e "${YELLOW} Setup User: clovisd ${NC}"
@@ -98,7 +108,7 @@ echo -e "${LGREEN}== Done == ${NC}"
 
 #Setup Host Directories
 if [ ! -d /home/cl6web ]; then mkdir /home/cl6web ; fi
-if [ ! -d /home/cl6web/s.cl6.us ]; then mkdir /home/cl6web/s.cl6.us ; fi
+if [ ! -d /home/cl6web/s${SERVERNUM}.cl6.us ]; then mkdir /home/cl6web/s${SERVERNUM}.cl6.us ; fi
 if [ ! -d /home/cl6web/example.com ]; then mkdir /home/cl6web/example.com ; fi
 if [ ! -d /home/cl6web/example.com/logs ]; then mkdir /home/cl6web/example.com/logs ; fi
 if [ ! -d /home/cl6web/example.com/html ]; then mkdir /home/cl6web/example.com/html ; fi
@@ -109,14 +119,16 @@ if [ ! -d /home/cl6web/example.com/automation ]; then mkdir /home/cl6web/example
 if [ ! -d /home/scripts/setup/greeter ]; then mkdir /home/scripts/setup/greeter ; fi
 cd /home/scripts/setup/greeter
 tar -zxvf /home/scripts/setup/greeter.tar.gz /home/scripts/setup/greeter
-if [ ! -d /home/cl6web/s.cl6.us/greeting ]; then mkdir /home/cl6web/s.cl6.us/greeting ; fi
+if [ ! -d /home/cl6web/s${SERVERNUM}.cl6.us/greeting ]; then mkdir /home/cl6web/s${SERVERNUM}.cl6.us/greeting ; fi
+cp -R /home/scripts/setup/status/ /home/cl6web/s${SERVERNUM}.cl6.us/greeter
+nano /etc/apache2/sites-available/s${SERVERNUM}.cl6.us
 
 #Setup Server Status
 if [ ! -d /home/scripts/setup/status ]; then mkdir /home/scripts/setup/status ; fi
 cd /home/scripts/setup/status
 tar -zxvf /home/scripts/setup/status.tar.gz /home/scripts/setup/status
-if [ ! -d /home/cl6web/s.cl6.us/status ]; then mkdir /home/cl6web/s.cl6.us/status ; fi
+if [ ! -d /home/cl6web/s${SERVERNUM}.cl6.us/status ]; then mkdir /home/cl6web/s${SERVERNUM}.cl6.us/status ; fi
+cp -R /home/scripts/setup/status/ /home/cl6web/s${SERVERNUM}.cl6.us/status
+nano /etc/apache2/sites-available/s${SERVERNUM}.cl6.us.conf
 
-#setup ssl
-#setup cron ssl
-#certbot renew --dry-run
+#CRON SSL Renew
