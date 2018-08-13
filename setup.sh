@@ -1,5 +1,7 @@
 #!/bin/bash
-
+exec 3>&1 4>&2
+trap 'exec 2>&4 1>&3' 0 1 2 3
+exec 1>/home/scripts/logs/setup.out 2>&1
 #set -x
 #set +x
 
@@ -65,7 +67,7 @@ echo -e "${LGREEN}== Done == ${NC}"
 #Install Packages
 echo -e "${BLUE}<== 7. Install Apps & Packages ==> ${NC}"
 echo -e "${YELLOW} Setting up CertBot Repo ${NC}"
-add-apt-get-repository -y ppa:certbot/certbot
+add-apt-repository -y ppa:certbot/certbot
 echo -e "${YELLOW} Installing Apache / SQL / CertBot ${NC}"
 apt-get --assume-yes -qq -y install apache2 mysql-server python-certbot-apache >> ${logfile} 2>&1
 apt-get --assume-yes -qq -y update >> ${logfile} 2>&1
@@ -297,6 +299,9 @@ echo "${AUTH}" > /home/cl6web/s${SERVERNUM}.cl6.us/status/.htaccess
 #CRON SSL Renew
 crontab="0 0 1 * * certbot renew  >/dev/null 2>&1"
 crontab -u root -l; echo "$crontab"  | crontab -u root -
+
+#CleanUp
+sudo rm -R /home/scripts/setup
 
 #Reboot
 apt-get --assume-yes -qq -y update >> ${logfile} 2>&1
