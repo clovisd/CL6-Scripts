@@ -11,24 +11,35 @@ BLUE='\033[1;34m'
 LGREEN='\033[1;32m'
 WHITE='\033[1;37m'
 
+echo -e "${GREEN}<== CL6 Server Setup Script ==>"
+echo -e "${LGREEN} v1.2 - clovisd"
+echo -e "${YELLOW} >> Checking Root"
 #Check Root
 if [[ $EUID -ne 0 ]]; then
-  echo "Need Root to Run! Please try running as Root again."
+  echo "${RED} Need Root to Run! Please try running as Root again."
   exit 1
+else
+  echo -e "${LGREEN} Running with Root."
 fi
-
 
 #Log File
 logfile="/home/scripts/logs/loader.log"
 
 #Setup Files & Directories
+echo -e "${YELLOW} >> Setting up Directories"
 if [ ! -d /home/scripts ]; then mkdir /home/scripts ; fi
 if [ ! -d /home/scripts/setup ]; then mkdir /home/scripts/setup ; fi
 if [ ! -d /home/scripts/logs ]; then mkdir /home/scripts/logs ; fi
+echo -e "${LGREEN} >> Done"
 
+echo -e "${YELLOW} >> Cloning from GitHub"
 git clone https://github.com/clovisd/CL6-Scripts.git /home/scripts/setup >> ${logfile} 2>&1
+echo -e "${LGREEN} >> Done"
 
+echo -e "${YELLOW} >> Setting Permissions"
 chmod a+x -R /home/scripts
+echo -e "${LGREEN} >> Done"
 
 #Run Install
+echo -e "${BLUE} ===>> Running Setup Script <<==="
 cd /home/scripts/setup && ./setup.sh
