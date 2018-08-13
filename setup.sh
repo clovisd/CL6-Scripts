@@ -121,7 +121,7 @@ cd /home/scripts/setup/greeter
 tar -zxvf /home/scripts/setup/greeter.tar.gz /home/scripts/setup/greeter
 if [ ! -d /home/cl6web/s${SERVERNUM}.cl6.us/greeting ]; then mkdir /home/cl6web/s${SERVERNUM}.cl6.us/greeting ; fi
 cp -R /home/scripts/setup/status/ /home/cl6web/s${SERVERNUM}.cl6.us/greeter
-nano /etc/apache2/sites-available/s${SERVERNUM}.cl6.us
+nano /etc/apache2/sites-available/util.cl6.us.conf
 
 #Setup Server Status
 if [ ! -d /home/scripts/setup/status ]; then mkdir /home/scripts/setup/status ; fi
