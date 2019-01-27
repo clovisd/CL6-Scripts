@@ -30,6 +30,12 @@ fi
 #Log File
 logfile="/home/scripts/logs/loader.log"
 
+#Setup Base Programs
+echo -e "${YELLOW} >> Installing Programs"
+apt-get --assume-yes -qq -y update >> ${logfile} 2>&1
+apt-get --assume-yes -qq -y upgrade >> ${logfile} 2>&1
+apt-get --assume-yes -qq -y install git
+
 #Setup Files & Directories
 echo -e "${YELLOW} >> Setting up Directories"
 if [ ! -d /home/scripts ]; then mkdir /home/scripts ; fi
