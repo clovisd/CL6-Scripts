@@ -90,7 +90,7 @@ echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
 service mysql restart | tee -a "$logfile"
 service apache2 restart | tee -a "$logfile"
 echo -e "${YELLOW} Installing PHP Packages ${NC}"
-apt-get --assume-yes -qq -y install hp php7.2-mysql php7.2-curl php7.2-xml php7.2-zip  php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-mbstring php-pear >> ${logfile} 2>&1
+apt-get --assume-yes -qq -y install hp php7.2-mysql php7.2-curl php7.2-xml php7.2-zip  php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap php-pear >> ${logfile} 2>&1
 echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
 service mysql restart | tee -a "$logfile"
 service apache2 restart | tee -a "$logfile"
@@ -127,6 +127,15 @@ echo -e "${LGREEN}== Done == ${NC}"
 echo -e "${BLUE}<== 3. Setup PHP ==> ${NC}"
 echo -e "${YELLOW} Copying Content to PHP.INI ${NC}"
 PHPSETTINGS='[PHP]
+#INSERT LOADERS HERE
+
+#CUSTOM
+date.timezone = "US/Central"
+upload_max_filesize = 2048M
+memory_limit = 512M
+post_max_size = 8M
+
+#REST
 engine = On
 short_open_tag = Off
 precision = 14
@@ -139,7 +148,6 @@ zend.enable_gc = On
 expose_php = Off
 max_execution_time = 30
 max_input_time = 60
-memory_limit = 512M
 error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT
 display_errors = Off
 display_startup_errors = Off
@@ -151,12 +159,10 @@ report_memleaks = On
 request_order = "GP"
 register_argc_argv = Off
 auto_globals_jit = On
-post_max_size = 8M
 default_mimetype = "text/html"
 default_charset = "UTF-8"
 enable_dl = Off
 file_uploads = On
-upload_max_filesize = 2048M
 max_file_uploads = 20
 allow_url_fopen = On
 allow_url_include = Off
