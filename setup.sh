@@ -448,7 +448,11 @@ echo -e "${YELLOW} Restarting Apache ${NC}"
 service apache2 restart | tee -a "$logfile"
 echo -ne "${WHITE}Press Enter when DNS ready!" ; read input
 echo -e "${YELLOW} Generating Certificate ${NC}"
-certbot --apache -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -n -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
+
+#certbot --apache -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -n -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
+
+#certbot certonly --webroot -w /var/www/example -d www.example.com -d example.com -w /var/www/other -d other.example.net -d another.other.example.net
+
 echo -e "${YELLOW} Setting HTACCESS File ${NC}"
 echo "${AUTH}" > /home/cl6web/s${SERVERNUM}.cl6.us/status/.htaccess
 ​echo -e "${LGREEN}== Done == ${NC}"
