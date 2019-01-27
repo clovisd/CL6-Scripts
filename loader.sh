@@ -34,7 +34,7 @@ logfile="/home/scripts/logs/loader.log"
 echo -e "${YELLOW} >> Installing Programs"
 apt-get --assume-yes -qq -y update >> ${logfile} 2>&1
 apt-get --assume-yes -qq -y upgrade >> ${logfile} 2>&1
-apt-get --assume-yes -qq -y install git
+apt-get --assume-yes -qq -y install git dig software-properties-common
 echo -e "${LGREEN} >> Done"
 
 #Setup Files & Directories

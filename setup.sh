@@ -77,9 +77,9 @@ echo -e "${LGREEN}== Done == ${NC}"
 #Install Packages
 echo -e "${BLUE}<== 7. Install Apps & Packages ==> ${NC}"
 echo -e "${YELLOW} Setting up CertBot Repo ${NC}"
-add-apt-repository -y ppa:certbot/certbot
+sudo add-apt-repository -y ppa:certbot/certbot
 echo -e "${YELLOW} Setting up PHPMyAdmin Repo ${NC}"
-sudo add-apt-repository ppa:nijel/phpmyadmin
+sudo add-apt-repository -y ppa:nijel/phpmyadmin
 echo -e "${YELLOW} Installing Apache / SQL / CertBot ${NC}"
 apt-get --assume-yes -qq -y install apache2 mysql-server python-certbot-apache >> ${logfile} 2>&1
 apt-get --assume-yes -qq -y update >> ${logfile} 2>&1
@@ -449,9 +449,8 @@ service apache2 restart | tee -a "$logfile"
 echo -ne "${WHITE}Press Enter when DNS ready!" ; read input
 echo -e "${YELLOW} Generating Certificate ${NC}"
 
-#certbot --apache -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -n -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
-
-#certbot certonly --webroot -w /var/www/example -d www.example.com -d example.com -w /var/www/other -d other.example.net -d another.other.example.net
+#certbot --apache-n -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
+#certbot certonly -m ssl@cl6web.com --agree-tos --no-eff-email --redirect --webroot -w /home/cl6web/s${SERVERNUM}.cl6.us/status -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
 
 echo -e "${YELLOW} Setting HTACCESS File ${NC}"
 echo "${AUTH}" > /home/cl6web/s${SERVERNUM}.cl6.us/status/.htaccess
