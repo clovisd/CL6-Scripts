@@ -39,6 +39,7 @@ logfile="/home/scripts/logs/loader.log"
 
 #Setup Base Programs
 echo -e "${YELLOW} >> Installing Programs"
+DEBIAN_FRONTEND=noninteractive
 apt-get -qq -y update >> ${logfile}
 apt-get -qq -y upgrade >> ${logfile}
 apt-get -qq -y install git software-properties-common dnsutils nano tzdata
