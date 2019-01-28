@@ -39,9 +39,9 @@ logfile="/home/scripts/logs/loader.log"
 
 #Setup Base Programs
 echo -e "${YELLOW} >> Installing Programs"
-apt-get --assume-yes -qq -y update >> ${logfile}
-apt-get --assume-yes -qq -y upgrade >> ${logfile}
-apt-get --assume-yes -qq -y install git software-properties-common
+apt-get -qq -y update >> ${logfile}
+apt-get -qq -y upgrade >> ${logfile}
+apt-get -qq -y install git software-properties-common
 echo -e "${LGREEN} >> Done"
 
 echo -e "${YELLOW} >> Cloning from GitHub"
