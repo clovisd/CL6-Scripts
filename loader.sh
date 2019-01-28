@@ -37,15 +37,15 @@ echo -e "${LGREEN} >> Done"
 #Log File
 logfile="/home/scripts/logs/loader.log"
 
-#SetTimeZone
-timedatectl set-timezone America/Denver
-
 #Setup Base Programs
 echo -e "${YELLOW} >> Installing Programs"
 apt-get -qq -y update >> ${logfile}
 apt-get -qq -y upgrade >> ${logfile}
-apt-get -qq -y install git software-properties-common dnsutils nano
+apt-get -qq -y install git software-properties-common dnsutils nano tzdata
 echo -e "${LGREEN} >> Done"
+
+#SetTimeZone
+timedatectl set-timezone America/Denver
 
 echo -e "${YELLOW} >> Cloning from GitHub"
 git clone https://github.com/clovisd/CL6-Scripts.git /home/scripts/setup >> ${logfile} 2>&1
