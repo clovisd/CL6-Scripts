@@ -27,6 +27,13 @@ else
   echo -e "${LGREEN} Running with Root."
 fi
 
+#Setup Files & Directories
+echo -e "${YELLOW} >> Setting up Directories"
+if [ ! -d /home/scripts ]; then mkdir /home/scripts ; fi
+if [ ! -d /home/scripts/setup ]; then mkdir /home/scripts/setup ; fi
+if [ ! -d /home/scripts/logs ]; then mkdir /home/scripts/logs ; fi
+echo -e "${LGREEN} >> Done"
+
 #Log File
 logfile="/home/scripts/logs/loader.log"
 
@@ -35,13 +42,6 @@ echo -e "${YELLOW} >> Installing Programs"
 apt-get --assume-yes -qq -y update >> ${logfile} 2>&1
 apt-get --assume-yes -qq -y upgrade >> ${logfile} 2>&1
 apt-get --assume-yes -qq -y install git dig software-properties-common
-echo -e "${LGREEN} >> Done"
-
-#Setup Files & Directories
-echo -e "${YELLOW} >> Setting up Directories"
-if [ ! -d /home/scripts ]; then mkdir /home/scripts ; fi
-if [ ! -d /home/scripts/setup ]; then mkdir /home/scripts/setup ; fi
-if [ ! -d /home/scripts/logs ]; then mkdir /home/scripts/logs ; fi
 echo -e "${LGREEN} >> Done"
 
 echo -e "${YELLOW} >> Cloning from GitHub"
