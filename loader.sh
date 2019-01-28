@@ -41,7 +41,7 @@ logfile="/home/scripts/logs/loader.log"
 echo -e "${YELLOW} >> Installing Programs"
 apt-get -qq -y update >> ${logfile}
 apt-get -qq -y upgrade >> ${logfile}
-apt-get -qq -y install git software-properties-common
+apt-get -qq -y install git software-properties-common dnsutils nano
 echo -e "${LGREEN} >> Done"
 
 echo -e "${YELLOW} >> Cloning from GitHub"
