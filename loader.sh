@@ -37,6 +37,9 @@ echo -e "${LGREEN} >> Done"
 #Log File
 logfile="/home/scripts/logs/loader.log"
 
+#SetTimeZone
+timedatectl set-timezone America/Denver
+
 #Setup Base Programs
 echo -e "${YELLOW} >> Installing Programs"
 apt-get -qq -y update >> ${logfile}
