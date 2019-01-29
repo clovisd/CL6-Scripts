@@ -44,12 +44,12 @@ DEBIAN_FRONTEND=noninteractive
 echo -ne "${WHITE}Interactivity Disabled." ; read input
 apt-get --assume-yes -qq update #>> ${logfile}
 echo -ne "${WHITE}Update Run." ; read input
-apt-get --assume-yes -qq remove postfix #>> ${logfile}
+apt-get --assume-yes -qq --purge remove postfix apache2 screen #>> ${logfile}
 echo -ne "${WHITE}Uninstall Run." ; read input
 apt-get --assume-yes -qq upgrade #>> ${logfile}
 echo -ne "${WHITE}Upgrade Run." ; read input
-apt-get install git software-properties-common dnsutils nano tzdata
-echo -ne "${WHITE}Basic Tools Installed" ; read input
+apt-get  --assume-yes -qq install git software-properties-common dnsutils nano tzdata
+echo -ne "${WHITE}Basic Utilities Installed" ; read input
 echo -e "${LGREEN} >> Done"
 
 #SetTimeZone
@@ -62,7 +62,7 @@ git clone https://github.com/clovisd/CL6-Scripts.git /home/scripts/setup >> ${lo
 echo -e "${LGREEN} >> Done"
 
 echo -e "${YELLOW} >> Setting Permissions"
-chmod a+x -R /home/scripts/setup.sh
+chmod a+x -R /home/scripts/setup/setup.sh
 echo -e "${LGREEN} >> Done"
 
 #Run Install
