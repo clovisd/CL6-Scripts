@@ -43,7 +43,7 @@ DEBIAN_FRONTEND=noninteractive
 echo -ne "${WHITE}>> interactive" ; read input
 apt-get --assume-yes update >> ${logfile}
 echo -ne "${WHITE}>> update" ; read input
-apt-get --assume-yes --purge remove postfix apache2 screen #>> ${logfile}
+apt-get --assume-yes --purge remove postfix apache2 screen >> ${logfile}
 #echo -ne "${WHITE}>> uninstall" ; read input
 #apt-get --assume-yes autoremove #>> ${logfile}
 #echo -ne "${WHITE}>> autoremove" ; read input
@@ -54,7 +54,7 @@ while kill -0 $PID 2> /dev/null; do
     printf  "."
     sleep 3
 done
-printf -e "${LGREEN} Done!"
+printf "${LGREEN} Done!"
 
 echo -ne "${WHITE}>> install" ; read input
 echo -e "${LGREEN} >> Done"
