@@ -39,19 +39,19 @@ logfile="/home/scripts/logs/loader.log"
 
 #Setup Base Programs
 echo -e "${YELLOW} >> Installing Programs"
-echo -ne "${WHITE}>> ent >>" ; read input
+echo -ne "${WHITE}>>" ; read input
 DEBIAN_FRONTEND=noninteractive
-echo -ne "${WHITE}>> ent >>" ; read input
+echo -ne "${WHITE}>>" ; read input
 apt-get --assume-yes -qq update >> ${logfile}
-echo -ne "${WHITE}>> ent >>" ; read input
+echo -ne "${WHITE}>>" ; read input
 apt-get --assume-yes -qq --purge remove postfix apache2 screen >> ${logfile}
-echo -ne "${WHITE}>> ent >>" ; read input
+echo -ne "${WHITE}>>" ; read input
 apt-get --assume-yes -qq autoremove >> ${logfile}
-echo -ne "${WHITE}>> ent >>" ; read input
+echo -ne "${WHITE}>>" ; read input
 apt-get --assume-yes -qq upgrade >> ${logfile}
-echo -ne "${WHITE}>> ent >>" ; read input
+echo -ne "${WHITE}>>" ; read input
 apt-get  --assume-yes -qq install git software-properties-common dnsutils nano tzdata
-echo -ne "${WHITE}>> ent >>" ; read input
+echo -ne "${WHITE}>>" ; read input
 echo -e "${LGREEN} >> Done"
 
 #SetTimeZone
