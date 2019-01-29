@@ -43,6 +43,12 @@ DEBIAN_FRONTEND=noninteractive
 echo -ne "${WHITE}>> interactive" ; read input
 apt-get --assume-yes update #>> ${logfile}
 echo -ne "${WHITE}>> update" ; read input
+apt-get --assume-yes --purge remove postfix apache2 screen #>> ${logfile}
+#echo -ne "${WHITE}>> uninstall" ; read input
+#apt-get --assume-yes autoremove #>> ${logfile}
+#echo -ne "${WHITE}>> autoremove" ; read input
+#apt-get --assume-yes upgrade #>> ${logfile}
+#echo -ne "${WHITE}>> upgrade" ; read input
 apt-get  --assume-yes install git software-properties-common dnsutils nano tzdata #>> ${logfile}
 echo -ne "${WHITE}>> install" ; read input
 echo -e "${LGREEN} >> Done"
