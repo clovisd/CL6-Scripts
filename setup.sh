@@ -70,23 +70,28 @@ echo "Server IP is: ${SERVERIP}"
 #Setup Updates for New Server
 echo -e "${BLUE}<== 1. Updates & Upgrades ==> ${NC}"
 apt-get --assume-yes -qq update & PID=$! >> ${logfile} 2>&1
+    printf  "${GREEN}[UPDATE:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
 done
-printf "${GREEN} Update Done!${NC}"
+printf "${GREEN}] - Done"
+echo -e ""
 apt-get --assume-yes -qq upgrade & PID=$! >> ${logfile} 2>&1
+    printf  "${GREEN}[UPGRADE:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
 done
-printf "${GREEN} Upgrade Done!${NC}"
+printf "${GREEN}] - Done"
+echo -e ""
 apt-get --assume-yes -qq autoremove & PID=$! >> ${logfile} 2>&1
+    printf  "${GREEN}[AUTOREMOVE:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
 done
-printf "${GREEN} Autoremove Done!${NC}"
+printf "${GREEN}] - Done"
 echo -e ""
 echo -e "${LGREEN}== Done == ${NC}"
 
