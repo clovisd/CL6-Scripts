@@ -39,15 +39,15 @@ logfile="/home/scripts/logs/loader.log"
 
 #Setup Base Programs
 echo -e "${YELLOW} >> Installing Programs"
-echo -ne "${WHITE}Press Enter to continue..." ; read input
+echo -ne "${WHITE}Press to continue..." ; read input
 DEBIAN_FRONTEND=noninteractive
-echo -ne "${WHITE}Press Enter to continue..." ; read input
+echo -ne "${WHITE}Press to continue..." ; read input
 apt-get update >> ${logfile}
-echo -ne "${WHITE}Press Enter to continue..." ; read input
+echo -ne "${WHITE}Press to continue..." ; read input
 apt-get upgrade >> ${logfile}
-echo -ne "${WHITE}Press Enter to continue..." ; read input
+echo -ne "${WHITE}Press to continue..." ; read input
 apt-get install git software-properties-common dnsutils nano tzdata
-echo -ne "${WHITE}Press Enter to continue..." ; read input
+echo -ne "${WHITE}Press to continue..." ; read input
 echo -e "${LGREEN} >> Done"
 
 #SetTimeZone
