@@ -40,24 +40,9 @@ logfile="/home/scripts/logs/loader.log"
 #Setup Base Programs
 echo -e "${YELLOW} >> Installing Programs"
 DEBIAN_FRONTEND=noninteractive
-apt-get --assume-yes update & PID=$!
-while kill -0 $PID 2> /dev/null; do 
-    printf  "."
-    sleep 3
-done
-printf "${GREEN} Update Done!${NC}"
-apt-get --assume-yes --purge remove postfix apache2 & PID=$!
-while kill -0 $PID 2> /dev/null; do 
-    printf  "."
-    sleep 3
-done
-printf "${GREEN} Removal Done!${NC}"
-apt-get --assume-yes install git software-properties-common dnsutils dbus tzdata & PID=$!
-while kill -0 $PID 2> /dev/null; do 
-    printf  "."
-    sleep 3
-done
-printf "${GREEN} Installed Programs!${NC}"
+apt-get --assume-yes update >> ${logfile} 2>&1
+apt-get --assume-yes --purge remove postfix apache2 >> ${logfile} 2>&1
+apt-get --assume-yes install git software-properties-common dnsutils dbus tzdata >> ${logfile} 2>&1
 echo -e "${LGREEN} >> Done"
 
 #SetTimeZone
