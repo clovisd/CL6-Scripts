@@ -57,7 +57,7 @@ while kill -0 $PID 2> /dev/null; do
     printf  "."
     sleep 3
 done
-printf "${GREEN} Install Programs!${NC}"
+printf "${GREEN} Installed Programs!${NC}"
 echo -e "${LGREEN} >> Done"
 
 #SetTimeZone
