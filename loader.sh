@@ -17,7 +17,7 @@ LGREEN='\033[1;32m'
 WHITE='\033[1;37m'
 
 echo -e "${GREEN}<== CL6 Server Setup Script ==>"
-echo -e "${LGREEN} v2.0 - clovisd"
+echo -e "${LGREEN} v2.1 - clovisd"
 echo -e "${YELLOW} >> Checking Root"
 #Check Root
 if [[ $EUID -ne 0 ]]; then
