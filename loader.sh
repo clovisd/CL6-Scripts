@@ -40,11 +40,11 @@ logfile="/home/scripts/logs/loader.log"
 #Setup Base Programs
 echo -e "${YELLOW} >> Installing Programs"
 echo -ne "${WHITE}Press to continue..." ; read input
-#DEBIAN_FRONTEND=noninteractive
+DEBIAN_FRONTEND=noninteractive
 echo -ne "${WHITE}Press to continue..." ; read input
-apt-get update >> ${logfile}
+apt-get --assume-yes -qq update #>> ${logfile}
 echo -ne "${WHITE}Press to continue..." ; read input
-apt-get upgrade >> ${logfile}
+apt-get --assume-yes -qq upgrade #>> ${logfile}
 echo -ne "${WHITE}Press to continue..." ; read input
 apt-get install git software-properties-common dnsutils nano tzdata
 echo -ne "${WHITE}Press to continue..." ; read input

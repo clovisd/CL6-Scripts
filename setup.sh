@@ -325,9 +325,9 @@ echo -e "${LGREEN}== Done == ${NC}"
 
 #SetupPHPAdmin
 echo -e "${BLUE}<== 8. PHPMyAdmin ==> ${NC}"
-apt-get --assume-yes -qq -y update
-apt-get --assume-yes -qq -y upgrade
-apt-get --assume-yes -qq -y autoremove
+apt-get --assume-yes -qq update
+apt-get --assume-yes -qq upgrade
+apt-get --assume-yes -qq autoremove
 echo -e "${YELLOW} Installing PHPMyAdmin ${NC}"
 apt-get --assume-yes -qq -y install phpmyadmin
 echo -e "${YELLOW}Setting Auth File ${NC}"
