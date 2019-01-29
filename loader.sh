@@ -17,7 +17,7 @@ LGREEN='\033[1;32m'
 WHITE='\033[1;37m'
 
 echo -e "${GREEN}<== CL6 Server Setup Script ==>"
-echo -e "${LGREEN} v1.6 - clovisd"
+echo -e "${LGREEN} v1.7 - clovisd"
 echo -e "${YELLOW} >> Checking Root"
 #Check Root
 if [[ $EUID -ne 0 ]]; then
@@ -41,15 +41,15 @@ logfile="/home/scripts/logs/loader.log"
 echo -e "${YELLOW} >> Installing Programs"
 DEBIAN_FRONTEND=noninteractive
 echo -ne "${WHITE}>> interactive" ; read input
-apt-get --assume-yes -qq update >> ${logfile}
+apt-get --assume-yes update #>> ${logfile}
 echo -ne "${WHITE}>> update" ; read input
-apt-get --assume-yes -qq --purge remove postfix apache2 screen >> ${logfile}
+apt-get --assume-yes --purge remove postfix apache2 screen #>> ${logfile}
 echo -ne "${WHITE}>> uninstall" ; read input
-apt-get --assume-yes -qq autoremove >> ${logfile}
+apt-get --assume-yes autoremove #>> ${logfile}
 echo -ne "${WHITE}>> autoremove" ; read input
-apt-get --assume-yes -qq upgrade >> ${logfile}
+apt-get --assume-yes upgrade #>> ${logfile}
 echo -ne "${WHITE}>> upgrade" ; read input
-apt-get  --assume-yes -qq install git software-properties-common dnsutils nano tzdata >> ${logfile}
+apt-get  --assume-yes install git software-properties-common dnsutils nano tzdata #>> ${logfile}
 echo -ne "${WHITE}>> install" ; read input
 echo -e "${LGREEN} >> Done"
 
