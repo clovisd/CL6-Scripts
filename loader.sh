@@ -39,17 +39,19 @@ logfile="/home/scripts/logs/loader.log"
 
 #Setup Base Programs
 echo -e "${YELLOW} >> Installing Programs"
-echo -ne "${WHITE}Initilized." ; read input
+echo -ne "${WHITE}>> ent >>" ; read input
 DEBIAN_FRONTEND=noninteractive
-echo -ne "${WHITE}Interactivity Disabled." ; read input
-apt-get --assume-yes -qq update #>> ${logfile}
-echo -ne "${WHITE}Update Run." ; read input
-apt-get --assume-yes -qq --purge remove postfix apache2 screen #>> ${logfile}
-echo -ne "${WHITE}Uninstall Run." ; read input
-apt-get --assume-yes -qq upgrade #>> ${logfile}
-echo -ne "${WHITE}Upgrade Run." ; read input
+echo -ne "${WHITE}>> ent >>" ; read input
+apt-get --assume-yes -qq update >> ${logfile}
+echo -ne "${WHITE}>> ent >>" ; read input
+apt-get --assume-yes -qq --purge remove postfix apache2 screen >> ${logfile}
+echo -ne "${WHITE}>> ent >>" ; read input
+apt-get --assume-yes -qq autoremove >> ${logfile}
+echo -ne "${WHITE}>> ent >>" ; read input
+apt-get --assume-yes -qq upgrade >> ${logfile}
+echo -ne "${WHITE}>> ent >>" ; read input
 apt-get  --assume-yes -qq install git software-properties-common dnsutils nano tzdata
-echo -ne "${WHITE}Basic Utilities Installed" ; read input
+echo -ne "${WHITE}>> ent >>" ; read input
 echo -e "${LGREEN} >> Done"
 
 #SetTimeZone
