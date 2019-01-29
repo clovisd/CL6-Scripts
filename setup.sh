@@ -69,9 +69,24 @@ echo "Server IP is: ${SERVERIP}"
 
 #Setup Updates for New Server
 echo -e "${BLUE}<== 1. Updates & Upgrades ==> ${NC}"
-apt-get --assume-yes -qq -y update >> ${logfile} 2>&1
-apt-get --assume-yes -qq -y upgrade >> ${logfile} 2>&1
-apt-get --assume-yes -qq -y autoremove >> ${logfile} 2>&1
+apt-get --assume-yes -qq update & PID=$! >> ${logfile} 2>&1
+while kill -0 $PID 2> /dev/null; do 
+    printf  "."
+    sleep 3
+done
+printf "${GREEN} Done!"
+apt-get --assume-yes -qq upgrade & PID=$! >> ${logfile} 2>&1
+while kill -0 $PID 2> /dev/null; do 
+    printf  "."
+    sleep 3
+done
+printf "${GREEN} Done!"
+apt-get --assume-yes -qq autoremove & PID=$! >> ${logfile} 2>&1
+while kill -0 $PID 2> /dev/null; do 
+    printf  "."
+    sleep 3
+done
+printf "${GREEN} Done!"
 echo -e "${LGREEN}== Done == ${NC}"
 
 #Install Packages
