@@ -40,7 +40,7 @@ logfile="/home/scripts/logs/loader.log"
 #Setup Base Programs
 echo -e "${YELLOW} >> Installing Programs"
 echo -ne "${WHITE}Press to continue..." ; read input
-DEBIAN_FRONTEND=noninteractive
+#DEBIAN_FRONTEND=noninteractive
 echo -ne "${WHITE}Press to continue..." ; read input
 apt-get update >> ${logfile}
 echo -ne "${WHITE}Press to continue..." ; read input
