@@ -74,19 +74,19 @@ while kill -0 $PID 2> /dev/null; do
     printf  "."
     sleep 3
 done
-printf "${GREEN} Done!"
+printf "${GREEN} Update Done!${NC}"
 apt-get --assume-yes -qq upgrade & PID=$! >> ${logfile} 2>&1
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
 done
-printf "${GREEN} Done!"
+printf "${GREEN} Upgrade Done!${NC}"
 apt-get --assume-yes -qq autoremove & PID=$! >> ${logfile} 2>&1
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
 done
-printf "${GREEN} Done!"
+printf "${GREEN} Autoremove Done!${NC}"
 echo -e "${LGREEN}== Done == ${NC}"
 
 #Install Packages
