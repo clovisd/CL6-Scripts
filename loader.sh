@@ -49,7 +49,14 @@ apt-get --assume-yes --purge remove postfix apache2 screen #>> ${logfile}
 #echo -ne "${WHITE}>> autoremove" ; read input
 #apt-get --assume-yes upgrade #>> ${logfile}
 #echo -ne "${WHITE}>> upgrade" ; read input
-apt-get  --assume-yes install git software-properties-common dnsutils nano tzdata #>> ${logfile}
+apt-get  --assume-yes install git software-properties-common dnsutils dbus tzdata & PID=$! #>> ${logfile}
+
+while kill -0 $PID 2> /dev/null; do 
+    printf  "."
+    sleep 3
+done
+printf -e "${LGREEN} Done!"
+
 echo -ne "${WHITE}>> install" ; read input
 echo -e "${LGREEN} >> Done"
 
