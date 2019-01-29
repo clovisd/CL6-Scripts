@@ -339,6 +339,7 @@ Require valid-user'
 
 echo "${AUTH}" > /usr/share/phpmyadmin/.htaccess
 echo -e "${YELLOW} Set AllowOverride All for PHPMYAdmin ${NC}"
+echo -ne "${WHITE}Press Enter when ready!" ; read input
 nano /etc/apache2/conf-available/phpmyadmin.conf
 echo -e "${YELLOW} Enable Plugin ${NC}"
 phpenmod mbstring
