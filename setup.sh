@@ -87,6 +87,7 @@ while kill -0 $PID 2> /dev/null; do
     sleep 3
 done
 printf "${GREEN} Autoremove Done!${NC}"
+echo -e ""
 echo -e "${LGREEN}== Done == ${NC}"
 
 #Install Packages
