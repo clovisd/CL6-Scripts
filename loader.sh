@@ -39,15 +39,17 @@ logfile="/home/scripts/logs/loader.log"
 
 #Setup Base Programs
 echo -e "${YELLOW} >> Installing Programs"
-echo -ne "${WHITE}Press to continue..." ; read input
+echo -ne "${WHITE}Initilized." ; read input
 DEBIAN_FRONTEND=noninteractive
-echo -ne "${WHITE}Press to continue..." ; read input
+echo -ne "${WHITE}Interactivity Disabled." ; read input
 apt-get --assume-yes -qq update #>> ${logfile}
-echo -ne "${WHITE}Press to continue..." ; read input
+echo -ne "${WHITE}Update Run." ; read input
+apt-get --assume-yes -qq remove postfix #>> ${logfile}
+echo -ne "${WHITE}Uninstall Run." ; read input
 apt-get --assume-yes -qq upgrade #>> ${logfile}
-echo -ne "${WHITE}Press to continue..." ; read input
+echo -ne "${WHITE}Upgrade Run." ; read input
 apt-get install git software-properties-common dnsutils nano tzdata
-echo -ne "${WHITE}Press to continue..." ; read input
+echo -ne "${WHITE}Basic Tools Installed" ; read input
 echo -e "${LGREEN} >> Done"
 
 #SetTimeZone
