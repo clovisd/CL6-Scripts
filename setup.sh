@@ -451,6 +451,7 @@ echo -e "${YELLOW} Generating Certificate ${NC}"
 
 #certbot --apache-n -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
 #certbot certonly -m ssl@cl6web.com --agree-tos --no-eff-email --redirect --webroot -w /home/cl6web/s${SERVERNUM}.cl6.us/status -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
+certbot run -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -a webroot -i apache -w /home/cl6web/s${SERVERNUM}.cl6.us/status -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
 
 echo -e "${YELLOW} Setting HTACCESS File ${NC}"
 echo "${AUTH}" > /home/cl6web/s${SERVERNUM}.cl6.us/status/.htaccess
