@@ -462,7 +462,7 @@ crontab="0 0 1 * * certbot renew  >/dev/null 2>&1"
 crontab -u root -l; echo "$crontab"  | crontab -u root -
 
 #CleanUp
-sudo rm -R /home/scripts/setup
+#sudo rm -R /home/scripts/setup
 
 #Reboot
 apt-get --assume-yes -qq -y update >> ${logfile} 2>&1

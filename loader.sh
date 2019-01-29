@@ -17,7 +17,7 @@ LGREEN='\033[1;32m'
 WHITE='\033[1;37m'
 
 echo -e "${GREEN}<== CL6 Server Setup Script ==>"
-echo -e "${LGREEN} v1.2 - clovisd"
+echo -e "${LGREEN} v1.4 - clovisd"
 echo -e "${YELLOW} >> Checking Root"
 #Check Root
 if [[ $EUID -ne 0 ]]; then
@@ -46,14 +46,16 @@ apt-get -qq -y install git software-properties-common dnsutils nano tzdata
 echo -e "${LGREEN} >> Done"
 
 #SetTimeZone
+echo -e "${YELLOW} >> Setting Timezone"
 timedatectl set-timezone America/Denver
+echo -e "${LGREEN} >> Done"
 
 echo -e "${YELLOW} >> Cloning from GitHub"
 git clone https://github.com/clovisd/CL6-Scripts.git /home/scripts/setup >> ${logfile} 2>&1
 echo -e "${LGREEN} >> Done"
 
 echo -e "${YELLOW} >> Setting Permissions"
-chmod a+x -R /home/scripts
+chmod a+x -R /home/scripts/setup.sh
 echo -e "${LGREEN} >> Done"
 
 #Run Install
