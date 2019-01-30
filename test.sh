@@ -27,7 +27,7 @@ BLUE='\033[1;34m'
 LGREEN='\033[1;32m'
 WHITE='\033[1;37m'
 
-#Setup Base Programss
+#Setup Base Programs
 echo -e "${YELLOW} >> Installing Programs"
 
 (apt-get update -qq & PID=$!) >> ${logfile} 2>&1
@@ -51,4 +51,4 @@ while kill -0 $PID 2> /dev/null; do
     sleep 3
 done
 printf "${GREEN}]${NC} - Done\n"
-echo -e "${LGREEN} >> Done"
+echo -e "${LGREEN} >> Done${NC}"

@@ -117,5 +117,5 @@ echo -e "OS: ${OS}"
 echo -e "VER: ${VER}"
 
 #Run Install
-echo -e "${BLUE} ===>> Running Setup Script <<==="
+echo -e "${BLUE} ===>> Running Setup Script <<===${NC}"
 cd /home/scripts/setup && ./setup.sh
