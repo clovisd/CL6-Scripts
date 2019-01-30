@@ -25,7 +25,7 @@ echo -e "OS: ${OS}"
 echo -e "VER: ${VER}"
 
 echo -e "${GREEN}<== CL6 Server Setup Script ==>"
-echo -e "${LGREEN} v2.4- clovisd"
+echo -e "${LGREEN} v2.4.9 - clovisd"
 echo -ne "${RED}Press Enter when ready!${NC}" ; read input
 
 #Log File

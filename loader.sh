@@ -26,7 +26,7 @@ ${RED} | |   | |  | '_ \| | | \___ \
 ${RED} | |___| |__| (_) | |_| |___) |
 ${RED}  \____|_____\___(_)___/|____/ \n"
 echo -e "${GREEN}<== CL6 Server Loader Script ==>"
-echo -e "${LGREEN} v2.4 - clovisd"
+echo -e "${LGREEN} v2.4.9 - clovisd"
 echo -ne "${RED}Press Enter when ready!${NC}" ; read input
 echo -e "${YELLOW} >> Checking Root"
 #Check Root
