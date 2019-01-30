@@ -16,7 +16,7 @@ fi
 DEBIAN_FRONTEND=noninteractive
 
 #Log File
-logfile="/home/scripts/logs/test.log"
+logfile="/home/test.log"
 
 #Color Codes
 RED='\033[0;31m'
