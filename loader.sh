@@ -60,7 +60,7 @@ apt-get install -qq git software-properties-common dnsutils dbus tzdata & PID=$!
     printf  "${GREEN}[INSTALL:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
-    sleep 3i
+    sleep 3
 done
 printf "${GREEN}]${NC} - Done"
 echo -e ""
