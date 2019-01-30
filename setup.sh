@@ -44,7 +44,7 @@ else
     SERVERNUM=${input}
     echo "Server Name Set to: S${input}.CL6.US (S${SERVERNUM}.CL6WEB.COM)"
 fi
-echo -ne "${RED}>> clovisd account info:${NC}/n"
+echo -ne "\n${RED}>> clovisd account info:${NC}\n"
 read -s -p "Enter Password:" clpasswd
 if [[ -z $clpasswd ]]; then
     echo "No Value Entered. Exiting.${NC}"
@@ -52,7 +52,7 @@ if [[ -z $clpasswd ]]; then
 else
     echo "clovisd:$clpasswd" > /home/scripts/setup/clovisd.info
 fi
-echo -ne "/n${RED}>> Cl6Web account info:${NC}/n"
+echo -ne "\n${RED}>> Cl6Web account info:${NC}\n"
 read -s -p "Enter Password:" c6passwd
 if [[ -z $c6passwd ]]; then
     echo "No Value Entered. Exiting.${NC}"
@@ -60,7 +60,7 @@ if [[ -z $c6passwd ]]; then
 else
     echo "cl6web:$c6passwd" > /home/scripts/setup/cl6web.info
 fi
-echo -ne "/n${RED}>> Root account info:${NC}/n"
+echo -ne "\n${RED}>> Root account info:${NC}\n"
 read -s -p "Enter Password:" rootpasswd
 if [[ -z $rootpasswd ]]; then
     echo "No Value Entered. Exiting.${NC}"
@@ -83,7 +83,7 @@ while kill -0 $PID 2> /dev/null; do
     sleep 3
 done
 printf "${GREEN}]${NC} - Done\n"
-(apt-get upgrade -qq) >> ${logfile} & PID=$! 2>&1
+(apt-get upgrade) >> ${logfile} & PID=$! 2>&1
     printf  "${GREEN}[UPGRADE:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
