@@ -158,9 +158,26 @@ echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
 service mysql restart | tee -a "$logfile"
 service apache2 restart | tee -a "$logfile"
 echo -e "${YELLOW} Installing PHP Packages ${NC}"
+#PHP Base Packages
 (apt-get install -qq php7.2 php7.2-mysql php7.2-curl php7.2-xml php7.2-zip  php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap) >> ${logfile} & PID=$! 2>&1
 #php-pear
-    printf  "${GREEN}[INSTALL\n:"
+    printf  "${GREEN}[INSTALL 1\n:"
+while kill -0 $PID 2> /dev/null; do 
+    printf  "."
+    sleep 3
+done
+printf "${GREEN}]${NC} - Done\n"
+#PHP Secondary Packages
+(apt-get install -qq php-pecl libmcrypt-dev) >> ${logfile} & PID=$! 2>&1
+    printf  "${GREEN}[INSTALL 2\n:"
+while kill -0 $PID 2> /dev/null; do 
+    printf  "."
+    sleep 3
+done
+printf "${GREEN}]${NC} - Done\n"
+#PHP 3rd Party Packages
+(apt-get pecl install mcrypt-1.0.1) >> ${logfile} & PID=$! 2>&1
+    printf  "${GREEN}[INSTALL 3\n:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
@@ -238,6 +255,7 @@ date.timezone = "US/Central"
 upload_max_filesize = 2048M
 memory_limit = 512M
 post_max_size = 8M
+extension = mcrypt.so
 
 #REST
 engine = On
