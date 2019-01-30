@@ -600,9 +600,11 @@ STATUSPAGE="<VirtualHost *:80>
 echo "${STATUSPAGE}" > /etc/apache2/sites-available/s${SERVERNUM}.cl6.us.conf
 echo -e "${YELLOW} Creating SymLink ${NC}"
 cd /etc/apache2/sites-enabled && ln -s /etc/apache2/sites-available/s${SERVERNUM}.cl6.us.conf
+
+echo -e "${BLUE}<== 13. Setup CertBot + CloudFlare ==> ${NC}"
 echo -e "${YELLOW} Restarting Apache ${NC}"
 service apache2 restart >> ${logfile} 2>&1
-echo -e "${YELLOW} Creating A Records ${NC}"
+echo -e "${YELLOW} Creating A Records w/ CloudFlare ${NC}"
 
 ZONE1=cl6.us
 ZONE2=cl6web.com
@@ -636,8 +638,7 @@ curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONEID2/dns_records
 wait 3s
 
 echo -e "${LGREEN} == Done == ${NC}"
-echo -ne "${WHITE}Press Enter when DNS ready!${NC}" ; read input
-echo -e "${YELLOW} Generating Certificate ${NC}"
+echo -e "${YELLOW} Generating CertBot Certs ${NC}"
 
 #certbot --apache-n -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
 #certbot certonly -m ssl@cl6web.com --agree-tos --no-eff-email --redirect --webroot -w /home/cl6web/s${SERVERNUM}.cl6.us/status -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
