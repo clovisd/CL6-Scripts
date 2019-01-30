@@ -40,21 +40,21 @@ logfile="/home/scripts/logs/loader.log"
 #Setup Base Programs
 echo -e "${YELLOW} >> Installing Programs"
 DEBIAN_FRONTEND=noninteractive
-apt-get update -qq & PID=$! >> ${logfile} 2>&1
+apt-get update -qq & PID=$! & >> ${logfile} 2>&1
     printf  "${GREEN}[UPDATE:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
 done
 printf "${GREEN}]${NC} - Done\n"
-apt-get remove --purge -qq postfix apache2 & PID=$! >> ${logfile} 2>&1
+apt-get remove --purge -qq postfix apache2 & PID=$! & >> ${logfile} 2>&1
     printf  "${GREEN}[REMOVE:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
 done
 printf "${GREEN}]${NC} - Done\n"
-apt-get install -qq git software-properties-common dnsutils dbus tzdata & PID=$! >> ${logfile} 2>&1
+apt-get install -qq git software-properties-common dnsutils dbus tzdata & PID=$! & >> ${logfile} 2>&1
     printf  "${GREEN}[INSTALL:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
