@@ -84,13 +84,14 @@ while kill -0 $PID 2> /dev/null; do
 done
 printf "${GREEN}]${NC} - Done\n"
 echo -ne "${RED}Press Enter to start Upgrade:${NC}" ; read input
-(apt-get upgrade) >> ${logfile} & PID=$! 2>&1
+(DEBIAN_FRONTEND=readline apt-get upgrade) >> ${logfile} & PID=$! 2>&1
     printf  "${GREEN}[UPGRADE:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
 done
 printf "${GREEN}]${NC} - Done\n"
+echo -ne "${RED}Press Enter when ready!${NC}" ; read input
 (apt-get autoclean -qq) >> ${logfile} & PID=$! 2>&1
     printf  "${GREEN}[AUTOCLEAN:"
 while kill -0 $PID 2> /dev/null; do 
