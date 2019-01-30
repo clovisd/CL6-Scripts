@@ -69,7 +69,7 @@ echo "Server IP is: ${SERVERIP}"
 
 #Setup Updates for New Server
 echo -e "${BLUE}<== 1. Updates & Upgrades ==> ${NC}"
-apt-get --assume-yes -qq update & PID=$! >> ${logfile} 2>&1
+apt-get --assume-yes -qq update & PID=$! #>> ${logfile} 2>&1
     printf  "${GREEN}[UPDATE:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
@@ -77,7 +77,7 @@ while kill -0 $PID 2> /dev/null; do
 done
 printf "${GREEN}] - Done"
 echo -e ""
-apt-get --assume-yes -qq upgrade & PID=$! >> ${logfile} 2>&1
+apt-get --assume-yes -qq upgrade & PID=$! #>> ${logfile} 2>&1
     printf  "${GREEN}[UPGRADE:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
@@ -85,7 +85,7 @@ while kill -0 $PID 2> /dev/null; do
 done
 printf "${GREEN}] - Done"
 echo -e ""
-apt-get --assume-yes -qq autoremove & PID=$! >> ${logfile} 2>&1
+apt-get --assume-yes -qq autoremove & PID=$! #>> ${logfile} 2>&1
     printf  "${GREEN}[AUTOREMOVE:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
@@ -102,21 +102,21 @@ sudo add-apt-repository -y ppa:certbot/certbot
 echo -e "${YELLOW} Setting up PHPMyAdmin Repo ${NC}"
 sudo add-apt-repository -y ppa:nijel/phpmyadmin
 echo -e "${YELLOW} Installing Apache / SQL / CertBot ${NC}"
-apt-get --assume-yes -qq -y install apache2 mysql-server python-certbot-apache >> ${logfile} 2>&1
-apt-get --assume-yes -qq -y update >> ${logfile} 2>&1
-apt-get --assume-yes -qq -y upgrade >> ${logfile} 2>&1
+apt-get --assume-yes -qq -y install apache2 mysql-server python-certbot-apache #>> ${logfile} 2>&1
+apt-get --assume-yes -qq -y update #>> ${logfile} 2>&1
+apt-get --assume-yes -qq -y upgrade #>> ${logfile} 2>&1
 echo -e "${YELLOW} Setup SQL Security ${NC}"
 mysql_secure_installation --use-default --password=${rootpasswd}
 echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
 service mysql restart | tee -a "$logfile"
 service apache2 restart | tee -a "$logfile"
 echo -e "${YELLOW} Installing PHP Packages ${NC}"
-apt-get --assume-yes -qq -y install hp php7.2-mysql php7.2-curl php7.2-xml php7.2-zip  php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap php-pear >> ${logfile} 2>&1
+apt-get --assume-yes -qq -y install hp php7.2-mysql php7.2-curl php7.2-xml php7.2-zip  php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap php-pear #>> ${logfile} 2>&1
 echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
 service mysql restart | tee -a "$logfile"
 service apache2 restart | tee -a "$logfile"
 echo -e "${YELLOW} Installing Personal Packages ${NC}"
-apt-get --assume-yes -qq -y install mc sl screen htop >> ${logfile} 2>&1
+apt-get --assume-yes -qq -y install mc sl screen htop #>> ${logfile} 2>&1
 echo -e "${LGREEN}== Done == ${NC}"
 
 #Setup user
@@ -487,8 +487,8 @@ crontab -u root -l; echo "$crontab"  | crontab -u root -
 #sudo rm -R /home/scripts/setup
 
 #Reboot
-apt-get --assume-yes -qq -y update >> ${logfile} 2>&1
-apt-get --assume-yes -qq -y upgrade >> ${logfile} 2>&1
-apt-get --assume-yes -qq -y autoremove >> ${logfile} 2>&1
+apt-get --assume-yes -qq -y update #>> ${logfile} 2>&1
+apt-get --assume-yes -qq -y upgrade #>> ${logfile} 2>&1
+apt-get --assume-yes -qq -y autoremove #>> ${logfile} 2>&1
 echo -ne "${WHITE}Press Enter when Reboot Ready!" ; read input
 reboot
