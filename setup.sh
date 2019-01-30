@@ -637,10 +637,8 @@ curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONEID2/dns_records
   --data '{"type":"A","name":"'"$DNSRECORD2"'","content":"'"$SERVERIP"'","proxied":false}' >> ${logfile} 2>&1
   
 sleep 3s
-
 echo -e "${LGREEN} == Done == ${NC}"
 echo -e "${YELLOW} Generating CertBot Certs ${NC}"
-
 #certbot --apache-n -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
 #certbot certonly -m ssl@cl6web.com --agree-tos --no-eff-email --redirect --webroot -w /home/cl6web/s${SERVERNUM}.cl6.us/status -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
 certbot run -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -a webroot -i apache -w /home/cl6web/s${SERVERNUM}.cl6.us/status -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com >> ${logfile} 2>&1
