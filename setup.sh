@@ -4,7 +4,7 @@
 #exec 1>/home/scripts/logs/setup.out 2>&1
 #set -x
 #set +x
-DEBIAN_FRONTEND=readline
+DEBIAN_FRONTEND=noninteractive
 
 
 #Color Codes
