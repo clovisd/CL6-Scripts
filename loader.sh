@@ -18,7 +18,12 @@ LGREEN='\033[1;32m'
 WHITE='\033[1;37m'
 
 DEBIAN_FRONTEND=noninteractive
-
+echo -e "\n
+${RED}   ____ _     __   _   _ ____  
+${RED}  / ___| |   / /_ | | | / ___| \n
+${RED} | |   | |  | '_ \| | | \___ \ \n
+${RED} | |___| |__| (_) | |_| |___) |\n
+${RED} \____|_____\___(_)___/|____/ \n"
 echo -e "${GREEN}<== CL6 Server Loader Script ==>"
 echo -e "${LGREEN} v2.3 - clovisd"
 echo -ne "${RED}Press Enter when ready!${NC}" ; read input
