@@ -71,6 +71,7 @@ if [[ -z $rootpasswd ]]; then
 else
     echo "root:$rootpasswd" > /home/scripts/setup/root.info
 fi
+echo ""
 #FigureOut IP
 SERVERIP="$(dig +short myip.opendns.com @resolver1.opendns.com)"
 echo "Server IP is: ${SERVERIP}"
