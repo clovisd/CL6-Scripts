@@ -5,6 +5,8 @@
 #set -x
 #set +x
 
+#bash <(wget -O- -q https://raw.githubusercontent.com/clovisd/CL6-Scripts/master/test.sh)
+
 #Check Root
 if [[ $EUID -ne 0 ]]; then
   echo "${RED} Need Root to Run! Please try running as Root again."
@@ -37,7 +39,7 @@ while kill -0 $PID 2> /dev/null; do
     sleep 3
 done
 printf "${GREEN}]${NC} - Done\n"
-(apt-get upgrade -qq & PID=$!) >> ${logfile} 2>&1
+(apt-get remove --purge -qq postfix apache2 & PID=$!) >> ${logfile} 2>&1
     printf  "${GREEN}[REMOVE:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
