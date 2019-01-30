@@ -9,7 +9,8 @@
 #bash <(wget -O- -q https://goo.gl/yf18Rh)
 
 V='v2.5.0'
-echo "${V}" > /home/scripts/setup/version.info
+echo ${V} > /home/scripts/setup/version.info
+
 #Color Codes
 RED='\033[0;31m'
 NC='\033[0m'
