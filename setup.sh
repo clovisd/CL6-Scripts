@@ -83,6 +83,7 @@ while kill -0 $PID 2> /dev/null; do
     sleep 3
 done
 printf "${GREEN}]${NC} - Done\n"
+echo -ne "${RED}Press Enter to start Upgrade:${NC}" ; read input
 (apt-get upgrade) >> ${logfile} & PID=$! 2>&1
     printf  "${GREEN}[UPGRADE:"
 while kill -0 $PID 2> /dev/null; do 
