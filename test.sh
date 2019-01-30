@@ -16,7 +16,7 @@ fi
 DEBIAN_FRONTEND=noninteractive
 
 #Log File
-logfile="/home/scripts/logs/loader.log"
+logfile="/home/scripts/logs/test.log"
 
 #Color Codes
 RED='\033[0;31m'
@@ -37,7 +37,7 @@ while kill -0 $PID 2> /dev/null; do
     sleep 3
 done
 printf "${GREEN}]${NC} - Done\n"
-(apt-get upgrade & PID=$!) >> ${logfile} 2>&1
+(apt-get upgrade -qq & PID=$!) >> ${logfile} 2>&1
     printf  "${GREEN}[REMOVE:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
