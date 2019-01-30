@@ -91,7 +91,7 @@ while kill -0 $PID 2> /dev/null; do
     sleep 3
 done
 printf "${GREEN}] - Done\n"
-echo -e "${LGREEN}== Done == ${NC}"
+echo -e "${LGREEN} == Done == ${NC}"
 
 #Install Packages
 echo -e "${BLUE}<== 7. Install Apps & Packages ==> ${NC}"
@@ -115,7 +115,7 @@ service mysql restart | tee -a "$logfile"
 service apache2 restart | tee -a "$logfile"
 echo -e "${YELLOW} Installing Personal Packages ${NC}"
 apt-get --assume-yes -qq -y install mc sl screen htop #>> ${logfile} 2>&1
-echo -e "${LGREEN}== Done == ${NC}"
+echo -e "${LGREEN} == Done == ${NC}"
 
 #Setup user
 echo -e "${BLUE}<== 2. Users & Passwords ==> ${NC}"
@@ -131,7 +131,7 @@ useradd cl6web -G www-data -s /bin/bash
 chpasswd<<<"cl6web:${c6passwd}"
 htpasswd -b /home/cl6web/.htpasswd cl6web ${c6passwd}
 
-echo -e "${LGREEN}== Done == ${NC}"
+echo -e "${LGREEN} == Done == ${NC}"
 
 #Setup Bash
 echo -e "${BLUE}<== 3. Setup Bash ==> ${NC}"
@@ -140,7 +140,7 @@ cp /home/scripts/setup/.bashrc /home/clovisd/
 cp /home/scripts/setup/.bashrc /home/cl6web/
 if [ ! -d /home/root ]; then mkdir /home/root ; fi
 cp /home/scripts/setup/.bashrc /home/root/
-echo -e "${LGREEN}== Done == ${NC}"
+echo -e "${LGREEN} == Done == ${NC}"
 
 #Setup PHP
 echo -e "${BLUE}<== 3. Setup PHP ==> ${NC}"
@@ -291,7 +291,7 @@ cl6web    ALL=(ALL:ALL) ALL
 "
 
 echo "${SUDO}" > /etc/sudoers.d/cl6
-echo -e "${LGREEN}== Done == ${NC}"
+echo -e "${LGREEN} == Done == ${NC}"
 
 #Setup SSH Port
 echo -e "${BLUE}<== 5. Setup SSH Settings ==> ${NC}"
@@ -311,7 +311,7 @@ echo "${SSHD}" > /etc/ssh/sshd_config
 #vi /etc/ssh/sshd_config
 echo -e "${YELLOW} Restarting SSH Service ${NC}"
 service sshd restart
-echo -e "${LGREEN}== Done == ${NC}"
+echo -e "${LGREEN} == Done == ${NC}"
 
 #Setup Hosts
 echo -e "${BLUE}<== 6. Set Server Name & Hosts ==> ${NC}"
@@ -340,7 +340,7 @@ ff02::3 ip6-allhosts
 
 echo "${HOSTS}" > /etc/hosts
 #nano /etc/hosts
-echo -e "${LGREEN}== Done == ${NC}"
+echo -e "${LGREEN} == Done == ${NC}"
 
 #SetupPHPAdmin
 echo -e "${BLUE}<== 8. PHPMyAdmin ==> ${NC}"
@@ -365,7 +365,7 @@ phpenmod mbstring
 echo -e "${YELLOW}Configure MySQL ${NC}"
 mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '${rootpasswd}';"
 mysql -u root -p"${rootpasswd}" -e "FLUSH PRIVILEGES;"
-​echo -e "${LGREEN}== Done == ${NC}"
+​echo -e "${LGREEN} == Done == ${NC}"
 ​
 #Cleanup Apache
 echo -e "${BLUE}<== 9. Cleanup Apache Configs ==> ${NC}"
@@ -383,7 +383,7 @@ if [ ! -d /home/cl6web/example.com/logs ]; then mkdir /home/cl6web/example.com/l
 if [ ! -d /home/cl6web/example.com/html ]; then mkdir /home/cl6web/example.com/html ; fi
 if [ ! -d /home/cl6web/example.com/backup ]; then mkdir /home/cl6web/example.com/backup ; fi
 if [ ! -d /home/cl6web/example.com/automation ]; then mkdir /home/cl6web/example.com/automation ; fi
-echo -e "${LGREEN}== Done == ${NC}"
+echo -e "${LGREEN} == Done == ${NC}"
 
 #Setup CL6 Greeter Page
 echo -e "${BLUE}<== 11. Setup Greeter Page ==> ${NC}"
@@ -425,7 +425,7 @@ echo -e "${YELLOW} Creating SymLink ${NC}"
 cd /etc/apache2/sites-enabled && ln -s /etc/apache2/sites-available/util.cl6.us.conf
 echo -e "${YELLOW} Restarting Apache ${NC}"
 service apache2 restart | tee -a "$logfile"
-echo -e "${LGREEN}== Done == ${NC}"
+echo -e "${LGREEN} == Done == ${NC}"
 
 #Setup Server Status
 echo -e "${BLUE}<== 12. Setup Status Page ==> ${NC}"
@@ -475,7 +475,7 @@ certbot run -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -a webroot -
 
 echo -e "${YELLOW} Setting HTACCESS File ${NC}"
 echo "${AUTH}" > /home/cl6web/s${SERVERNUM}.cl6.us/status/.htaccess
-​echo -e "${LGREEN}== Done == ${NC}"
+​echo -e "${LGREEN} == Done == ${NC}"
 
 #CRON SSL Renew
 crontab="0 0 1 * * certbot renew  >/dev/null 2>&1"
