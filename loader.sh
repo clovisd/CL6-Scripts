@@ -109,8 +109,8 @@ else
     VER=$(uname -r)
 fi
 
-echo -e "${OS}"
-echo -e "${VER}"
+echo -e "OS: ${OS}"
+echo -e "VER: ${VER}"
 
 #Run Install
 echo -e "${BLUE} ===>> Running Setup Script <<==="

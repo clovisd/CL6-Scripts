@@ -6,6 +6,9 @@
 #set +x
 DEBIAN_FRONTEND=interactive
 
+echo -e "OS: ${OS}"
+echo -e "VER: ${VER}"
+
 #Color Codes
 RED='\033[0;31m' #Error
 YELLOW='\033[1;33m' #Doing Something
