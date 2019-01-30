@@ -617,15 +617,13 @@ zoneid1=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=$zone1
   -H "X-Auth-Key: $cfk" \
   -H "Content-Type: application/json" | jq -r '{"result"}[] | .[0] | .id')
 echo "Zoneid for $zone1 is $zoneid1"
-
 curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$zoneid1/dns_records" \
   -H "X-Auth-Email: $cfemail" \
   -H "X-Auth-Key: $cfk" \
   -H "Content-Type: application/json" \
-	--data '{"type":"A","name":"$zone1","content":"$SERVERIP","ttl":120,"priority":10,"proxied":false}'
+	--data '{"type":"A","name":"$zone1","content":"$SERVERIP","ttl":120,"priority":10,"proxied":false}' | jq
 sleep 10s
-
-​echo -e "${LGREEN} == Done == ${NC}"
+echo -e "${LGREEN} == Done == ${NC}"
 echo -ne "${WHITE}Press when Record Created!${NC}" ; read input
 echo -ne "${WHITE}Press Enter when DNS ready!${NC}" ; read input
 echo -e "${YELLOW} Generating Certificate ${NC}"
