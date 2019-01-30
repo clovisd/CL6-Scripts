@@ -27,7 +27,7 @@ BLUE='\033[1;34m'
 LGREEN='\033[1;32m'
 WHITE='\033[1;37m'
 
-#Setup Base Programs
+#Setup Base Programss
 echo -e "${YELLOW} >> Installing Programs"
 
 (apt-get update -qq & PID=$!) >> ${logfile} 2>&1
