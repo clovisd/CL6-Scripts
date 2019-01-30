@@ -72,6 +72,10 @@ else
     echo "root:$rootpasswd" > /home/scripts/setup/root.info
 fi
 echo ""
+#SetupConf
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password $rootpasswd'
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password $rootpasswd'
+
 #FigureOut IP
 SERVERIP="$(dig +short myip.opendns.com @resolver1.opendns.com)"
 echo "Server IP is: ${SERVERIP}"
