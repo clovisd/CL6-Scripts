@@ -20,7 +20,7 @@ WHITE='\033[1;37m'
 DEBIAN_FRONTEND=noninteractive
 
 echo -e "${GREEN}<== CL6 Server Loader Script ==>"
-echo -e "${LGREEN} v1.0 - clovisd"
+echo -e "${LGREEN} v2.1 - clovisd"
 echo -ne "${RED}Press Enter when ready!${NC}" ; read input
 echo -e "${YELLOW} >> Checking Root"
 #Check Root
