@@ -512,5 +512,5 @@ crontab -u root -l; echo "$crontab"  | crontab -u root -
 apt-get --assume-yes -qq -y update #>> ${logfile} 2>&1
 apt-get --assume-yes -qq -y upgrade #>> ${logfile} 2>&1
 apt-get --assume-yes -qq -y autoremove #>> ${logfile} 2>&1
-echo -ne "${WHITE}Press Enter when Reboot Ready!" ; read input
+echo -ne "${WHITE}Press Enter when Reboot Ready!${NC}" ; read input
 reboot
