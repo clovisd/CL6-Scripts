@@ -89,14 +89,15 @@ else
 fi
 echo ""
 #SetupConf
-debconf-set-selections <<< 'mysql-server mysql-server/root_password password $ROOTPASSWD'
-debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password $ROOTPASSWD'
-debconf-set-selections <<< 'phpmyadmin phpmyadmin/dbconfig-install boolean true'
-debconf-set-selections <<< 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2'
-debconf-set-selections <<< 'phpmyadmin phpmyadmin/app-password-confirm password $ROOTPASSWD'
-debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/admin-pass password $ROOTPASSWD'
-debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/app-pass password $ROOTPASSWD'
-
+echo "mysql-server mysql-server/root_password password $ROOTPASSWD" | debconf-set-selections >> ${logfile} 2>&1
+echo "mysql-server mysql-server/root_password_again password $ROOTPASSWD" | debconf-set-selections >> ${logfile} 2>&1
+echo "phpmyadmin phpmyadmin/dbconfig-install boolean true" | debconf-set-selections >> ${logfile} 2>&1
+echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | debconf-set-selections >> ${logfile} 2>&1
+echo "phpmyadmin phpmyadmin/app-password-confirm password $ROOTPASSWD" | debconf-set-selections >> ${logfile} 2>&1
+echo "phpmyadmin phpmyadmin/mysql/admin-pass password $ROOTPASSWD" | debconf-set-selections >> ${logfile} 2>&1
+echo "phpmyadmin phpmyadmin/mysql/app-pass password $ROOTPASSWD" | debconf-set-selections >> ${logfile} 2>&1
+debconf-get-selections|grep phpmyadmin >> ${logfile} 2>&1
+debconf-get-selections|grep mysql-server >> ${logfile} 2>&1
 #FigureOut IP
 SERVERIP="$(dig +short myip.opendns.com @resolver1.opendns.com)"
 echo "Server IP is: ${SERVERIP}"
@@ -650,7 +651,7 @@ echo "${AUTH}" > /home/cl6web/s${SERVERNUM}.cl6.us/status/.htaccess
 
 #CRON SSL Renew
 crontab="0 0 1 * * certbot renew  >/dev/null 2>&1"
-crontab -u root -l; echo "$crontab"  | crontab -u root -  >> ${logfile} 2>&1
+crontab -u root -l; echo "$crontab" | crontab -u root - >> ${logfile} 2>&1
 
 #CleanUp
 #sudo rm -R /home/scripts/setup
