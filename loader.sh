@@ -20,8 +20,8 @@ WHITE='\033[1;37m'
 DEBIAN_FRONTEND=noninteractive
 echo -e "\n
 ${RED}   ____ _     __   _   _ ____  
-${RED}  / ___| |   / /_ | | | / ___|
-${RED} | |   | |  | '_ \| | | \___ \
+${RED}  / ___| |   / /_ | | | / ___| 
+${RED} | |   | |  | '_ \| | | \___ \ 
 ${RED} | |___| |__| (_) | |_| |___) |
 ${RED} \____|_____\___(_)___/|____/ "
 echo -e "${GREEN}<== CL6 Server Loader Script ==>"
@@ -63,7 +63,7 @@ while kill -0 $PID 2> /dev/null; do
 done
 printf "${GREEN}]${NC} - Done\n"
 (apt-get install -qq git software-properties-common dnsutils dbus tzdata nano) >> ${logfile} & PID=$! 2>&1
-    printf  "${GREEN}[INSTALL:"
+    printf  "${GREEN}[INSTALL:\n"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
