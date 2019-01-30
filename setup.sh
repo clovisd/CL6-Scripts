@@ -109,30 +109,73 @@ echo -e "${LGREEN} == Done == ${NC}"
 #Install Packages
 echo -e "${BLUE}<== 7. Install Apps & Packages ==> ${NC}"
 echo -e "${YELLOW} Setting up CertBot Repo ${NC}"
-sudo add-apt-repository -y ppa:certbot/certbot
+sudo add-apt-repository -y ppa:certbot/certbot >> ${logfile} 2>&1
 echo -e "${YELLOW} Setting up PHP Repo ${NC}"
-sudo add-apt-repository -y ppa:ondrej/php
+sudo add-apt-repository -y ppa:ondrej/php >> ${logfile} 2>&1
 echo -e "${YELLOW} Setting up PHPMyAdmin Repo ${NC}"
-sudo add-apt-repository -y ppa:nijel/phpmyadmin
+sudo add-apt-repository -y ppa:nijel/phpmyadmin >> ${logfile} 2>&1
 echo -e "${YELLOW} Installing Apache / SQL / CertBot ${NC}"
-apt-get update -qq >> ${logfile} 2>&1
-apt-get install -qq apache2 mysql-server python-certbot-apache >> ${logfile} 2>&1
+(apt-get update) >> ${logfile} & PID=$! 2>&1
+    printf  "${GREEN}[UPDATE:"
+while kill -0 $PID 2> /dev/null; do 
+    printf  "."
+    sleep 3
+done
+printf "${GREEN}]${NC} - Done\n"
+(apt-get install -qq apache2 mysql-server python-certbot-apache) >> ${logfile} & PID=$! 2>&1
+    printf  "${GREEN}[INSTALL:"
+while kill -0 $PID 2> /dev/null; do 
+    printf  "."
+    sleep 3
+done
+printf "${GREEN}]${NC} - Done\n"
 echo -e "${YELLOW} Setup SQL Security ${NC}"
 mysql_secure_installation --use-default --password=${rootpasswd}
 echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
 service mysql restart | tee -a "$logfile"
 service apache2 restart | tee -a "$logfile"
 echo -e "${YELLOW} Installing PHP Packages ${NC}"
-apt-get install -qq php php7.2-mysql php7.2-curl php7.2-xml php7.2-zip  php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap php-pear >> ${logfile} 2>&1
+(apt-get install -qq php php7.2-mysql php7.2-curl php7.2-xml php7.2-zip  php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap php-pear) >> ${logfile} & PID=$! 2>&1
+    printf  "${GREEN}[INSTALL:"
+while kill -0 $PID 2> /dev/null; do 
+    printf  "."
+    sleep 3
+done
+printf "${GREEN}]${NC} - Done\n"
 echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
 service mysql restart | tee -a "$logfile"
 service apache2 restart | tee -a "$logfile"
 echo -e "${YELLOW} Installing Personal Packages ${NC}"
-apt-get install mc sl screen htop #>> ${logfile} 2>&1
+(apt-get install -qq mc sl screen htop) >> ${logfile} & PID=$! 2>&1
+    printf  "${GREEN}[INSTALL:"
+while kill -0 $PID 2> /dev/null; do 
+    printf  "."
+    sleep 3
+done
+printf "${GREEN}]${NC} - Done\n"
 echo -e "${YELLOW} Clean up and Updates ${NC}"
-apt-get update -qq #>> ${logfile} 2>&1
-apt-get upgrade -qq #>> ${logfile} 2>&1
-apt-get autoclean -qq #>> ${logfile} 2>&1
+(apt-get update) >> ${logfile} & PID=$! 2>&1
+    printf  "${GREEN}[UPDATE:"
+while kill -0 $PID 2> /dev/null; do 
+    printf  "."
+    sleep 3
+done
+printf "${GREEN}]${NC} - Done\n"
+(apt-get upgrade -qq) >> ${logfile} & PID=$! 2>&1
+    printf  "${GREEN}[UPGRADE:"
+while kill -0 $PID 2> /dev/null; do 
+    printf  "."
+    sleep 3
+done
+printf "${GREEN}]${NC} - Done\n"
+
+(apt-get autoclean -qq) >> ${logfile} & PID=$! 2>&1
+    printf  "${GREEN}[AUTOCLEAN:"
+while kill -0 $PID 2> /dev/null; do 
+    printf  "."
+    sleep 3
+done
+printf "${GREEN}]${NC} - Done\n"
 echo -e "${LGREEN} == Done == ${NC}"
 
 #Setup user

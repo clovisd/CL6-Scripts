@@ -43,7 +43,6 @@ logfile="/home/scripts/logs/loader.log"
 
 #Setup Base Programs
 echo -e "${YELLOW} >> Installing Programs"
-
 (apt-get update -qq) >> ${logfile} & PID=$! 2>&1
     printf  "${GREEN}[UPDATE:"
 while kill -0 $PID 2> /dev/null; do 
@@ -71,11 +70,7 @@ echo -e "${LGREEN} >> Done"
 echo -e "${YELLOW} >> Setting Timezone"
 timedatectl set-timezone America/Denver >> ${logfile} 2>&1
 locale-gen en_US.UTF-8 >> ${logfile} 2>&1
-echo -ne "${RED}Press Enter when ready!${NC}" ; read input
 export LC_ALL=en_US.UTF-8
-echo -ne "${RED}Press Enter when ready!${NC}" ; read input
-locale
-echo -ne "${RED}Press Enter when ready!${NC}" ; read input
 echo -e "${LGREEN} >> Done"
 
 echo -e "${YELLOW} >> Cloning from GitHub"
