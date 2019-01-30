@@ -4,6 +4,7 @@
 #exec 1>/home/scripts/logs/setup.out 2>&1
 #set -x
 #set +x
+DEBIAN_FRONTEND=interactive
 
 #Color Codes
 RED='\033[0;31m' #Error
