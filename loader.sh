@@ -21,7 +21,7 @@ DEBIAN_FRONTEND=noninteractive
 
 echo -e "${GREEN}<== CL6 Server Loader Script ==>"
 echo -e "${LGREEN} v1.0 - clovisd"
-echo -ne "${RED}Press Enter when ready!" ; read input
+echo -ne "${RED}Press Enter when ready!${NC}" ; read input
 echo -e "${YELLOW} >> Checking Root"
 #Check Root
 if [[ $EUID -ne 0 ]]; then

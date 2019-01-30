@@ -6,8 +6,6 @@
 #set +x
 DEBIAN_FRONTEND=readline
 
-echo -e "OS: ${OS}"
-echo -e "VER: ${VER}"
 
 #Color Codes
 RED='\033[0;31m' #Error
@@ -18,9 +16,15 @@ LGREEN='\033[1;32m' #Completed
 NC='\033[0m'
 WHITE='\033[1;37m'
 
+OS=head /home/scripts/setup/os.info
+VER=head /home/scripts/setup/ver.info
+
+echo -e "OS: ${OS}"
+echo -e "VER: ${VER}"
+
 echo -e "${GREEN}<== CL6 Server Setup Script ==>"
 echo -e "${LGREEN} v5.6 - clovisd"
-echo -ne "${RED}Press Enter when ready!" ; read input
+echo -ne "${RED}Press Enter when ready!${NC}" ; read input
 
 #Log File
 logfile="/home/scripts/logs/setup.log"
@@ -34,7 +38,7 @@ fi
 #Prompt for Server Info
 echo -ne "${WHITE}Please enter the S# name scheme: " ; read input
 if [[ -z $input ]]; then
-    echo "No Value Entered. Exiting."
+    echo "No Value Entered. Exiting.${NC}"
 	exit 1
 else
     SERVERNUM=${input}
@@ -44,7 +48,7 @@ echo -ne "${RED}>> clovisd account info:${NC}"
 echo ""
 read -s -p "Enter Password:" clpasswd
 if [[ -z $clpasswd ]]; then
-    echo "No Value Entered. Exiting."
+    echo "No Value Entered. Exiting.${NC}"
 	exit 1
 else
     echo "clovisd:$clpasswd" > /home/scripts/setup/clovisd.info
@@ -54,7 +58,7 @@ echo -ne "${RED}>> Cl6Web account info:${NC}"
 echo ""
 read -s -p "Enter Password:" c6passwd
 if [[ -z $c6passwd ]]; then
-    echo "No Value Entered. Exiting."
+    echo "No Value Entered. Exiting.${NC}"
 	exit 1
 else
     echo "cl6web:$c6passwd" > /home/scripts/setup/cl6web.info
@@ -64,7 +68,7 @@ echo -ne "${RED}>> Root account info:${NC}"
 echo ""
 read -s -p "Enter Password:" rootpasswd
 if [[ -z $rootpasswd ]]; then
-    echo "No Value Entered. Exiting."
+    echo "No Value Entered. Exiting.${NC}"
 	exit 1
 else
     echo "root:$rootpasswd" > /home/scripts/setup/root.info
@@ -74,6 +78,8 @@ echo ""
 #FigureOut IP
 SERVERIP="$(dig +short myip.opendns.com @resolver1.opendns.com)"
 echo "Server IP is: ${SERVERIP}"
+
+
 
 #Setup Updates for New Server
 echo -e "${BLUE}<== 1. Updates & Upgrades ==> ${NC}"
