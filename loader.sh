@@ -68,6 +68,9 @@ echo -e "${LGREEN} >> Done"
 #SetTimeZone
 echo -e "${YELLOW} >> Setting Timezone"
 timedatectl set-timezone America/Denver
+locale-gen en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
 echo -e "${LGREEN} >> Done"
 
 echo -e "${YELLOW} >> Cloning from GitHub"
