@@ -16,11 +16,11 @@ LGREEN='\033[1;32m' #Completed
 NC='\033[0m'
 WHITE='\033[1;37m'
 
-OST=$(</home/scripts/setup/os.info)
-VERT=$(</home/scripts/setup/ver.info)
+OS=$(</home/scripts/setup/os.info)
+VER=$(</home/scripts/setup/ver.info)
 
-echo -e "OS: ${VERT}"
-echo -e "VER: ${OST}"
+echo -e "OS: ${OS}"
+echo -e "VER: ${VER}"
 
 echo -e "${GREEN}<== CL6 Server Setup Script ==>"
 echo -e "${LGREEN} v2.1 - clovisd"
