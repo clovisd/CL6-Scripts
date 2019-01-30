@@ -490,7 +490,7 @@ echo -e "${YELLOW} Creating SymLink ${NC}"
 cd /etc/apache2/sites-enabled && ln -s /etc/apache2/sites-available/s${SERVERNUM}.cl6.us.conf
 echo -e "${YELLOW} Restarting Apache ${NC}"
 service apache2 restart | tee -a "$logfile"
-echo -ne "${WHITE}Press Enter when DNS ready!" ; read input
+echo -ne "${WHITE}Press Enter when DNS ready!${NC}" ; read input
 echo -e "${YELLOW} Generating Certificate ${NC}"
 
 #certbot --apache-n -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
