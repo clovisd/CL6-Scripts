@@ -621,13 +621,13 @@ zoneid2=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=$zone2
   -H "X-Auth-Email: $cfemail" \
   -H "X-Auth-Key: $cfk" \
   -H "Content-Type: application/json" | jq -r '{"result"}[] | .[0] | .id')
-
+echo -e  "${zoneid1} - ${cfemail} - ${cfk} - ${zone1} - ${SERVERIP}"
 curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$zoneid1/dns_records" \
   -H "X-Auth-Email: $cfemail" \
   -H "X-Auth-Key: $cfk" \
   -H "Content-Type: application/json" \
   --data '{"type":"A","name":"$zone1","content":"$SERVERIP","ttl":120,"priority":10,"proxied":false}' | jq
-
+echo -e  "${zoneid2} - ${cfemail} - ${cfk} - ${zone2} - ${SERVERIP}"
 curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$zoneid2/dns_records" \
   -H "X-Auth-Email: $cfemail" \
   -H "X-Auth-Key: $cfk" \
