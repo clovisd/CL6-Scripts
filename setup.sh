@@ -76,27 +76,27 @@ echo "Server IP is: ${SERVERIP}"
 
 #Setup Updates for New Server
 echo -e "${BLUE}<== 1. Updates & Upgrades ==> ${NC}"
-(apt-get update -qq & PID=$!) >> ${logfile} 2>&1
+(apt-get update) >> ${logfile} & PID=$! 2>&1
     printf  "${GREEN}[UPDATE:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
 done
-printf "${GREEN}] - Done\n"
-(apt-get upgrade -qq & PID=$!) >> ${logfile} 2>&1
+printf "${GREEN}]${NC} - Done\n"
+(apt-get upgrade -qq) >> ${logfile} & PID=$! 2>&1
     printf  "${GREEN}[UPGRADE:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
 done
-printf "${GREEN}] - Done\n"
-(apt-get autoremove -qq & PID=$!) #>> ${logfile} 2>&1
-    printf  "${GREEN}[AUTOREMOVE:"
+printf "${GREEN}]${NC} - Done\n"
+(apt-get autoclean -qq) >> ${logfile} & PID=$! 2>&1
+    printf  "${GREEN}[AUTOCLEAN:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
 done
-printf "${GREEN}] - Done\n"
+printf "${GREEN}]${NC} - Done\n"
 echo -e "${LGREEN} == Done == ${NC}"
 
 #Install Packages
