@@ -48,56 +48,54 @@ else
     echo "Server Name Set to: S${input}.CL6.US (S${SERVERNUM}.CL6WEB.COM)"
 fi
 echo -ne "\n${RED}>> clovisd account info:${NC}\n"
-read -s -p "Enter Password:" clpasswd
-if [[ -z $clpasswd ]]; then
+read -s -p "Enter Password:" CLPASSWD
+if [[ -z $CLPASSWD ]]; then
     echo "No Value Entered. Exiting.${NC}"
 	exit 1
 else
-    echo "clovisd:$clpasswd" > /home/scripts/setup/clovisd.info
+    echo "clovisd:$CLPASSWD" > /home/scripts/setup/clovisd.info
 fi
 echo -ne "\n${RED}>> Cl6Web account info:${NC}\n"
-read -s -p "Enter Password:" c6passwd
-if [[ -z $c6passwd ]]; then
+read -s -p "Enter Password:" C6PASSWD
+if [[ -z $C6PASSWD ]]; then
     echo "No Value Entered. Exiting.${NC}"
 	exit 1
 else
-    echo "cl6web:$c6passwd" > /home/scripts/setup/cl6web.info
+    echo "cl6web:$C6PASSWD" > /home/scripts/setup/cl6web.info
 fi
 echo -ne "\n${RED}>> Root account info:${NC}\n"
-read -s -p "Enter Password:" rootpasswd
-if [[ -z $rootpasswd ]]; then
+read -s -p "Enter Password:" ROOTPASSWD
+if [[ -z $ROOTPASSWD ]]; then
     echo "No Value Entered. Exiting.${NC}"
 	exit 1
 else
-    echo "root:$rootpasswd" > /home/scripts/setup/root.info
+    echo "root:$ROOTPASSWD" > /home/scripts/setup/root.info
 fi
 echo -ne "\n${RED}>> Cloudflare Account Info:${NC}\n"
-read -p "Enter CloudFlare Email: " cfemail
-if [[ -z $cfemail ]]; then
+read -p "Enter CloudFlare Email: " CFEMAIL
+if [[ -z $CFEMAIL ]]; then
     echo "No Value Entered. Exiting.${NC}"
 	exit 1
 else
-    echo "$cfemail" > /home/scripts/setup/cfemail.info
+    echo "$CFEMAIL" > /home/scripts/setup/cfemail.info
 fi
 echo -ne "\n"
-read -p "Enter CloudFlare Auth Key: " cfk
-if [[ -z $cfk ]]; then
+read -p "Enter CloudFlare Auth Key: " CFK
+if [[ -z $CFK ]]; then
     echo "No Value Entered. Exiting.${NC}"
 	exit 1
 else
-    echo "$cfk" > /home/scripts/setup/cfkey.info
+    echo "$CFK" > /home/scripts/setup/cfkey.info
 fi
-
 echo ""
-
 #SetupConf
-debconf-set-selections <<< 'mysql-server mysql-server/root_password password ${rootpasswd}'
-debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password ${rootpasswd}'
+debconf-set-selections <<< 'mysql-server mysql-server/root_password password ${ROOTPASSWD}'
+debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password ${ROOTPASSWD}'
 debconf-set-selections <<< 'phpmyadmin phpmyadmin/dbconfig-install boolean true'
 debconf-set-selections <<< 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2'
-debconf-set-selections <<< 'phpmyadmin phpmyadmin/app-password-confirm password ${rootpasswd}'
-debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/admin-pass password ${rootpasswd}'
-debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/app-pass password ${rootpasswd}'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/app-password-confirm password ${ROOTPASSWD}'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/admin-pass password ${ROOTPASSWD}'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/app-pass password ${ROOTPASSWD}'
 
 #FigureOut IP
 SERVERIP="$(dig +short myip.opendns.com @resolver1.opendns.com)"
@@ -153,7 +151,7 @@ while kill -0 $PID 2> /dev/null; do
 done
 printf "${GREEN}]${NC} - Done\n"
 echo -e "${YELLOW} Setup SQL Security ${NC}"
-mysql_secure_installation --use-default --password=${rootpasswd} >> ${logfile} 2>&1
+mysql_secure_installation --use-default --password=${ROOTPASSWD} >> ${logfile} 2>&1
 echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
 service mysql restart >> ${logfile} 2>&1
 service apache2 restart >> ${logfile} 2>&1
@@ -231,12 +229,12 @@ if [ ! -d /home/cl6web ]; then mkdir /home/cl6web ; fi
 
 echo -e "${YELLOW} Setup User: clovisd ${NC}"
 useradd clovisd -m -s /bin/bash
-chpasswd<<<"clovisd:${clpasswd}"
-htpasswd -c -b /home/cl6web/.htpasswd clovisd ${clpasswd}
+chpasswd<<<"clovisd:${CLPASSWD}"
+htpasswd -c -b /home/cl6web/.htpasswd clovisd ${CLPASSWD}
 echo -e "${YELLOW} Setup User: cl6web ${NC}"
 useradd cl6web -G www-data -s /bin/bash
-chpasswd<<<"cl6web:${c6passwd}"
-htpasswd -b /home/cl6web/.htpasswd cl6web ${c6passwd}
+chpasswd<<<"cl6web:${C6PASSWD}"
+htpasswd -b /home/cl6web/.htpasswd cl6web ${C6PASSWD}
 
 echo -e "${LGREEN} == Done == ${NC}"
 
@@ -501,8 +499,8 @@ echo -e "${YELLOW} Enable Plugin ${NC}"
 phpenmod mbstring
 phpenmod mcrypt
 echo -e "${YELLOW}Configure MySQL ${NC}"
-mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '${rootpasswd}';"
-mysql -u root -p"${rootpasswd}" -e "FLUSH PRIVILEGES;"
+mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '${ROOTPASSWD}';"
+mysql -u root -p"${ROOTPASSWD}" -e "FLUSH PRIVILEGES;"
 ​echo -e "${LGREEN} == Done == ${NC}"
 ​
 #Cleanup Apache
@@ -606,33 +604,37 @@ echo -e "${YELLOW} Restarting Apache ${NC}"
 service apache2 restart >> ${logfile} 2>&1
 echo -e "${YELLOW} Creating A Records ${NC}"
 
-zone1=cl6.us
-zone2=cl6web.com
-dnsrecord1=s${SERVERNUM}.cl6.us
-dnsrecord2=s${SERVERNUM}.cl6web.com
+ZONE1=cl6.us
+ZONE2=cl6web.com
+DNSRECORD1=s${SERVERNUM}.cl6.us
+DNSRECORD2=s${SERVERNUM}.cl6web.com
 
-# get the zone id for the requested zone
-zoneid1=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=$zone1&status=active" \
-  -H "X-Auth-Email: $cfemail" \
-  -H "X-Auth-Key: $cfk" \
+ZONEID1=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=$ZONE1&status=active" \
+  -H "X-Auth-Email: $CFEMAIL" \
+  -H "X-Auth-Key: $CFK" \
   -H "Content-Type: application/json" | jq -r '{"result"}[] | .[0] | .id')
   
-zoneid2=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=$zone2&status=active" \
-  -H "X-Auth-Email: $cfemail" \
-  -H "X-Auth-Key: $cfk" \
+ZONEID2=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=$ZONE2&status=active" \
+  -H "X-Auth-Email: $CFEMAIL" \
+  -H "X-Auth-Key: $CFK" \
   -H "Content-Type: application/json" | jq -r '{"result"}[] | .[0] | .id')
-echo -e  "${zoneid1} - ${cfemail} - ${cfk} - ${zone1} - ${SERVERIP}"
-curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$zoneid1/dns_records" \
-  -H "X-Auth-Email: $cfemail" \
-  -H "X-Auth-Key: $cfk" \
+
+curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONEID1/dns_records" \
+  -H "X-Auth-Email: $CFEMAIL" \
+  -H "X-Auth-Key: $CFK" \
   -H "Content-Type: application/json" \
-  --data '{"type":"A","name":"$zone1","content":"$SERVERIP","ttl":1,"proxied":false}' | jq
-echo -e  "${zoneid2} - ${cfemail} - ${cfk} - ${zone2} - ${SERVERIP}"
-curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$zoneid2/dns_records" \
-  -H "X-Auth-Email: $cfemail" \
-  -H "X-Auth-Key: $cfk" \
+  --data '{"type":"A","name":"'"$DNSRECORD1"'","content":"'"$SERVERIP"'","proxied":false}' | jq
+  
+wait 3s
+
+curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONEID2/dns_records" \
+  -H "X-Auth-Email: $CFEMAIL" \
+  -H "X-Auth-Key: $CFK" \
   -H "Content-Type: application/json" \
-  --data '{"type":"A","name":"$zone2","content":"$SERVERIP","ttl":1,"proxied":false}' | jq
+  --data '{"type":"A","name":"'"$DNSRECORD2"'","content":"'"$SERVERIP"'","proxied":false}' | jq
+  
+wait 3s
+
 echo -e "${LGREEN} == Done == ${NC}"
 echo -ne "${WHITE}Press Enter when DNS ready!${NC}" ; read input
 echo -e "${YELLOW} Generating Certificate ${NC}"
