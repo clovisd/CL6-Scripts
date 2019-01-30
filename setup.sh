@@ -48,7 +48,7 @@ else
     echo "Server Name Set to: S${input}.CL6.US (S${SERVERNUM}.CL6WEB.COM)"
 fi
 echo -ne "\n${RED}>> clovisd account info:${NC}\n"
-read -s -p "Enter Password:" CLPASSWD
+read -s -p "Enter Password: " CLPASSWD
 if [[ -z $CLPASSWD ]]; then
     echo "No Value Entered. Exiting.${NC}"
 	exit 1
@@ -56,7 +56,7 @@ else
     echo "clovisd:$CLPASSWD" > /home/scripts/setup/clovisd.info
 fi
 echo -ne "\n${RED}>> Cl6Web account info:${NC}\n"
-read -s -p "Enter Password:" C6PASSWD
+read -s -p "Enter Password: " C6PASSWD
 if [[ -z $C6PASSWD ]]; then
     echo "No Value Entered. Exiting.${NC}"
 	exit 1
@@ -64,7 +64,7 @@ else
     echo "cl6web:$C6PASSWD" > /home/scripts/setup/cl6web.info
 fi
 echo -ne "\n${RED}>> Root account info:${NC}\n"
-read -s -p "Enter Password:" ROOTPASSWD
+read -s -p "Enter Password: " ROOTPASSWD
 if [[ -z $ROOTPASSWD ]]; then
     echo "No Value Entered. Exiting.${NC}"
 	exit 1
