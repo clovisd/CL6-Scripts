@@ -26,7 +26,7 @@ echo -e "OS: ${OS}"
 echo -e "VER: ${VER}"
 
 echo -e "${GREEN}<== CL6 Server Setup Script ==>"
-echo -e "${LGREEN} v2.2 - clovisd"
+echo -e "${LGREEN} v2.3- clovisd"
 echo -ne "${RED}Press Enter when ready!${NC}" ; read input
 
 #Log File
@@ -73,8 +73,8 @@ else
 fi
 echo ""
 #SetupConf
-sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password $rootpasswd'
-sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password $rootpasswd'
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password ${rootpasswd}'
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password ${rootpasswd}'
 
 #FigureOut IP
 SERVERIP="$(dig +short myip.opendns.com @resolver1.opendns.com)"
@@ -96,6 +96,7 @@ while kill -0 $PID 2> /dev/null; do
     sleep 3
 done
 printf "${GREEN}]${NC} - Done\n"
+DEBIAN_FRONTEND=noninteractive
 (apt-get autoclean -qq) >> ${logfile} & PID=$! 2>&1
     printf  "${GREEN}[AUTOCLEAN:"
 while kill -0 $PID 2> /dev/null; do 
@@ -404,11 +405,12 @@ echo -e "${LGREEN} == Done == ${NC}"
 
 #SetupPHPAdmin
 echo -e "${BLUE}<== 8. PHPMyAdmin ==> ${NC}"
-apt-get --assume-yes -qq update
-apt-get --assume-yes -qq upgrade
-apt-get --assume-yes -qq autoremove
+apt-get -qq update
+apt-get -qq upgrade
+apt-get -qq autoremove
 echo -e "${YELLOW} Installing PHPMyAdmin ${NC}"
-apt-get --assume-yes -qq -y --allow-unauthenticated install phpmyadmin
+#DEBIAN_FRONTEND=readline
+apt-get install -qq phpmyadmin
 echo -e "${YELLOW}Setting Auth File ${NC}"
 
 AUTH='AuthType Basic
@@ -452,7 +454,7 @@ echo -e "${YELLOW} Moving Archive ${NC}"
 cp /home/scripts/setup/greeter.tar.gz /home/scripts/setup/greeter
 cd /home/scripts/setup/greeter
 echo -e "${YELLOW} Extracting Archive ${NC}"
-tar -zxvf greeter.tar.gz | tee -a "$logfile"
+tar -zxvf greeter.tar.gz  >> ${logfile} 2>&1
 rm greeter.tar.gz
 if [ ! -d /home/cl6web/s${SERVERNUM}.cl6.us/greeter ]; then mkdir /home/cl6web/s${SERVERNUM}.cl6.us/greeter ; fi
 echo -e "${YELLOW} Moving Files ${NC}"
@@ -494,7 +496,7 @@ echo -e "${YELLOW} Moving Archive ${NC}"
 cp /home/scripts/setup/status.tar.gz /home/scripts/setup/status
 cd /home/scripts/setup/status
 echo -e "${YELLOW} Extracting Archive ${NC}"
-tar -zxvf status.tar.gz | tee -a "$logfile"
+tar -zxvf status.tar.gz  >> ${logfile} 2>&1
 rm status.tar.gz
 if [ ! -d /home/cl6web/s${SERVERNUM}.cl6.us/status ]; then mkdir /home/cl6web/s${SERVERNUM}.cl6.us/status ; fi
 echo -e "${YELLOW} Moving Files ${NC}"
@@ -531,7 +533,7 @@ echo -e "${YELLOW} Generating Certificate ${NC}"
 
 #certbot --apache-n -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
 #certbot certonly -m ssl@cl6web.com --agree-tos --no-eff-email --redirect --webroot -w /home/cl6web/s${SERVERNUM}.cl6.us/status -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
-certbot run -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -a webroot -i apache -w /home/cl6web/s${SERVERNUM}.cl6.us/status -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
+certbot run -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -a webroot -i apache -w /home/cl6web/s${SERVERNUM}.cl6.us/status -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com >> ${logfile} 2>&1
 
 echo -e "${YELLOW} Setting HTACCESS File ${NC}"
 echo "${AUTH}" > /home/cl6web/s${SERVERNUM}.cl6.us/status/.htaccess
@@ -545,8 +547,8 @@ crontab -u root -l; echo "$crontab"  | crontab -u root -
 #sudo rm -R /home/scripts/setup
 
 #Reboot
-apt-get --assume-yes -qq -y update #>> ${logfile} 2>&1
-apt-get --assume-yes -qq -y upgrade #>> ${logfile} 2>&1
-apt-get --assume-yes -qq -y autoremove #>> ${logfile} 2>&1
+apt-get -qq -y update #>> ${logfile} 2>&1
+apt-get -qq -y upgrade #>> ${logfile} 2>&1
+apt-get -qq -y autoremove #>> ${logfile} 2>&1
 echo -ne "${WHITE}Press Enter when Reboot Ready!${NC}" ; read input
 reboot
