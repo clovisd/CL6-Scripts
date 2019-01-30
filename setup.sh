@@ -4,7 +4,7 @@
 #exec 1>/home/scripts/logs/setup.out 2>&1
 #set -x
 #set +x
-#DEBIAN_FRONTEND=dialog
+DEBIAN_FRONTEND=readline
 
 echo -e "OS: ${OS}"
 echo -e "VER: ${VER}"
