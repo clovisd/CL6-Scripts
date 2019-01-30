@@ -348,7 +348,7 @@ apt-get --assume-yes -qq update
 apt-get --assume-yes -qq upgrade
 apt-get --assume-yes -qq autoremove
 echo -e "${YELLOW} Installing PHPMyAdmin ${NC}"
-apt-get --assume-yes -qq -y install phpmyadmin
+apt-get --assume-yes -qq -y --allow-unauthenticated install phpmyadmin
 echo -e "${YELLOW}Setting Auth File ${NC}"
 
 AUTH='AuthType Basic
