@@ -72,7 +72,7 @@ else
     echo "root:$rootpasswd" > /home/scripts/setup/root.info
 fi
 echo -ne "\n${RED}>> Cloudflare Account Info:${NC}\n"
-read -s "Enter CloudFlare Email:" cfemail
+read -p "Enter CloudFlare Email:" cfemail
 if [[ -z $cfemail ]]; then
     echo "No Value Entered. Exiting.${NC}"
 	exit 1
@@ -80,7 +80,7 @@ else
     echo "$cfemail" > /home/scripts/setup/cfemail.info
 fi
 echo -ne "\n"
-read -s "Enter CloudFlare Auth Key:" cfk
+read -p "Enter CloudFlare Auth Key:" cfk
 if [[ -z $cfk ]]; then
     echo "No Value Entered. Exiting.${NC}"
 	exit 1
