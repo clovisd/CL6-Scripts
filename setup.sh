@@ -6,6 +6,9 @@
 #set +x
 DEBIAN_FRONTEND=noninteractive
 
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
 
 #Color Codes
 RED='\033[0;31m' #Error
@@ -72,8 +75,6 @@ fi
 SERVERIP="$(dig +short myip.opendns.com @resolver1.opendns.com)"
 echo "Server IP is: ${SERVERIP}"
 
-
-
 #Setup Updates for New Server
 echo -e "${BLUE}<== 1. Updates & Upgrades ==> ${NC}"
 (apt-get update) >> ${logfile} & PID=$! 2>&1
@@ -83,7 +84,6 @@ while kill -0 $PID 2> /dev/null; do
     sleep 3
 done
 printf "${GREEN}]${NC} - Done\n"
-echo -ne "${RED}Press Enter to start Upgrade:${NC}" ; read input
 (DEBIAN_FRONTEND=readline apt-get upgrade -y) >> ${logfile} & PID=$! 2>&1
     printf  "${GREEN}[UPGRADE:"
 while kill -0 $PID 2> /dev/null; do 
@@ -91,7 +91,6 @@ while kill -0 $PID 2> /dev/null; do
     sleep 3
 done
 printf "${GREEN}]${NC} - Done\n"
-echo -ne "${RED}Press Enter when ready!${NC}" ; read input
 (apt-get autoclean -qq) >> ${logfile} & PID=$! 2>&1
     printf  "${GREEN}[AUTOCLEAN:"
 while kill -0 $PID 2> /dev/null; do 
