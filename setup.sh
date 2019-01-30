@@ -18,6 +18,10 @@ LGREEN='\033[1;32m' #Completed
 NC='\033[0m'
 WHITE='\033[1;37m'
 
+echo -e "${GREEN}<== CL6 Server Setup Script ==>"
+echo -e "${LGREEN} v5.6 - clovisd"
+echo -ne "${RED}Press Enter when ready!" ; read input
+
 #Log File
 logfile="/home/scripts/logs/setup.log"
 
