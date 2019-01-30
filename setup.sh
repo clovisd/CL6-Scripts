@@ -121,7 +121,7 @@ while kill -0 $PID 2> /dev/null; do
     sleep 3
 done
 printf "${GREEN}]${NC} - Done\n"
-(sudo -E apt-get install -qq apache2 mysql-server python-certbot-apache) >> ${logfile} & PID=$! 2>&1
+(apt-get install -qq apache2 mysql-server python-certbot-apache) >> ${logfile} & PID=$! 2>&1
     printf  "${GREEN}[INSTALL:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
