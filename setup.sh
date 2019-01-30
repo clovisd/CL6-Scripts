@@ -4,8 +4,7 @@
 #exec 1>/home/scripts/logs/setup.out 2>&1
 #set -x
 #set +x
-DEBIAN_FRONTEND=noninteractive
-
+export DEBIAN_FRONTEND=noninteractive
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
@@ -94,10 +93,10 @@ echo ""
 debconf-set-selections <<< 'mysql-server mysql-server/root_password password ${rootpasswd}'
 debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password ${rootpasswd}'
 debconf-set-selections <<< 'phpmyadmin phpmyadmin/dbconfig-install boolean true'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2'
 debconf-set-selections <<< 'phpmyadmin phpmyadmin/app-password-confirm password ${rootpasswd}'
 debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/admin-pass password ${rootpasswd}'
 debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/app-pass password ${rootpasswd}'
-debconf-set-selections <<< 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2'
 
 #FigureOut IP
 SERVERIP="$(dig +short myip.opendns.com @resolver1.opendns.com)"
@@ -132,11 +131,11 @@ echo -e "${LGREEN} == Done == ${NC}"
 #Install Packages
 echo -e "${BLUE}<== 7. Install Apps & Packages ==> ${NC}"
 echo -e "${YELLOW} Setting up CertBot Repo ${NC}"
-sudo add-apt-repository -y ppa:certbot/certbot >> ${logfile} 2>&1
+add-apt-repository -y ppa:certbot/certbot >> ${logfile} 2>&1
 echo -e "${YELLOW} Setting up PHP Repo ${NC}"
-sudo add-apt-repository -y ppa:ondrej/php >> ${logfile} 2>&1
+add-apt-repository -y ppa:ondrej/php >> ${logfile} 2>&1
 echo -e "${YELLOW} Setting up PHPMyAdmin Repo ${NC}"
-sudo add-apt-repository -y ppa:nijel/phpmyadmin >> ${logfile} 2>&1
+add-apt-repository -y ppa:nijel/phpmyadmin >> ${logfile} 2>&1
 echo -e "${YELLOW} Installing Apache / SQL / CertBot ${NC}"
 (apt-get update) >> ${logfile} & PID=$! 2>&1
     printf  "${GREEN}[UPDATE:"
@@ -155,8 +154,8 @@ printf "${GREEN}]${NC} - Done\n"
 echo -e "${YELLOW} Setup SQL Security ${NC}"
 mysql_secure_installation --use-default --password=${rootpasswd} >> ${logfile} 2>&1
 echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
-service mysql restart | tee -a "$logfile"
-service apache2 restart | tee -a "$logfile"
+service mysql restart >> ${logfile} 2>&1
+service apache2 restart >> ${logfile} 2>&1
 echo -e "${YELLOW} Installing PHP Packages ${NC}"
 #PHP Base Packages
 (apt-get install -qq php7.2 php7.2-mysql php7.2-curl php7.2-xml php7.2-zip  php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap) >> ${logfile} & PID=$! 2>&1
@@ -168,7 +167,8 @@ while kill -0 $PID 2> /dev/null; do
 done
 printf "${GREEN}]${NC} - Done\n"
 #PHP Secondary Packages
-(apt-get install -qq php-pecl libmcrypt-dev) >> ${logfile} & PID=$! 2>&1
+(apt-get install -qq libmcrypt-dev) >> ${logfile} & PID=$! 2>&1
+# php-pecl
     printf  "${GREEN}[INSTALL 2\n:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
@@ -176,16 +176,21 @@ while kill -0 $PID 2> /dev/null; do
 done
 printf "${GREEN}]${NC} - Done\n"
 #PHP 3rd Party Packages
-(apt-get pecl install mcrypt-1.0.1) >> ${logfile} & PID=$! 2>&1
+(pecl -q install mcrypt-1.0.1) >> ${logfile} & PID=$! 2>&1
     printf  "${GREEN}[INSTALL 3\n:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
 done
 printf "${GREEN}]${NC} - Done\n"
+echo -e "${YELLOW} Setting Up mcrypt ${NC}"
+echo extension=/usr/lib/php/20170718/mcrypt.so > /etc/php/7.2/mods-available/mcrypt.ini
+cd /etc/php/7.2/cli/conf.d/ && ln -s /etc/php/7.2/mods-available/20-mcrypt.ini
+cd /etc/php/7.2/apache2/conf.d/ && ln -s /etc/php/7.2/mods-available/20-mcrypt.ini
 echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
-service mysql restart | tee -a "$logfile"
-service apache2 restart | tee -a "$logfile"
+echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
+service mysql restart >> ${logfile} 2>&1
+service apache2 restart >> ${logfile} 2>&1
 echo -e "${YELLOW} Installing Other QOL Packages ${NC}"
 (apt-get install -qq mc sl screen htop) >> ${logfile} & PID=$! 2>&1
     printf  "${GREEN}[INSTALL\n:"
@@ -384,7 +389,7 @@ ldap.max_links = -1
 echo "${PHPSETTINGS}" > /etc/php/7.2/apach2/php.ini
 
 echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
-service apache2 restart | tee -a "$logfile"
+service apache2 restart >> ${logfile} 2>&1
 
 #Setup permissions
 echo -e "${BLUE}<== 4. Setup User Permissions ==> ${NC}"
@@ -477,7 +482,7 @@ done
 printf "${GREEN}]${NC} - Done\n"
 echo -e "${YELLOW} Installing PHPMyAdmin ${NC}"
 (DEBIAN_FRONTEND=noninteractive apt-get install -qq phpmyadmin) >> ${logfile} & PID=$! 2>&1
-    printf  "${GREEN}[INSTALL\n:\n"
+    printf  "${GREEN}[INSTALL:\n"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
@@ -559,7 +564,7 @@ echo "${STATUSPAGE}" > /etc/apache2/sites-available/util.cl6.us.conf
 echo -e "${YELLOW} Creating SymLink ${NC}"
 cd /etc/apache2/sites-enabled && ln -s /etc/apache2/sites-available/util.cl6.us.conf
 echo -e "${YELLOW} Restarting Apache ${NC}"
-service apache2 restart | tee -a "$logfile"
+service apache2 restart >> ${logfile} 2>&1
 echo -e "${LGREEN} == Done == ${NC}"
 
 #Setup Server Status
@@ -600,7 +605,7 @@ echo "${STATUSPAGE}" > /etc/apache2/sites-available/s${SERVERNUM}.cl6.us.conf
 echo -e "${YELLOW} Creating SymLink ${NC}"
 cd /etc/apache2/sites-enabled && ln -s /etc/apache2/sites-available/s${SERVERNUM}.cl6.us.conf
 echo -e "${YELLOW} Restarting Apache ${NC}"
-service apache2 restart | tee -a "$logfile"
+service apache2 restart >> ${logfile} 2>&1
 echo -e "${YELLOW} Creating A Records ${NC}"
 
 zone1=cl6.us
