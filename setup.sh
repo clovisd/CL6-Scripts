@@ -73,8 +73,13 @@ else
 fi
 echo ""
 #SetupConf
-sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password ${rootpasswd}'
-sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password ${rootpasswd}'
+debconf-set-selections <<< 'mysql-server mysql-server/root_password password ${rootpasswd}'
+debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password ${rootpasswd}'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/dbconfig-install boolean true'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/app-password-confirm password ${rootpasswd}'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/admin-pass password ${rootpasswd}'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/app-pass password ${rootpasswd}'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2'
 
 #FigureOut IP
 SERVERIP="$(dig +short myip.opendns.com @resolver1.opendns.com)"
@@ -130,7 +135,7 @@ while kill -0 $PID 2> /dev/null; do
 done
 printf "${GREEN}]${NC} - Done\n"
 echo -e "${YELLOW} Setup SQL Security ${NC}"
-mysql_secure_installation --use-default --password=${rootpasswd}
+mysql_secure_installation --use-default --password=${rootpasswd} >> ${logfile} 2>&1
 echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
 service mysql restart | tee -a "$logfile"
 service apache2 restart | tee -a "$logfile"
@@ -187,7 +192,7 @@ echo -e "${YELLOW} Setup User: clovisd ${NC}"
 useradd clovisd -m -s /bin/bash
 chpasswd<<<"clovisd:${clpasswd}"
 htpasswd -c -b /home/cl6web/.htpasswd clovisd ${clpasswd}
-​echo -e "${YELLOW} Setup User: cl6web ${NC}"
+echo -e "${YELLOW} Setup User: cl6web ${NC}"
 useradd cl6web -G www-data -s /bin/bash
 chpasswd<<<"cl6web:${c6passwd}"
 htpasswd -b /home/cl6web/.htpasswd cl6web ${c6passwd}
