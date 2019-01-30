@@ -16,12 +16,6 @@ LGREEN='\033[1;32m' #Completed
 NC='\033[0m'
 WHITE='\033[1;37m'
 
-OS=head /home/scripts/setup/os.info
-VER=head /home/scripts/setup/ver.info
-
-echo -e "OS: ${OS}"
-echo -e "VER: ${VER}"
-
 OST=$(</home/scripts/setup/os.info)
 VERT=$(</home/scripts/setup/ver.info)
 
