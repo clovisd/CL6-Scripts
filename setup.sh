@@ -146,7 +146,7 @@ while kill -0 $PID 2> /dev/null; do
 done
 printf "${GREEN}]${NC} - Done\n"
 (apt-get install -qq apache2 mysql-server python-certbot-apache) >> ${logfile} & PID=$! 2>&1
-    printf  "${GREEN}[INSTALL:"
+    printf  "${GREEN}[INSTALL\n:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
@@ -160,7 +160,7 @@ service apache2 restart | tee -a "$logfile"
 echo -e "${YELLOW} Installing PHP Packages ${NC}"
 (apt-get install -qq php7.2 php7.2-mysql php7.2-curl php7.2-xml php7.2-zip  php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap) >> ${logfile} & PID=$! 2>&1
 #php-pear
-    printf  "${GREEN}[INSTALL:"
+    printf  "${GREEN}[INSTALL\n:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
@@ -171,7 +171,7 @@ service mysql restart | tee -a "$logfile"
 service apache2 restart | tee -a "$logfile"
 echo -e "${YELLOW} Installing Other QOL Packages ${NC}"
 (apt-get install -qq mc sl screen htop) >> ${logfile} & PID=$! 2>&1
-    printf  "${GREEN}[INSTALL:"
+    printf  "${GREEN}[INSTALL\n:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
@@ -459,7 +459,7 @@ done
 printf "${GREEN}]${NC} - Done\n"
 echo -e "${YELLOW} Installing PHPMyAdmin ${NC}"
 (DEBIAN_FRONTEND=noninteractive apt-get install -qq phpmyadmin) >> ${logfile} & PID=$! 2>&1
-    printf  "${GREEN}[INSTALL:\n"
+    printf  "${GREEN}[INSTALL\n:\n"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
