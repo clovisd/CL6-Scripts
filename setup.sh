@@ -20,12 +20,13 @@ WHITE='\033[1;37m'
 
 OS=$(</home/scripts/setup/os.info)
 VER=$(</home/scripts/setup/ver.info)
+V=$(</home/scripts/setup/version.info)
 
 echo -e "OS: ${OS}"
 echo -e "VER: ${VER}"
 
 echo -e "${GREEN}<== CL6 Server Setup Script ==>"
-echo -e "${LGREEN} v2.4.9 - clovisd"
+echo -e "${LGREEN} ${V} - clovisd"
 echo -ne "${RED}Press Enter when ready!${NC}" ; read input
 
 #Log File

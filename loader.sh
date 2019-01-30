@@ -8,6 +8,8 @@
 #bash <(wget -O- -q https://raw.githubusercontent.com/clovisd/CL6-Scripts/master/loader.sh)
 #bash <(wget -O- -q https://goo.gl/yf18Rh)
 
+V='v2.4.9'
+echo "${V}" > /home/scripts/setup/version.info
 #Color Codes
 RED='\033[0;31m'
 NC='\033[0m'
@@ -26,7 +28,7 @@ ${RED} | |   | |  | '_ \| | | \___ \
 ${RED} | |___| |__| (_) | |_| |___) |
 ${RED}  \____|_____\___(_)___/|____/ \n"
 echo -e "${GREEN}<== CL6 Server Loader Script ==>"
-echo -e "${LGREEN} v2.4.9 - clovisd"
+echo -e "${LGREEN} ${V} - clovisd"
 echo -ne "${RED}Press Enter when ready!${NC}" ; read input
 echo -e "${YELLOW} >> Checking Root"
 #Check Root
