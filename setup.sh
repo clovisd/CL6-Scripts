@@ -618,38 +618,11 @@ zoneid1=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=$zone1
   -H "Content-Type: application/json" | jq -r '{"result"}[] | .[0] | .id')
 echo "Zoneid for $zone1 is $zoneid1"
 
-dnsrecordid1=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$zoneid1/dns_records?type=A&name=$dnsrecord1" \
-  -H "X-Auth-Email: $cfemail" \
-  -H "X-Auth-Key: $cfk" \
-  -H "Content-Type: application/json" | jq -r '{"result"}[] | .[0] | .id')
-echo "DNSrecordid for $dnsrecord1 is $dnsrecordid1"
-
-curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$zoneid1/dns_records/$dnsrecordid1" \
+curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$zoneid1/dns_records" \
   -H "X-Auth-Email: $cfemail" \
   -H "X-Auth-Key: $cfk" \
   -H "Content-Type: application/json" \
-  --data "{\"type\":\"A\",\"name\":\"$dnsrecord1\",\"content\":\"$ip\",\"ttl\":1,\"proxied\":false}" | jq
-  
-sleep 10s
-# get the dns record id
-  
-zoneid2=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=$zone2&status=active" \
-  -H "X-Auth-Email: $cfemail" \
-  -H "X-Auth-Key: $cfk" \
-  -H "Content-Type: application/json" | jq -r '{"result"}[] | .[0] | .id')
-echo "Zoneid for $zone2 is $zoneid2"
-
-dnsrecordid2=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$zoneid2/dns_records?type=A&name=$dnsrecord2" \
-  -H "X-Auth-Email: $cfemail" \
-  -H "X-Auth-Key: $cfk" \
-  -H "Content-Type: application/json" | jq -r '{"result"}[] | .[0] | .id')
-echo "DNSrecordid for $dnsrecord2 is $dnsrecordid2"
-
-curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$zoneid2/dns_records/$dnsrecordid2" \
-  -H "X-Auth-Email: $cfemail" \
-  -H "X-Auth-Key: $cfk" \
-  -H "Content-Type: application/json" \
-  --data "{\"type\":\"A\",\"name\":\"$dnsrecord2\",\"content\":\"$ip\",\"ttl\":1,\"proxied\":false}" | jq
+	--data '{"type":"A","name":"$zone1","content":"$SERVERIP","ttl":120,"priority":10,"proxied":false}'
 sleep 10s
 
 ​echo -e "${LGREEN} == Done == ${NC}"
