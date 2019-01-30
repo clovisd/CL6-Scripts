@@ -17,7 +17,7 @@ LGREEN='\033[1;32m'
 WHITE='\033[1;37m'
 
 echo -e "${GREEN}<== CL6 Server Setup Script ==>"
-echo -e "${LGREEN} v2.1 - clovisd"
+echo -e "${LGREEN} v2.2 - clovisd"
 echo -e "${YELLOW} >> Checking Root"
 #Check Root
 if [[ $EUID -ne 0 ]]; then
@@ -46,24 +46,21 @@ while kill -0 $PID 2> /dev/null; do
     printf  "."
     sleep 3
 done
-printf "${GREEN}]${NC} - Done"
-echo -e ""
+printf "${GREEN}]${NC} - Done\n"
 apt-get remove --purge -qq postfix apache2 & PID=$! >> ${logfile} 2>&1
     printf  "${GREEN}[REMOVE:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
 done
-printf "${GREEN}]${NC} - Done"
-echo -e ""
+printf "${GREEN}]${NC} - Done\n"
 apt-get install -qq git software-properties-common dnsutils dbus tzdata & PID=$! >> ${logfile} 2>&1
     printf  "${GREEN}[INSTALL:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
 done
-printf "${GREEN}]${NC} - Done"
-echo -e ""
+printf "${GREEN}]${NC} - Done\n"
 echo -e "${LGREEN} >> Done"
 
 #SetTimeZone
