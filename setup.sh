@@ -386,10 +386,8 @@ ldap.max_links = -1
 [curl]
 [openssl]'
 echo "${PHPSETTINGS}" > /etc/php/7.2/apach2/php.ini
-
 echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
 service apache2 restart >> ${logfile} 2>&1
-
 #Setup permissions
 echo -e "${BLUE}<== 4. Setup User Permissions ==> ${NC}"
 
@@ -613,12 +611,12 @@ dnsrecord1=s${SERVERNUM}.cl6.us
 dnsrecord2=s${SERVERNUM}.cl6web.com
 
 # get the zone id for the requested zone
-zoneid1=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=zone1&status=active" \
+zoneid1=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=$zone1&status=active" \
   -H "X-Auth-Email: $cloudflare_auth_email" \
   -H "X-Auth-Key: $cfk" \
   -H "Content-Type: application/json" | jq -r '{"result"}[] | .[0] | .id')
   
-zoneid2=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=zone2&status=active" \
+zoneid2=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=$zone2&status=active" \
   -H "X-Auth-Email: $cloudflare_auth_email" \
   -H "X-Auth-Key: $cfk" \
   -H "Content-Type: application/json" | jq -r '{"result"}[] | .[0] | .id')
