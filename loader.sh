@@ -17,8 +17,10 @@ BLUE='\033[1;34m'
 LGREEN='\033[1;32m'
 WHITE='\033[1;37m'
 
+DEBIAN_FRONTEND=noninteractive
+
 echo -e "${GREEN}<== CL6 Server Setup Script ==>"
-echo -e "${LGREEN} v2.8 - clovisd"
+echo -e "${LGREEN} v2.6 - clovisd"
 echo -ne "${RED}Press Enter when ready!" ; read input
 echo -e "${YELLOW} >> Checking Root"
 #Check Root
@@ -41,21 +43,22 @@ logfile="/home/scripts/logs/loader.log"
 
 #Setup Base Programs
 echo -e "${YELLOW} >> Installing Programs"
-DEBIAN_FRONTEND=noninteractive apt-get update -qq & PID=$! #>> ${logfile} 2>&1
+
+(apt-get update -qq & PID=$!) >> ${logfile} 2>&1
     printf  "${GREEN}[UPDATE:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
 done
 printf "${GREEN}]${NC} - Done\n"
-DEBIAN_FRONTEND=noninteractive apt-get remove --purge -qq postfix apache2 & PID=$! #>> ${logfile} 2>&1
+(apt-get remove --purge -qq postfix apache2 & PID=$!) >> ${logfile} 2>&1
     printf  "${GREEN}[REMOVE:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
 done
 printf "${GREEN}]${NC} - Done\n"
-DEBIAN_FRONTEND=noninteractive apt-get install -qq git software-properties-common dnsutils dbus tzdata nano -qq & PID=$! #>> ${logfile} 2>&1
+(apt-get install -qq git software-properties-common dnsutils dbus tzdata nano -qq & PID=$!) >> ${logfile} 2>&1
     printf  "${GREEN}[INSTALL:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
@@ -69,7 +72,6 @@ echo -e "${YELLOW} >> Setting Timezone"
 timedatectl set-timezone America/Denver
 locale-gen en_US.UTF-8
 export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
 echo -e "${LGREEN} >> Done"
 
 echo -e "${YELLOW} >> Cloning from GitHub"
