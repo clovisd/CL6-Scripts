@@ -22,6 +22,12 @@ VER=head /home/scripts/setup/ver.info
 echo -e "OS: ${OS}"
 echo -e "VER: ${VER}"
 
+OST=$(</home/scripts/setup/os.info)
+VERT=$(</home/scripts/setup/ver.info)
+
+echo -e "OS: ${VERT}"
+echo -e "VER: ${OST}"
+
 echo -e "${GREEN}<== CL6 Server Setup Script ==>"
 echo -e "${LGREEN} v5.6 - clovisd"
 echo -ne "${RED}Press Enter when ready!${NC}" ; read input
