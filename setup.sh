@@ -72,7 +72,7 @@ else
     echo "root:$rootpasswd" > /home/scripts/setup/root.info
 fi
 echo -ne "\n${RED}>> Cloudflare Account Info:${NC}\n"
-read -p "Enter CloudFlare Email:" cfemail
+read -p "Enter CloudFlare Email: " cfemail
 if [[ -z $cfemail ]]; then
     echo "No Value Entered. Exiting.${NC}"
 	exit 1
@@ -80,7 +80,7 @@ else
     echo "$cfemail" > /home/scripts/setup/cfemail.info
 fi
 echo -ne "\n"
-read -p "Enter CloudFlare Auth Key:" cfk
+read -p "Enter CloudFlare Auth Key: " cfk
 if [[ -z $cfk ]]; then
     echo "No Value Entered. Exiting.${NC}"
 	exit 1
@@ -603,7 +603,7 @@ zoneid2=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=zone2&
 
 echo "Zoneid for $zone1 is $zoneid1"
 echo "Zoneid for $zone2 is $zoneid2"
-
+sleep 10s
 # get the dns record id
 dnsrecordid1=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$zoneid1/dns_records?type=A&name=$dnsrecord1" \
   -H "X-Auth-Email: $cloudflare_auth_email" \
@@ -617,7 +617,7 @@ dnsrecordid2=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$zonei
 
 echo "DNSrecordid for $dnsrecord1 is $dnsrecordid1"
 echo "DNSrecordid for $dnsrecord2 is $dnsrecordid2"
-
+sleep 10s
 # update the record
 curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$zoneid1/dns_records/$dnsrecordid1" \
   -H "X-Auth-Email: $cloudflare_auth_email" \
