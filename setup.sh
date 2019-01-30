@@ -89,13 +89,13 @@ else
 fi
 echo ""
 #SetupConf
-debconf-set-selections <<< 'mysql-server mysql-server/root_password password ${ROOTPASSWD}'
-debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password ${ROOTPASSWD}'
+debconf-set-selections <<< 'mysql-server mysql-server/root_password password $ROOTPASSWD'
+debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password $ROOTPASSWD'
 debconf-set-selections <<< 'phpmyadmin phpmyadmin/dbconfig-install boolean true'
 debconf-set-selections <<< 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2'
-debconf-set-selections <<< 'phpmyadmin phpmyadmin/app-password-confirm password ${ROOTPASSWD}'
-debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/admin-pass password ${ROOTPASSWD}'
-debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/app-pass password ${ROOTPASSWD}'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/app-password-confirm password $ROOTPASSWD'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/admin-pass password $ROOTPASSWD'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/app-pass password $ROOTPASSWD'
 
 #FigureOut IP
 SERVERIP="$(dig +short myip.opendns.com @resolver1.opendns.com)"
@@ -625,17 +625,17 @@ curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONEID1/dns_records
   -H "X-Auth-Email: $CFEMAIL" \
   -H "X-Auth-Key: $CFK" \
   -H "Content-Type: application/json" \
-  --data '{"type":"A","name":"'"$DNSRECORD1"'","content":"'"$SERVERIP"'","proxied":false}' | jq
+  --data '{"type":"A","name":"'"$DNSRECORD1"'","content":"'"$SERVERIP"'","proxied":false}' >> ${logfile} 2>&1
   
-wait 3s
+sleep 3s
 
 curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONEID2/dns_records" \
   -H "X-Auth-Email: $CFEMAIL" \
   -H "X-Auth-Key: $CFK" \
   -H "Content-Type: application/json" \
-  --data '{"type":"A","name":"'"$DNSRECORD2"'","content":"'"$SERVERIP"'","proxied":false}' | jq
+  --data '{"type":"A","name":"'"$DNSRECORD2"'","content":"'"$SERVERIP"'","proxied":false}' >> ${logfile} 2>&1
   
-wait 3s
+sleep 3s
 
 echo -e "${LGREEN} == Done == ${NC}"
 echo -e "${YELLOW} Generating CertBot Certs ${NC}"
