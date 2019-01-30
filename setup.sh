@@ -140,7 +140,7 @@ echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
 service mysql restart | tee -a "$logfile"
 service apache2 restart | tee -a "$logfile"
 echo -e "${YELLOW} Installing PHP Packages ${NC}"
-(apt-get install -qq php php7.2-mysql php7.2-curl php7.2-xml php7.2-zip  php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap php-pear) >> ${logfile} & PID=$! 2>&1
+(apt-get install -qq php7.2 php7.2-mysql php7.2-curl php7.2-xml php7.2-zip  php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap php-pear) >> ${logfile} & PID=$! 2>&1
     printf  "${GREEN}[INSTALL:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
@@ -424,11 +424,12 @@ AuthUserFile /home/cl6web/.htpasswd
 Require valid-user'
 
 echo "${AUTH}" > /usr/share/phpmyadmin/.htaccess
-echo -e "${YELLOW} Set AllowOverride All for PHPMYAdmin ${NC}"
+echo -e "${YELLOW} Set ${GREEN}AllowOverride All${YELLOW} for PHPMYAdmin ${NC}"
 echo -ne "${WHITE}Press Enter when ready!" ; read input
 nano /etc/apache2/conf-available/phpmyadmin.conf
 echo -e "${YELLOW} Enable Plugin ${NC}"
 phpenmod mbstring
+phpenmod mcrypt
 echo -e "${YELLOW}Configure MySQL ${NC}"
 mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '${rootpasswd}';"
 mysql -u root -p"${rootpasswd}" -e "FLUSH PRIVILEGES;"
@@ -546,7 +547,7 @@ echo "${AUTH}" > /home/cl6web/s${SERVERNUM}.cl6.us/status/.htaccess
 
 #CRON SSL Renew
 crontab="0 0 1 * * certbot renew  >/dev/null 2>&1"
-crontab -u root -l; echo "$crontab"  | crontab -u root -
+crontab -u root -l; echo "$crontab"  | crontab -u root -  >> ${logfile} 2>&1
 
 #CleanUp
 #sudo rm -R /home/scripts/setup
