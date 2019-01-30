@@ -97,7 +97,7 @@ while kill -0 $PID 2> /dev/null; do
     sleep 3
 done
 printf "${GREEN}] - Done\n"
-(apt-get autoremove -qq & PID=$!) >> ${logfile} 2>&1
+(apt-get autoremove -qq & PID=$!) #>> ${logfile} 2>&1
     printf  "${GREEN}[AUTOREMOVE:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
