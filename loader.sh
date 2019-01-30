@@ -71,7 +71,11 @@ echo -e "${LGREEN} >> Done"
 echo -e "${YELLOW} >> Setting Timezone"
 timedatectl set-timezone America/Denver >> ${logfile} 2>&1
 locale-gen en_US.UTF-8 >> ${logfile} 2>&1
-export LC_ALL=en_US.UTF-8 >> ${logfile} 2>&1
+echo -ne "${RED}Press Enter when ready!${NC}" ; read input
+export LC_ALL=en_US.UTF-8
+echo -ne "${RED}Press Enter when ready!${NC}" ; read input
+locale
+echo -ne "${RED}Press Enter when ready!${NC}" ; read input
 echo -e "${LGREEN} >> Done"
 
 echo -e "${YELLOW} >> Cloning from GitHub"
