@@ -626,16 +626,14 @@ curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$zoneid1/dns_records
   -H "X-Auth-Email: $cfemail" \
   -H "X-Auth-Key: $cfk" \
   -H "Content-Type: application/json" \
-  --data '{"type":"A","name":"$zone1","content":"$SERVERIP","ttl":120,"priority":10,"proxied":false}' | jq
+  --data '{"type":"A","name":"$zone1","content":"$SERVERIP","ttl":1,"proxied":false}' | jq
 echo -e  "${zoneid2} - ${cfemail} - ${cfk} - ${zone2} - ${SERVERIP}"
 curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$zoneid2/dns_records" \
   -H "X-Auth-Email: $cfemail" \
   -H "X-Auth-Key: $cfk" \
   -H "Content-Type: application/json" \
-  --data '{"type":"A","name":"$zone2","content":"$SERVERIP","ttl":120,"priority":10,"proxied":false}' | jq
-
+  --data '{"type":"A","name":"$zone2","content":"$SERVERIP","ttl":1,"proxied":false}' | jq
 echo -e "${LGREEN} == Done == ${NC}"
-echo -ne "${WHITE}Press when Record Created!${NC}" ; read input
 echo -ne "${WHITE}Press Enter when DNS ready!${NC}" ; read input
 echo -e "${YELLOW} Generating Certificate ${NC}"
 
