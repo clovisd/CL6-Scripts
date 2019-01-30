@@ -26,7 +26,7 @@ echo -e "OS: ${OS}"
 echo -e "VER: ${VER}"
 
 echo -e "${GREEN}<== CL6 Server Setup Script ==>"
-echo -e "${LGREEN} v2.3- clovisd"
+echo -e "${LGREEN} v2.4- clovisd"
 echo -ne "${RED}Press Enter when ready!${NC}" ; read input
 
 #Log File
@@ -71,7 +71,25 @@ if [[ -z $rootpasswd ]]; then
 else
     echo "root:$rootpasswd" > /home/scripts/setup/root.info
 fi
+echo -ne "\n${RED}>> Cloudflare Account Info:${NC}\n"
+read -s -p "Enter CloudFlare Email:" c6passwd
+if [[ -z $cfemail ]]; then
+    echo "No Value Entered. Exiting.${NC}"
+	exit 1
+else
+    echo "$cfemail" > /home/scripts/setup/cfemail.info
+fi
+echo -ne "\n"
+read -s -p "Enter CloudFlare Auth Key:" cfk
+if [[ -z $cfk ]]; then
+    echo "No Value Entered. Exiting.${NC}"
+	exit 1
+else
+    echo "$cfk" > /home/scripts/setup/cfkey.info
+fi
+
 echo ""
+
 #SetupConf
 debconf-set-selections <<< 'mysql-server mysql-server/root_password password ${rootpasswd}'
 debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password ${rootpasswd}'
@@ -140,7 +158,8 @@ echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
 service mysql restart | tee -a "$logfile"
 service apache2 restart | tee -a "$logfile"
 echo -e "${YELLOW} Installing PHP Packages ${NC}"
-(apt-get install -qq php7.2 php7.2-mysql php7.2-curl php7.2-xml php7.2-zip  php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap php-pear) >> ${logfile} & PID=$! 2>&1
+(apt-get install -qq php7.2 php7.2-mysql php7.2-curl php7.2-xml php7.2-zip  php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap) >> ${logfile} & PID=$! 2>&1
+#php-pear
     printf  "${GREEN}[INSTALL:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
@@ -150,7 +169,7 @@ printf "${GREEN}]${NC} - Done\n"
 echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
 service mysql restart | tee -a "$logfile"
 service apache2 restart | tee -a "$logfile"
-echo -e "${YELLOW} Installing Personal Packages ${NC}"
+echo -e "${YELLOW} Installing Other QOL Packages ${NC}"
 (apt-get install -qq mc sl screen htop) >> ${logfile} & PID=$! 2>&1
     printf  "${GREEN}[INSTALL:"
 while kill -0 $PID 2> /dev/null; do 
@@ -344,7 +363,7 @@ ldap.max_links = -1
 [opcache]
 [curl]
 [openssl]'
-echo "${PHP}" > /etc/php/7.2/apach2/php.ini
+echo "${PHPSETTINGS}" > /etc/php/7.2/apach2/php.ini
 
 echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
 service apache2 restart | tee -a "$logfile"
@@ -390,9 +409,14 @@ echo "${HOSTNAME}" > /etc/hostname
 echo -e "${GREEN} Set Hosts ${NC}"
 
 HOSTS="# Basic Hosts
+127.0.0.1 localhost.localdomain localhost
+# Auto-generated hostname. Please do not remove this comment.
+
+${SERVERIP} S${SERVERNUM}.CL6.US S${SERVERNUM}
 127.0.1.1 CL6-${SERVERNUM}.localdomain CL6-${SERVERNUM}
-127.0.1.1 S${SERVERNUM}.cl6.us CL6-${SERVERNUM}
+127.0.1.1 S${SERVERNUM}.CL6.US CL6-${SERVERNUM}
 127.0.0.1 localhost
+
 # IPv6 Hosts
 ::1 ip6-localhost ip6-loopback
 fe00::0 ip6-localnet
@@ -400,6 +424,7 @@ ff00::0 ip6-mcastprefix
 ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 ff02::3 ip6-allhosts
+
 # Net Hosts
 ​${SERVERIP} S${SERVERNUM}.CL6.US
 ​${SERVERIP} S${SERVERNUM}.CL6WEB.COM"
@@ -410,12 +435,36 @@ echo -e "${LGREEN} == Done == ${NC}"
 
 #SetupPHPAdmin
 echo -e "${BLUE}<== 8. PHPMyAdmin ==> ${NC}"
-apt-get -qq update
-apt-get -qq upgrade
-apt-get -qq autoremove
+(apt-get update) >> ${logfile} & PID=$! 2>&1
+    printf  "${GREEN}[UPDATE:"
+while kill -0 $PID 2> /dev/null; do 
+    printf  "."
+    sleep 3
+done
+printf "${GREEN}]${NC} - Done\n"
+(apt-get upgrade -qq) >> ${logfile} & PID=$! 2>&1
+    printf  "${GREEN}[UPGRADE:\n"
+while kill -0 $PID 2> /dev/null; do 
+    printf  "."
+    sleep 3
+done
+printf "${GREEN}]${NC} - Done\n"
+
+(apt-get autoclean -qq) >> ${logfile} & PID=$! 2>&1
+    printf  "${GREEN}[AUTOCLEAN:"
+while kill -0 $PID 2> /dev/null; do 
+    printf  "."
+    sleep 3
+done
+printf "${GREEN}]${NC} - Done\n"
 echo -e "${YELLOW} Installing PHPMyAdmin ${NC}"
-#DEBIAN_FRONTEND=readline
-apt-get install -qq phpmyadmin
+(DEBIAN_FRONTEND=noninteractive apt-get install -qq phpmyadmin) >> ${logfile} & PID=$! 2>&1
+    printf  "${GREEN}[INSTALL:\n"
+while kill -0 $PID 2> /dev/null; do 
+    printf  "."
+    sleep 3
+done
+printf "${GREEN}]${NC} - Done\n"
 echo -e "${YELLOW}Setting Auth File ${NC}"
 
 AUTH='AuthType Basic
@@ -534,6 +583,56 @@ echo -e "${YELLOW} Creating SymLink ${NC}"
 cd /etc/apache2/sites-enabled && ln -s /etc/apache2/sites-available/s${SERVERNUM}.cl6.us.conf
 echo -e "${YELLOW} Restarting Apache ${NC}"
 service apache2 restart | tee -a "$logfile"
+echo -e "${YELLOW} Creating A Records ${NC}"
+
+zone1=cl6.us
+zone2=cl6web.com
+dnsrecord1=s${SERVERNUM}.cl6.us
+dnsrecord2=s${SERVERNUM}.cl6web.com
+
+# get the zone id for the requested zone
+zoneid1=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=zone1&status=active" \
+  -H "X-Auth-Email: $cloudflare_auth_email" \
+  -H "X-Auth-Key: $cfk" \
+  -H "Content-Type: application/json" | jq -r '{"result"}[] | .[0] | .id')
+  
+zoneid2=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=zone2&status=active" \
+  -H "X-Auth-Email: $cloudflare_auth_email" \
+  -H "X-Auth-Key: $cfk" \
+  -H "Content-Type: application/json" | jq -r '{"result"}[] | .[0] | .id')
+
+echo "Zoneid for $zone1 is $zoneid1"
+echo "Zoneid for $zone2 is $zoneid2"
+
+# get the dns record id
+dnsrecordid1=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$zoneid1/dns_records?type=A&name=$dnsrecord1" \
+  -H "X-Auth-Email: $cloudflare_auth_email" \
+  -H "X-Auth-Key: $cfk" \
+  -H "Content-Type: application/json" | jq -r '{"result"}[] | .[0] | .id')
+  
+dnsrecordid2=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$zoneid2/dns_records?type=A&name=$dnsrecord2" \
+  -H "X-Auth-Email: $cloudflare_auth_email" \
+  -H "X-Auth-Key: $cfk" \
+  -H "Content-Type: application/json" | jq -r '{"result"}[] | .[0] | .id')
+
+echo "DNSrecordid for $dnsrecord1 is $dnsrecordid1"
+echo "DNSrecordid for $dnsrecord2 is $dnsrecordid2"
+
+# update the record
+curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$zoneid1/dns_records/$dnsrecordid1" \
+  -H "X-Auth-Email: $cloudflare_auth_email" \
+  -H "X-Auth-Key: $cfk" \
+  -H "Content-Type: application/json" \
+  --data "{\"type\":\"A\",\"name\":\"$dnsrecord1\",\"content\":\"$ip\",\"ttl\":1,\"proxied\":false}" | jq
+  
+curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$zoneid2/dns_records/$dnsrecordid2" \
+  -H "X-Auth-Email: $cloudflare_auth_email" \
+  -H "X-Auth-Key: $cfk" \
+  -H "Content-Type: application/json" \
+  --data "{\"type\":\"A\",\"name\":\"$dnsrecord2\",\"content\":\"$ip\",\"ttl\":1,\"proxied\":false}" | jq
+
+​echo -e "${LGREEN} == Done == ${NC}"
+echo -ne "${WHITE}Press when Record Created!${NC}" ; read input
 echo -ne "${WHITE}Press Enter when DNS ready!${NC}" ; read input
 echo -e "${YELLOW} Generating Certificate ${NC}"
 
