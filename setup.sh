@@ -79,7 +79,7 @@ echo -ne "\n${RED}>> Cloudflare Account Info:${NC}\n"
 read -p "Enter CloudFlare Email: " CFEMAIL
 if [[ -z $CFEMAIL ]]; then
     echo "No Value Entered. Using default."
-	"clovisdelmotte@gmail.com" > /opt/cl6/vault/cfemail.vault
+	echo "clovisdelmotte@gmail.com" > /opt/cl6/vault/cfemail.vault
 else
     echo "$CFEMAIL" > /opt/cl6/vault/cfemail.vault
 fi

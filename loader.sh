@@ -8,8 +8,7 @@
 #bash <(wget -O- -q https://raw.githubusercontent.com/clovisd/CL6-Scripts/master/loader.sh)
 #bash <(wget -O- -q https://goo.gl/yf18Rh)
 
-V='v2.6.0'
-echo "${V}" > /opt/cl6/info/cl6v.info
+V='v2.6.1'
 
 #Color Codes
 RED='\033[0;31m'
@@ -129,6 +128,7 @@ fi
 
 echo "${OS}" > /opt/cl6/info/os.info
 echo "${VER}" > /opt/cl6/info/ver.info
+echo "${V}" > /opt/cl6/info/cl6v.info
 
 #Run Install
 echo -e "${BLUE} ===>> Running Setup Script <<===${NC}"
