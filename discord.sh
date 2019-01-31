@@ -5,24 +5,26 @@
 #set -x
 #set +x
 
-OS-OS=$(</opt/cl6/info/os.info)
-OS-VER=$(</opt/cl6/info/ver.info)
-INSTALL-VER=$(</opt/cl6/info/cl6v.info)
-SERVER-NUM=$(</opt/cl6/info/servernum.info)
-SERVER-IP=$(</opt/cl6/info/serverip.info)
-USER-ROOT-PASSWD=$(</opt/cl6/vault/cl6-passwd.vault)
-USER-CL6-PASSWD=$(</opt/cl6/vault/root-passwd.vault)
+OSOS=$(</opt/cl6/info/os.info)
+OSVER=$(</opt/cl6/info/ver.info)
+INSTALLVER=$(</opt/cl6/info/cl6v.info)
+SERVERNUM=$(</opt/cl6/info/servernum.info)
+SERVERIP=$(</opt/cl6/info/serverip.info)
+USERROOTPASSWD=$(</opt/cl6/vault/cl6-passwd.vault)
+USERCL6PASSWD=$(</opt/cl6/vault/root-passwd.vault)
 
 curl -s -X POST "https://discordapp.com/api/webhooks/540485981564960768/dUFXcmnKquZxcWx4SmoSTbupdJ-bWZzBn8zO-yPIjo6ozbLUm-Cfa6e4HY0TLSwvzOm3" \
+  -H "Content-Type: application/json" \
   --data '{
   "username": "CL6 Bot",
   "embeds": [
     {
+      "content": "embeds",
       "title": "**CL6 Web Company **- *Automation Script Update*",
       "description": "A new server has just been setup, see below for more information:",
       "color": 15680559,
       "footer": {
-        "text": "install completed using '"$INSTALL-VER"' CL6 install script"
+        "text": "install completed using '"$INSTALLVER"' CL6 install script"
       },
       "thumbnail": {
         "url": "https://i.imgur.com/yvkJ2un.png"
@@ -30,11 +32,11 @@ curl -s -X POST "https://discordapp.com/api/webhooks/540485981564960768/dUFXcmnK
       "fields": [
         {
           "name": "Server Name & Info:",
-          "value": " **[CL6.US Server #'"$SERVER-NUM"'](https://s'"$SERVER-NUM"'.cl6.us)**\n\n`https://S'"$SERVER-NUM"'.CL6.US` or `https://S'"$SERVER-NUM"'.CL6WEB.COM`\n"
+          "value": " **[CL6.US Server #'"$SERVERNUM"'](https://s'"$SERVERNUM"'.cl6.us)**\n\n`https://S'"$SERVERNUM"'.CL6.US` or `https://S'"$SERVERNUM"'.CL6WEB.COM`\n"
         },
         {
           "name": "OS & Version:",
-          "value": "OS: `'"$OS-OS"'`\nVER: `'"$OS-VER"'`",
+          "value": "OS: `'"$OSOS"'`\nVER: `'"$OSVER"'`",
           "inline": true
         },
         {
@@ -44,28 +46,27 @@ curl -s -X POST "https://discordapp.com/api/webhooks/540485981564960768/dUFXcmnK
         },
         {
           "name": "Network Info:",
-          "value": "IP: `'"$SERVER-IP"'`\nU:\nD:\nP:",
+          "value": "IP: `'"$SERVERIP"'`\nU:\nD:\nP:",
           "inline": true
         },
         {
           "name": "SSH Access:",
-          "value": "URL: `S'"$SERVER-NUM"'.CL6.US`\nPORT: `42806`\n\n`ssh user@s'"$SERVER-NUM"'.cl6.us -p 42806`",
+          "value": "URL: `S'"$SERVERNUM"'.CL6.US`\nPORT: `42806`\n\n`ssh user@s'"$SERVERNUM"'.cl6.us -p 42806`",
           "inline": true
         },
         {
           "name": "Database Info:",
-          "value": "**Users**:\n - root \ `'"USER-ROOT-PASSWD"'`",
+          "value": "**Users**:\n - root \ `'"$USERROOTPASSWD"'`",
           "inline": true
         },
         {
           "name": "Setup Info:",
-          "value": "Setup Ver: `'"$INSTALL-VER"'`\nDuration: `2h 15m`\nHostname: `S'"$SERVER-NUM"'`",
+          "value": "Setup Ver: `'"$INSTALLVER"'`\nDuration: `2h 15m`\nHostname: `S'"$SERVERNUM"'`",
           "inline": true
         }
       ]
     }
   ]
-}' >> ${logfile} 2>&1
-  
+}'
 sleep 3s
 exit
