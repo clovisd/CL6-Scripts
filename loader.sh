@@ -42,6 +42,7 @@ fi
 
 #Setup Files & Directories
 echo -e "${YELLOW} >> Setting up Directories"
+if [ ! -d /opt/cl6 ]; then mkdir /opt/cl6 ; fi
 if [ ! -d /opt/cl6/setup ]; then mkdir /opt/cl6/setup ; fi
 if [ ! -d /opt/cl6/logs ]; then mkdir /opt/cl6/logs ; fi
 if [ ! -d /opt/cl6/info ]; then mkdir /opt/cl6/info ; fi
