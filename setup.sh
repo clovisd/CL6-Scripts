@@ -694,5 +694,8 @@ while kill -0 $PID 2> /dev/null; do
     sleep 3
 done
 printf "${GREEN}]${NC} - Done\n"
+echo -e "${YELLOW} Discord Ping ${NC}"
+cd /opt/cl6/setup && ./discord.sh
+printf "${GREEN}]${NC} - Done\n"
 echo -ne "${WHITE}Press Enter when Reboot Ready!${NC}" ; read input
 reboot
