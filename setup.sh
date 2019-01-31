@@ -40,12 +40,12 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 #Prompt for Server Info
-echo -ne "${WHITE}Please enter the S# name scheme: " ; read input
-if [[ -z $input ]]; then
+echo -ne "${WHITE}Please enter the S# name scheme: " ; read SERVERNUM
+if [[ -z $SERVERNUM ]]; then
     echo "No Value Entered. Exiting.${NC}"
 	exit 1
 else
-    SERVERNUM=${input}
+	echo "${SERVERNUM}" > /opt/cl6/info/servernum.info
     echo "Server Name Set to: S${input}.CL6.US (S${SERVERNUM}.CL6WEB.COM)"
 fi
 echo -ne "\n${RED}>> clovisd account info:${NC}\n"
@@ -54,7 +54,8 @@ if [[ -z $CLPASSWD ]]; then
     echo "No Value Entered. Exiting.${NC}"
 	exit 1
 else
-    echo "clovisd:$CLPASSWD" > /opt/cl6/vault/clovisd.vault
+    echo "clovisd:$CLPASSWD" > /opt/cl6/vault/clovisd-string.vault
+    echo "$CLPASSWD" > /opt/cl6/vault/clovisd-passwd.vault
 fi
 echo -ne "\n${RED}>> Cl6Web account info:${NC}\n"
 read -s -p "Enter Password: " C6PASSWD
@@ -62,7 +63,8 @@ if [[ -z $C6PASSWD ]]; then
     echo "No Value Entered. Exiting.${NC}"
 	exit 1
 else
-    echo "cl6web:$C6PASSWD" > /opt/cl6/vault/cl6web.vault
+    echo "cl6web:$C6PASSWD" > /opt/cl6/vault/cl6web-string.vault
+    echo "$C6PASSWD" > /opt/cl6/vault/cl6web-passwd.vault
 fi
 echo -ne "\n${RED}>> Root account info:${NC}\n"
 read -s -p "Enter Password: " ROOTPASSWD
@@ -70,13 +72,14 @@ if [[ -z $ROOTPASSWD ]]; then
     echo "No Value Entered. Exiting.${NC}"
 	exit 1
 else
-    echo "root:$ROOTPASSWD" > /opt/cl6/vault/root.vault
+    echo "root:$ROOTPASSWD" > /opt/cl6/vault/root-string.vault
+    echo "$ROOTPASSWD" > /opt/cl6/vault/root-passwd.vault
 fi
 echo -ne "\n${RED}>> Cloudflare Account Info:${NC}\n"
 read -p "Enter CloudFlare Email: " CFEMAIL
 if [[ -z $CFEMAIL ]]; then
-    echo "No Value Entered. Exiting.${NC}"
-	exit 1
+    echo "No Value Entered. Using default."
+	"clovisdelmotte@gmail.com" > /opt/cl6/vault/cfemail.vault
 else
     echo "$CFEMAIL" > /opt/cl6/vault/cfemail.vault
 fi
@@ -102,6 +105,7 @@ debconf-get-selections|grep mysql-server >> ${logfile} 2>&1
 #FigureOut IP
 SERVERIP="$(dig +short myip.opendns.com @resolver1.opendns.com)"
 echo "Server IP is: ${SERVERIP}"
+echo "${SERVERIP}" > /opt/cl6/info/serverip.info
 
 #Setup Updates for New Server
 echo -e "${BLUE}<== 1. Updates & Upgrades ==> ${NC}"
@@ -236,7 +240,7 @@ chpasswd<<<"clovisd:${CLPASSWD}"
 htpasswd -c -b /opt/cl6/vault/.htpasswd clovisd ${CLPASSWD}
 echo -e "${YELLOW} Setup User: cl6 ${NC}"
 useradd cl6 -G www-data -s /bin/bash
-chpasswd<<<"cl6web:${C6PASSWD}"
+chpasswd<<<"cl6:${C6PASSWD}"
 htpasswd -b /opt/cl6/vault/.htpasswd cl6 ${C6PASSWD}
 
 echo -e "${LGREEN} == Done == ${NC}"
