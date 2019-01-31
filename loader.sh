@@ -9,7 +9,7 @@
 #bash <(wget -O- -q https://goo.gl/yf18Rh)
 
 V='v2.6.0'
-echo ${V} > /opt/cl6/info/cl6v.info
+echo "${V}" > /opt/cl6/info/cl6v.info
 
 #Color Codes
 RED='\033[0;31m'
