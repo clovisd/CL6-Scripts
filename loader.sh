@@ -1,7 +1,7 @@
 #!/bin/bash
 #exec 3>&1 4>&2
 #trap 'exec 2>&4 1>&3' 0 1 2 3
-#exec 1>/home/scripts/logs/loader.out 2>&1
+#exec 1>/opt/cl6/logs/loader_exec.log 2>&1
 #set -x
 #set +x
 
@@ -9,7 +9,7 @@
 #bash <(wget -O- -q https://goo.gl/yf18Rh)
 
 V='v2.5.0'
-echo ${V} > /home/scripts/setup/version.info
+echo ${V} > /opt/cl6/info/cl6v.info
 
 #Color Codes
 RED='\033[0;31m'
@@ -42,13 +42,16 @@ fi
 
 #Setup Files & Directories
 echo -e "${YELLOW} >> Setting up Directories"
-if [ ! -d /home/scripts ]; then mkdir /home/scripts ; fi
-if [ ! -d /home/scripts/setup ]; then mkdir /home/scripts/setup ; fi
-if [ ! -d /home/scripts/logs ]; then mkdir /home/scripts/logs ; fi
+if [ ! -d /opt/cl6/setup ]; then mkdir /opt/cl6/setup ; fi
+if [ ! -d /opt/cl6/logs ]; then mkdir /opt/cl6/logs ; fi
+if [ ! -d /opt/cl6/info ]; then mkdir /opt/cl6/info ; fi
+if [ ! -d /opt/cl6/vault ]; then mkdir /opt/cl6/vault ; fi
+if [ ! -d /opt/cl6/hosting ]; then mkdir /opt/cl6/hosting ; fi
+if [ ! -d /opt/cl6/locks ]; then mkdir /opt/cl6/locks ; fi
 echo -e "${LGREEN} >> Done"
 
 #Log File
-logfile="/home/scripts/logs/loader.log"
+logfile="/opt/cl6/logs/loader.log"
 
 #Setup Base Programs
 echo -e "${YELLOW} >> Installing Programs"
@@ -85,11 +88,11 @@ export LANGUAGE=en_US.UTF-8
 echo -e "${LGREEN} >> Done"
 
 echo -e "${YELLOW} >> Cloning from GitHub"
-git clone https://github.com/clovisd/CL6-Scripts.git /home/scripts/setup >> ${logfile} 2>&1
+git clone https://github.com/clovisd/CL6-Scripts.git /opt/cl6/setup >> ${logfile} 2>&1
 echo -e "${LGREEN} >> Done"
 
 echo -e "${YELLOW} >> Setting Permissions"
-chmod a+x -R /home/scripts/setup/setup.sh
+chmod a+x -R /opt/cl6/setup/setup.sh
 echo -e "${LGREEN} >> Done"
 
 #DetectOS
@@ -123,9 +126,9 @@ else
     VER=$(uname -r)
 fi
 
-echo "${OS}" > /home/scripts/setup/os.info
-echo "${VER}" > /home/scripts/setup/ver.info
+echo "${OS}" > /opt/cl6/info/os.info
+echo "${VER}" > /opt/cl6/info/ver.info
 
 #Run Install
 echo -e "${BLUE} ===>> Running Setup Script <<===${NC}"
-cd /home/scripts/setup && ./setup.sh
+cd /opt/cl6/setup && ./setup.sh

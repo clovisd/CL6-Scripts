@@ -1,9 +1,10 @@
 #!/bin/bash
 #exec 3>&1 4>&2
 #trap 'exec 2>&4 1>&3' 0 1 2 3
-#exec 1>/home/scripts/logs/setup.out 2>&1
+#exec 1>/opt/cl6/logs/setup_exec.log 2>&1
 #set -x
 #set +x
+
 export DEBIAN_FRONTEND=noninteractive
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -18,9 +19,9 @@ LGREEN='\033[1;32m' #Completed
 NC='\033[0m'
 WHITE='\033[1;37m'
 
-OS=$(</home/scripts/setup/os.info)
-VER=$(</home/scripts/setup/ver.info)
-V=$(</home/scripts/setup/version.info)
+OS=$(</opt/cl6/info/os.info)
+VER=$(</opt/cl6/info/ver.info)
+V=$(</opt/cl6/info/cl6v.info)
 
 echo -e "OS: ${OS}"
 echo -e "VER: ${VER}"
@@ -30,7 +31,7 @@ echo -e "${LGREEN} ${V} - clovisd"
 echo -ne "${RED}Press Enter when ready!${NC}" ; read input
 
 #Log File
-logfile="/home/scripts/logs/setup.log"
+logfile="/opt/cl6/logs/setup.log"
 
 #Check Root
 if [[ $EUID -ne 0 ]]; then
@@ -53,7 +54,7 @@ if [[ -z $CLPASSWD ]]; then
     echo "No Value Entered. Exiting.${NC}"
 	exit 1
 else
-    echo "clovisd:$CLPASSWD" > /home/scripts/setup/clovisd.info
+    echo "clovisd:$CLPASSWD" > /opt/cl6/vault/clovisd.vault
 fi
 echo -ne "\n${RED}>> Cl6Web account info:${NC}\n"
 read -s -p "Enter Password: " C6PASSWD
@@ -61,7 +62,7 @@ if [[ -z $C6PASSWD ]]; then
     echo "No Value Entered. Exiting.${NC}"
 	exit 1
 else
-    echo "cl6web:$C6PASSWD" > /home/scripts/setup/cl6web.info
+    echo "cl6web:$C6PASSWD" > /opt/cl6/vault/cl6web.vault
 fi
 echo -ne "\n${RED}>> Root account info:${NC}\n"
 read -s -p "Enter Password: " ROOTPASSWD
@@ -69,7 +70,7 @@ if [[ -z $ROOTPASSWD ]]; then
     echo "No Value Entered. Exiting.${NC}"
 	exit 1
 else
-    echo "root:$ROOTPASSWD" > /home/scripts/setup/root.info
+    echo "root:$ROOTPASSWD" > /opt/cl6/vault/root.vault
 fi
 echo -ne "\n${RED}>> Cloudflare Account Info:${NC}\n"
 read -p "Enter CloudFlare Email: " CFEMAIL
@@ -77,7 +78,7 @@ if [[ -z $CFEMAIL ]]; then
     echo "No Value Entered. Exiting.${NC}"
 	exit 1
 else
-    echo "$CFEMAIL" > /home/scripts/setup/cfemail.info
+    echo "$CFEMAIL" > /opt/cl6/vault/cfemail.vault
 fi
 echo -ne "\n"
 read -p "Enter CloudFlare Auth Key: " CFK
@@ -85,7 +86,7 @@ if [[ -z $CFK ]]; then
     echo "No Value Entered. Exiting.${NC}"
 	exit 1
 else
-    echo "$CFK" > /home/scripts/setup/cfkey.info
+    echo "$CFK" > /opt/cl6/vault/cfkey.vault
 fi
 echo ""
 #SetupConf
@@ -119,8 +120,8 @@ while kill -0 $PID 2> /dev/null; do
 done
 printf "${GREEN}]${NC} - Done\n"
 DEBIAN_FRONTEND=noninteractive
-(apt-get autoclean -qq) >> ${logfile} & PID=$! 2>&1
-    printf  "${GREEN}[AUTOCLEAN:"
+(apt-get autoremove -qq) >> ${logfile} & PID=$! 2>&1
+    printf  "${GREEN}[AUTOREMOVE:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
@@ -214,8 +215,8 @@ while kill -0 $PID 2> /dev/null; do
 done
 printf "${GREEN}]${NC} - Done\n"
 
-(apt-get autoclean -qq) >> ${logfile} & PID=$! 2>&1
-    printf  "${GREEN}[AUTOCLEAN:"
+(apt-get autoremove -qq) >> ${logfile} & PID=$! 2>&1
+    printf  "${GREEN}[AUTOREMOVE:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
@@ -226,26 +227,26 @@ echo -e "${LGREEN} == Done == ${NC}"
 #Setup user
 echo -e "${BLUE}<== 2. Users & Passwords ==> ${NC}"
 
-if [ ! -d /home/cl6web ]; then mkdir /home/cl6web ; fi
+if [ ! -d /home/cl6 ]; then mkdir /home/cl6 ; fi
+if [ ! -d /home/root ]; then mkdir /home/root ; fi
 
 echo -e "${YELLOW} Setup User: clovisd ${NC}"
 useradd clovisd -m -s /bin/bash
 chpasswd<<<"clovisd:${CLPASSWD}"
-htpasswd -c -b /home/cl6web/.htpasswd clovisd ${CLPASSWD}
-echo -e "${YELLOW} Setup User: cl6web ${NC}"
-useradd cl6web -G www-data -s /bin/bash
+htpasswd -c -b /opt/cl6/vault/.htpasswd clovisd ${CLPASSWD}
+echo -e "${YELLOW} Setup User: cl6 ${NC}"
+useradd cl6 -G www-data -s /bin/bash
 chpasswd<<<"cl6web:${C6PASSWD}"
-htpasswd -b /home/cl6web/.htpasswd cl6web ${C6PASSWD}
+htpasswd -b /opt/cl6/vault/.htpasswd cl6 ${C6PASSWD}
 
 echo -e "${LGREEN} == Done == ${NC}"
 
 #Setup Bash
 echo -e "${BLUE}<== 3. Setup Bash ==> ${NC}"
 echo -e "${YELLOW} Setting Up Bash for All Users ${NC}"
-cp /home/scripts/setup/.bashrc /home/clovisd/
-cp /home/scripts/setup/.bashrc /home/cl6web/
-if [ ! -d /home/root ]; then mkdir /home/root ; fi
-cp /home/scripts/setup/.bashrc /home/root/
+cp /opt/cl6/setup/.bashrc /home/clovisd/
+cp /opt/cl6/setup/.bashrc /home/cl6/
+cp /opt/cl6/setup/.bashrc /home/root/
 echo -e "${LGREEN} == Done == ${NC}"
 
 #Setup PHP
@@ -385,14 +386,15 @@ ldap.max_links = -1
 [opcache]
 [curl]
 [openssl]'
-echo "${PHPSETTINGS}" > /etc/php/7.2/apach2/php.ini
+echo "${PHPSETTINGS}" > /etc/php/7.2/apache2/php.ini
+echo "${PHPSETTINGS}" > /etc/php/7.2/cli/php.ini
 echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
 service apache2 restart >> ${logfile} 2>&1
 #Setup permissions
 echo -e "${BLUE}<== 4. Setup User Permissions ==> ${NC}"
 
 SUDO="clovisd    ALL=(ALL:ALL) NOPASSWD:ALL
-cl6web    ALL=(ALL:ALL) ALL
+cl6    ALL=(ALL:ALL) ALL
 "
 
 echo "${SUDO}" > /etc/sudoers.d/cl6
@@ -470,8 +472,8 @@ while kill -0 $PID 2> /dev/null; do
 done
 printf "${GREEN}]${NC} - Done\n"
 
-(apt-get autoclean -qq) >> ${logfile} & PID=$! 2>&1
-    printf  "${GREEN}[AUTOCLEAN:"
+(apt-get autoremove -qq) >> ${logfile} & PID=$! 2>&1
+    printf  "${GREEN}[AUTOREMOVE:"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
@@ -489,7 +491,7 @@ echo -e "${YELLOW}Setting Auth File ${NC}"
 
 AUTH='AuthType Basic
 AuthName "Restricted Files"
-AuthUserFile /home/cl6web/.htpasswd
+AuthUserFile /opt/cl6/vault/.htpasswd
 Require valid-user'
 
 echo "${AUTH}" > /usr/share/phpmyadmin/.htaccess
@@ -500,8 +502,15 @@ echo -e "${YELLOW} Enable Plugin ${NC}"
 phpenmod mbstring
 phpenmod mcrypt
 echo -e "${YELLOW}Configure MySQL ${NC}"
-mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '${ROOTPASSWD}';"
+#mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '${ROOTPASSWD}';"
+#mysql -u root -p"${ROOTPASSWD}" -e "FLUSH PRIVILEGES;"
+
+mysql -u root -p"${ROOTPASSWD}" -e "CREATE USER ‘clovisd’@’%’ IDENTIFIED BY ‘${CLPASSWD}’;"
+mysql -u root -p"${ROOTPASSWD}" -e "CREATE USER cl6@’%’ IDENTIFIED BY ‘${C6PASSWD}’;"
+mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO ‘clovisd’@’%’;"
+mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO ‘cl6’@’%’;"
 mysql -u root -p"${ROOTPASSWD}" -e "FLUSH PRIVILEGES;"
+
 ​echo -e "${LGREEN} == Done == ${NC}"
 ​
 #Cleanup Apache
@@ -512,44 +521,44 @@ cd /etc/apache2/sites-available/ && rm -R *
 
 #Setup Host Directories
 echo -e "${BLUE}<== 9. Setting Up Host Directories ==> ${NC}"
-if [ ! -d /home/cl6web ]; then mkdir /home/cl6web ; fi
-if [ ! -d /home/cl6web/s${SERVERNUM}.cl6.us ]; then mkdir /home/cl6web/s${SERVERNUM}.cl6.us ; fi
-if [ ! -d /home/cl6web/s${SERVERNUM}.cl6.us/logs ]; then mkdir /home/cl6web/s${SERVERNUM}.cl6.us/logs ; fi
-if [ ! -d /home/cl6web/example.com ]; then mkdir /home/cl6web/example.com ; fi
-if [ ! -d /home/cl6web/example.com/logs ]; then mkdir /home/cl6web/example.com/logs ; fi
-if [ ! -d /home/cl6web/example.com/html ]; then mkdir /home/cl6web/example.com/html ; fi
-if [ ! -d /home/cl6web/example.com/backup ]; then mkdir /home/cl6web/example.com/backup ; fi
-if [ ! -d /home/cl6web/example.com/automation ]; then mkdir /home/cl6web/example.com/automation ; fi
+if [ ! -d /opt/cl6/hosting/ ]; then mkdir /opt/cl6/hosting/ ; fi
+if [ ! -d /opt/cl6/hosting/s${SERVERNUM}.cl6.us ]; then mkdir /opt/cl6/hosting/s${SERVERNUM}.cl6.us ; fi
+if [ ! -d /opt/cl6/hosting/s${SERVERNUM}.cl6.us/logs ]; then mkdir /opt/cl6/hosting/s${SERVERNUM}.cl6.us/logs ; fi
+if [ ! -d /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html ]; then mkdir /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html ; fi
+if [ ! -d /opt/cl6/hosting/s${SERVERNUM}.cl6.us/backup ]; then mkdir /opt/cl6/hosting/s${SERVERNUM}.cl6.us/backup ; fi
+if [ ! -d /opt/cl6/hosting/s${SERVERNUM}.cl6.us/automation ]; then mkdir /opt/cl6/hosting/s${SERVERNUM}.cl6.us/automation ; fi
+if [ ! -d /opt/cl6/hosting/example.com ]; then mkdir /opt/cl6/hosting/example.com ; fi
+if [ ! -d /opt/cl6/hosting/example.com/logs ]; then mkdir /opt/cl6/hosting/example.com/logs ; fi
+if [ ! -d /opt/cl6/hosting/example.com/html ]; then mkdir /opt/cl6/hosting/example.com/html ; fi
+if [ ! -d /opt/cl6/hosting/example.com/backup ]; then mkdir /opt/cl6/hosting/example.com/backup ; fi
+if [ ! -d /opt/cl6/hosting/example.com/automation ]; then mkdir /opt/cl6/hosting/example.com/automation ; fi
 echo -e "${LGREEN} == Done == ${NC}"
 
-#Setup CL6 Greeter Page
-echo -e "${BLUE}<== 11. Setup Greeter Page ==> ${NC}"
-if [ ! -d /home/scripts/setup/greeter ]; then mkdir /home/scripts/setup/greeter ; fi
+#Setup Catch-All
+echo -e "${BLUE}<== 11. Setup Catch-All Page ==> ${NC}"
+if [ ! -d /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/catch-all ]; then mkdir /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/catch-all ; fi
 echo -e "${YELLOW} Moving Archive ${NC}"
-cp /home/scripts/setup/greeter.tar.gz /home/scripts/setup/greeter
-cd /home/scripts/setup/greeter
+cp /opt/cl6/setup/catch-all.tar.gz /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/catch-all
+cd /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/catch-all
 echo -e "${YELLOW} Extracting Archive ${NC}"
-tar -zxvf greeter.tar.gz  >> ${logfile} 2>&1
-rm greeter.tar.gz
-if [ ! -d /home/cl6web/s${SERVERNUM}.cl6.us/greeter ]; then mkdir /home/cl6web/s${SERVERNUM}.cl6.us/greeter ; fi
-echo -e "${YELLOW} Moving Files ${NC}"
-cp -R /home/scripts/setup/greeter/ /home/cl6web/s${SERVERNUM}.cl6.us/
+tar -zxvf catch-all.tar.gz  >> ${logfile} 2>&1
+rm catch-all.tar.gz
 echo -e "${YELLOW} Creating Apache Conf ${NC}"
 
 STATUSPAGE="<VirtualHost *:80>
-	ServerName util.cl6.us
+	ServerName catch-all.cl6.us
 	ServerAlias *.cl6.us
 	ServerAlias *.cl6web.com
 	ServerAlias www.*.cl6web.com
 	ServerAlias www.*.cl6.us
 
 	ServerAdmin webmaster@cl6.us
-	DocumentRoot /home/cl6web/s${SERVERNUM}.cl6.us/greeter
+	DocumentRoot /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/catch-all
 	
-	ErrorLog /home/cl6web/s${SERVERNUM}.cl6.us/logs/greeterpage.log
-	CustomLog /home/cl6web/s${SERVERNUM}.cl6.us/logs/greeterpage-custom.log combined
+	ErrorLog /opt/cl6/hosting/s${SERVERNUM}.cl6.us/logs/catch-all.log
+	CustomLog /opt/cl6/hosting/s${SERVERNUM}.cl6.us/logs/catch-all-custom.log combined
 
-	<Directory /home/cl6web/s${SERVERNUM}.cl6.us/greeter>
+	<Directory /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/catch-all>
 		AllowOverride All
 		Require all granted
 	</Directory>
@@ -557,25 +566,20 @@ STATUSPAGE="<VirtualHost *:80>
 
 # vim: syntax=apache ts=4 sw=4 sts=4 sr noet"
 
-echo "${STATUSPAGE}" > /etc/apache2/sites-available/util.cl6.us.conf
+echo "${STATUSPAGE}" > /etc/apache2/sites-available/catch-all.cl6.us.conf
 echo -e "${YELLOW} Creating SymLink ${NC}"
-cd /etc/apache2/sites-enabled && ln -s /etc/apache2/sites-available/util.cl6.us.conf
+cd /etc/apache2/sites-enabled && ln -s /etc/apache2/sites-available/catch-all.cl6.us.conf
 echo -e "${YELLOW} Restarting Apache ${NC}"
 service apache2 restart >> ${logfile} 2>&1
 echo -e "${LGREEN} == Done == ${NC}"
 
 #Setup Server Status
 echo -e "${BLUE}<== 12. Setup Status Page ==> ${NC}"
-if [ ! -d /home/scripts/setup/status ]; then mkdir /home/scripts/setup/status ; fi
 echo -e "${YELLOW} Moving Archive ${NC}"
-cp /home/scripts/setup/status.tar.gz /home/scripts/setup/status
-cd /home/scripts/setup/status
+cp /opt/cl6/setup/status-page.tar.gz /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html
+cd /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html
 echo -e "${YELLOW} Extracting Archive ${NC}"
-tar -zxvf status.tar.gz  >> ${logfile} 2>&1
-rm status.tar.gz
-if [ ! -d /home/cl6web/s${SERVERNUM}.cl6.us/status ]; then mkdir /home/cl6web/s${SERVERNUM}.cl6.us/status ; fi
-echo -e "${YELLOW} Moving Files ${NC}"
-cp -R /home/scripts/setup/status/ /home/cl6web/s${SERVERNUM}.cl6.us/
+tar -zxvf status-page.tar.gz  >> ${logfile} 2>&1
 echo -e "${YELLOW} Creating Apache Conf ${NC}"
 
 STATUSPAGE="<VirtualHost *:80>
@@ -585,12 +589,12 @@ STATUSPAGE="<VirtualHost *:80>
 	ServerAlias www.s${SERVERNUM}.cl6.us
 
 	ServerAdmin webmaster@cl6.us
-	DocumentRoot /home/cl6web/s${SERVERNUM}.cl6.us/status
+	DocumentRoot /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html
 	
-	ErrorLog /home/cl6web/s${SERVERNUM}.cl6.us/logs/statuspage.log
-	CustomLog /home/cl6web/s${SERVERNUM}.cl6.us/logs/statuspage-custom.log combined
+	ErrorLog /opt/cl6/hosting/s${SERVERNUM}.cl6.us/logs/status-page.log
+	CustomLog /opt/cl6/hosting/s${SERVERNUM}.cl6.us/logs/status-page-custom.log combined
 
-	<Directory /home/cl6web/s${SERVERNUM}.cl6.us/status>
+	<Directory /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html>
 		AllowOverride All
 		Require all granted
 	</Directory>
@@ -641,10 +645,10 @@ echo -e "${LGREEN} == Done == ${NC}"
 echo -e "${YELLOW} Generating CertBot Certs ${NC}"
 #certbot --apache-n -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
 #certbot certonly -m ssl@cl6web.com --agree-tos --no-eff-email --redirect --webroot -w /home/cl6web/s${SERVERNUM}.cl6.us/status -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
-certbot run -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -a webroot -i apache -w /home/cl6web/s${SERVERNUM}.cl6.us/status -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com >> ${logfile} 2>&1
+certbot run -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -a webroot -i apache -w /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com >> ${logfile} 2>&1
 
 echo -e "${YELLOW} Setting HTACCESS File ${NC}"
-echo "${AUTH}" > /home/cl6web/s${SERVERNUM}.cl6.us/status/.htaccess
+echo "${AUTH}" > /opt/cl6/hosting/s${SERVERNUM}.cl6.us/.htaccess
 ​echo -e "${LGREEN} == Done == ${NC}"
 
 #CRON SSL Renew
@@ -655,8 +659,36 @@ crontab -u root -l; echo "$crontab" | crontab -u root - >> ${logfile} 2>&1
 #sudo rm -R /home/scripts/setup
 
 #Reboot
-apt-get -qq -y update #>> ${logfile} 2>&1
-apt-get -qq -y upgrade #>> ${logfile} 2>&1
-apt-get -qq -y autoremove #>> ${logfile} 2>&1
+(apt-get update) >> ${logfile} & PID=$! 2>&1
+    printf  "${GREEN}[UPDATE:"
+while kill -0 $PID 2> /dev/null; do 
+    printf  "."
+    sleep 3
+done
+printf "${GREEN}]${NC} - Done\n"
+
+(apt-get upgrade -qq) >> ${logfile} & PID=$! 2>&1
+    printf  "${GREEN}[UPGRADE:\n"
+while kill -0 $PID 2> /dev/null; do 
+    printf  "."
+    sleep 3
+done
+printf "${GREEN}]${NC} - Done\n"
+
+(apt-get autoremove -qq) >> ${logfile} & PID=$! 2>&1
+    printf  "${GREEN}[AUTOREMOVE:"
+while kill -0 $PID 2> /dev/null; do 
+    printf  "."
+    sleep 3
+done
+printf "${GREEN}]${NC} - Done\n"
+
+(apt-get autoclean -qq) >> ${logfile} & PID=$! 2>&1
+    printf  "${GREEN}[AUTOCLEAN:"
+while kill -0 $PID 2> /dev/null; do 
+    printf  "."
+    sleep 3
+done
+printf "${GREEN}]${NC} - Done\n"
 echo -ne "${WHITE}Press Enter when Reboot Ready!${NC}" ; read input
 reboot
