@@ -93,6 +93,7 @@ echo -e "${LGREEN} >> Done"
 
 echo -e "${YELLOW} >> Setting Permissions"
 chmod a+x -R /opt/cl6/setup/setup.sh
+chmod a+x -R /opt/cl6/setup/discord.sh
 echo -e "${LGREEN} >> Done"
 
 #DetectOS
