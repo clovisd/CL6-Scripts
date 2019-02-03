@@ -5,6 +5,14 @@
 #set -x
 #set +x
 
+#source formatting.sh
+#source menu.sh
+#source blocks.sh
+#source cloudflare.sh
+#source uptimerobot.sh
+#source discord.sh
+#source /opt/cl6/vault/variables.sh
+
 export DEBIAN_FRONTEND=noninteractive
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
