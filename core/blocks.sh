@@ -1,9 +1,6 @@
 #!/bin/bash
-#exec 3>&1 4>&2
-#trap 'exec 2>&4 1>&3' 0 1 2 3
-#exec 1>/home/scripts/logs/loader.out 2>&1
-#set -x
-#set +x(apt-get update -qq) >> ${logfile} & PID=$! 2>&1
+#source debug.sh
+#source base.sh 0
 
 (apt-get update) >> ${logfile} & PID=$! 2>&1
     printf  "${GREEN}[UPDATE:"

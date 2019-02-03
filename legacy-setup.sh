@@ -10,6 +10,7 @@
 
 . test.sh
 #source formatting.sh
+#source art.sh
 #source menu.sh
 #source blocks.sh
 #source service.sh
