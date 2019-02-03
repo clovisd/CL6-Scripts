@@ -1,17 +1,25 @@
 #!/bin/bash
+#source debug.sh
+#source base.sh 1
+
 #exec 3>&1 4>&2
 #trap 'exec 2>&4 1>&3' 0 1 2 3
 #exec 1>/opt/cl6/logs/setup_exec.log 2>&1
 #set -x
 #set +x
 
+. test.sh
 #source formatting.sh
 #source menu.sh
 #source blocks.sh
+#source service.sh
+#source cron.sh
+#source backup.sh
 #source cloudflare.sh
 #source uptimerobot.sh
 #source discord.sh
 #source /opt/cl6/vault/variables.sh
+#source pushbullet.sh
 
 export DEBIAN_FRONTEND=noninteractive
 export LC_ALL=en_US.UTF-8
