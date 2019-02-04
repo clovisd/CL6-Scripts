@@ -1,6 +1,7 @@
 #!/bin/bash
-#source debug.sh
-#source base.sh 0
+source base.sh
+debug 0
+logs formatting
 
 # Terminal output control (http://www.termsys.demon.co.uk/vtansi.htm)
 

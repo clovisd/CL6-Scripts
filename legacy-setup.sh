@@ -21,6 +21,7 @@
 #source discord.sh
 #source /opt/cl6/vault/variables.sh
 #source pushbullet.sh
+#source logs.sh
 
 export DEBIAN_FRONTEND=noninteractive
 export LC_ALL=en_US.UTF-8

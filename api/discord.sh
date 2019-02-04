@@ -1,9 +1,7 @@
 #!/bin/bash
-#exec 3>&1 4>&2
-#trap 'exec 2>&4 1>&3' 0 1 2 3
-#exec 1>/opt/cl6/logs/setup_exec.log 2>&1
-#set -x
-#set +x
+source base.sh
+debug 0
+logs discord
 
 OSOS=$(</opt/cl6/info/os.info)
 OSVER=$(</opt/cl6/info/ver.info)

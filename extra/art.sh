@@ -1,7 +1,9 @@
 #!/bin/bash
-#source debug.sh
-#source base.sh 0
+source base.sh
+debug 0
+logs art
 
+http://patorjk.com/software/taag
    ____ _     __   _   _ ____  
   / ___| |   / /_ | | | / ___| 
  | |   | |  | '_ \| | | \___ \ 
