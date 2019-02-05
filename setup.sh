@@ -509,10 +509,12 @@ echo -e "${YELLOW}Configure MySQL ${NC}"
 #mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '${ROOTPASSWD}';"
 #mysql -u root -p"${ROOTPASSWD}" -e "FLUSH PRIVILEGES;"
 
-mysql -u root -p"${ROOTPASSWD}" -e "CREATE USER ‘clovisd’@’%’ IDENTIFIED BY ‘${CLPASSWD}’;"
-mysql -u root -p"${ROOTPASSWD}" -e "CREATE USER cl6@’%’ IDENTIFIED BY ‘${C6PASSWD}’;"
-mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO ‘clovisd’@’%’;"
-mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO ‘cl6’@’%’;"
+#mysql -u root -p"${ROOTPASSWD}" -e "CREATE USER ‘clovisd’@’%’ IDENTIFIED BY ‘${CLPASSWD}’;"
+#mysql -u root -p"${ROOTPASSWD}" -e "CREATE USER cl6@’%’ IDENTIFIED BY ‘${C6PASSWD}’;"
+mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO 'clovisd'@'localhost' IDENTIFIED BY '${CLPASSWD}';"
+mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO 'cl6'@'localhost' IDENTIFIED BY '${C6PASSWD}';"
+#mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO ‘clovisd’@’%’;"
+#mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO ‘cl6’@’%’;"
 mysql -u root -p"${ROOTPASSWD}" -e "FLUSH PRIVILEGES;"
 
 ​echo -e "${LGREEN} == Done == ${NC}"
@@ -657,6 +659,7 @@ echo "${AUTH}" > /opt/cl6/hosting/s${SERVERNUM}.cl6.us/.htaccess
 
 #CRON SSL Renew
 crontab="0 0 1 * * certbot renew  >/dev/null 2>&1"
+crontab -e root
 crontab -u root -l; echo "$crontab" | crontab -u root - >> ${logfile} 2>&1
 
 #CleanUp
@@ -696,6 +699,10 @@ done
 printf "${GREEN}]${NC} - Done\n"
 echo -e "${YELLOW} Discord Ping ${NC}"
 cd /opt/cl6/setup && ./discord.sh
-printf "${GREEN}]${NC} - Done\n"
+
+echo -e "${BLUE}<== 14. Setup Swap ==> ${NC}"
+
+
+
 echo -ne "${WHITE}Press Enter when Reboot Ready!${NC}" ; read input
 reboot
