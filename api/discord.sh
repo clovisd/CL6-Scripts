@@ -3,6 +3,24 @@ source base.sh
 debug 0
 logs discord
 
+function dsc-post {
+
+BOTNAME=$1
+CONTENT=$2
+
+curl -s -X POST "https://discordapp.com/api/webhooks/540485981564960768/dUFXcmnKquZxcWx4SmoSTbupdJ-bWZzBn8zO-yPIjo6ozbLUm-Cfa6e4HY0TLSwvzOm3" \
+  -H "Content-Type: application/json" \
+  --data '{
+  "content": "'"$CONTENT"'",
+  "username": "'"$BOTNAME"'"
+  }'
+}
+
+function cf-greet {
+
+BOTNAME=$1
+CONTENT=$2
+
 OSOS=$(</opt/cl6/info/os.info)
 OSVER=$(</opt/cl6/info/ver.info)
 INSTALLVER=$(</opt/cl6/info/cl6v.info)
@@ -14,8 +32,8 @@ USERCL6PASSWD=$(</opt/cl6/vault/root-passwd.vault)
 curl -s -X POST "https://discordapp.com/api/webhooks/540485981564960768/dUFXcmnKquZxcWx4SmoSTbupdJ-bWZzBn8zO-yPIjo6ozbLUm-Cfa6e4HY0TLSwvzOm3" \
   -H "Content-Type: application/json" \
   --data '{
-  "content": "embeds",
-  "username": "CL6 Bot",
+  "content": "'"$CONTENT"'",
+  "username": "'"$BOTNAME"'",
   "embeds": [
 	{
       "title": "**CL6 Web Company **- *Automation Script Update*",
@@ -66,5 +84,4 @@ curl -s -X POST "https://discordapp.com/api/webhooks/540485981564960768/dUFXcmnK
     }
   ]
 }'
-sleep 3s
-exit
+}

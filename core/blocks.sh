@@ -4,7 +4,7 @@ debug 0
 logs blocks
 
 
-function block $1 $2 {
+function blk-apt $1 $2 {
 	(apt-get $1 $2) >> ${logfile} & PID=$! 2>&1
 	printf  "${GREEN}[$1:"
 	while kill -0 $PID 2> /dev/null; do 
