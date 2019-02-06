@@ -242,6 +242,9 @@ echo -e "${YELLOW} Setup User: cl6 ${NC}"
 useradd cl6 -G www-data -s /bin/bash
 chpasswd<<<"cl6:${C6PASSWD}"
 htpasswd -b /opt/cl6/vault/.htpasswd cl6 ${C6PASSWD}
+echo -e "${YELLOW} Setup User: root ${NC}"
+sudo passwd -dl root
+#echo "${ROOTPASSWD}" | passwd --stdin root
 
 echo -e "${LGREEN} == Done == ${NC}"
 
@@ -653,7 +656,6 @@ certbot run -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -a webroot -
 echo -e "${YELLOW} Setting HTACCESS File ${NC}"
 echo "${AUTH}" > /opt/cl6/hosting/s${SERVERNUM}.cl6.us/.htaccess
 ​echo -e "${LGREEN} == Done == ${NC}"
-
 #CRON SSL Renew
 crontab="0 0 1 * * certbot renew  >/dev/null 2>&1"
 #crontab -e root
@@ -698,8 +700,6 @@ echo -e "${YELLOW} Discord Ping ${NC}"
 cd /opt/cl6/setup && ./discord.sh
 
 echo -e "${BLUE}<== 14. Setup Swap ==> ${NC}"
-
-
 
 echo -ne "${WHITE}Press Enter when Reboot Ready!${NC}" ; read input
 #reboot
