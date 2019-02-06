@@ -500,7 +500,6 @@ AUTH='AuthType Basic
 AuthName "Restricted Files"
 AuthUserFile /opt/cl6/vault/.htpasswd
 Require valid-user'
-
 echo "${AUTH}" > /usr/share/phpmyadmin/.htaccess
 echo -e "${YELLOW} Set ${GREEN}AllowOverride All${YELLOW} for PHPMYAdmin ${NC}"
 echo -ne "${WHITE}Press Enter when ready!" ; read input
@@ -519,7 +518,8 @@ mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO 'cl6'@'localh
 #mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO ‘cl6’@’%’;"
 mysql -u root -p"${ROOTPASSWD}" -e "FLUSH PRIVILEGES;" >> ${logfile} 2>&1
 echo -e "${LGREEN} == Done == ${NC}"
-​#cleanup Apache
+​
+#cleanup Apache
 echo -e "${BLUE}<== 9. Cleanup Apache Configs ==> ${NC}"
 cd /var/ && rm -R www
 cd /etc/apache2/sites-enabled/ && rm -R *
@@ -656,6 +656,7 @@ certbot run -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -a webroot -
 echo -e "${YELLOW} Setting HTACCESS File ${NC}"
 echo "${AUTH}" > /opt/cl6/hosting/s${SERVERNUM}.cl6.us/.htaccess
 ​echo -e "${LGREEN} == Done == ${NC}"
+
 #CRON SSL Renew
 crontab="0 0 1 * * certbot renew  >/dev/null 2>&1"
 #crontab -e root
