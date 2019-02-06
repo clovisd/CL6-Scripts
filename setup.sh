@@ -510,13 +510,13 @@ echo -e "${YELLOW}Configure MySQL ${NC}"
 #mysql -u root -p"${ROOTPASSWD}" -e "FLUSH PRIVILEGES;"
 #mysql -u root -p"${ROOTPASSWD}" -e "CREATE USER ‘clovisd’@’%’ IDENTIFIED BY ‘${CLPASSWD}’;"
 #mysql -u root -p"${ROOTPASSWD}" -e "CREATE USER cl6@’%’ IDENTIFIED BY ‘${C6PASSWD}’;"
-mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO 'clovisd'@'localhost' IDENTIFIED BY '${CLPASSWD}';"
-mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO 'cl6'@'localhost' IDENTIFIED BY '${C6PASSWD}';"
+mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO 'clovisd'@'localhost' IDENTIFIED BY '${CLPASSWD}';" >> ${logfile} 2>&1
+mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO 'cl6'@'localhost' IDENTIFIED BY '${C6PASSWD}';" >> ${logfile} 2>&1
 #mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO ‘clovisd’@’%’;"
 #mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO ‘cl6’@’%’;"
-mysql -u root -p"${ROOTPASSWD}" -e "FLUSH PRIVILEGES;"
+mysql -u root -p"${ROOTPASSWD}" -e "FLUSH PRIVILEGES;" >> ${logfile} 2>&1
 echo -e "${LGREEN} == Done == ${NC}"
-​#Cleanup Apache
+​#cleanup Apache
 echo -e "${BLUE}<== 9. Cleanup Apache Configs ==> ${NC}"
 cd /var/ && rm -R www
 cd /etc/apache2/sites-enabled/ && rm -R *
