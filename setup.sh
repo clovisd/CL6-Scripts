@@ -552,8 +552,8 @@ tar -zxvf catch-all.tar.gz  >> ${logfile} 2>&1
 rm catch-all.tar.gz
 echo -e "${YELLOW} Creating Apache Conf ${NC}"
 
-STATUSPAGE="<VirtualHost *:80>
-	ServerName catch-all.cl6.us
+CATCHALL="<VirtualHost *:80>
+	ServerName catch.cl6.us
 	ServerAlias *.cl6.us
 	ServerAlias *.cl6web.com
 	ServerAlias www.*.cl6web.com
@@ -562,8 +562,8 @@ STATUSPAGE="<VirtualHost *:80>
 	ServerAdmin webmaster@cl6.us
 	DocumentRoot /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/catch-all
 	
-	ErrorLog /opt/cl6/hosting/s${SERVERNUM}.cl6.us/logs/catch-all.log
-	CustomLog /opt/cl6/hosting/s${SERVERNUM}.cl6.us/logs/catch-all-custom.log combined
+	ErrorLog /opt/cl6/hosting/s${SERVERNUM}.cl6.us/logs/catch.log
+	CustomLog /opt/cl6/hosting/s${SERVERNUM}.cl6.us/logs/catch-custom.log combined
 
 	<Directory /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/catch-all>
 		AllowOverride All
@@ -573,9 +573,9 @@ STATUSPAGE="<VirtualHost *:80>
 
 # vim: syntax=apache ts=4 sw=4 sts=4 sr noet"
 
-echo "${STATUSPAGE}" > /etc/apache2/sites-available/catch-all.cl6.us.conf
+echo "${CATCHALL}" > /etc/apache2/sites-available/catch.cl6.us.conf
 echo -e "${YELLOW} Creating SymLink ${NC}"
-cd /etc/apache2/sites-enabled && ln -s /etc/apache2/sites-available/catch-all.cl6.us.conf
+cd /etc/apache2/sites-enabled && ln -s /etc/apache2/sites-available/catch.cl6.us.conf
 echo -e "${YELLOW} Restarting Apache ${NC}"
 service apache2 restart >> ${logfile} 2>&1
 echo -e "${LGREEN} == Done == ${NC}"
