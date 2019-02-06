@@ -519,12 +519,11 @@ mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO 'cl6'@'localh
 #mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO ‘cl6’@’%’;"
 mysql -u root -p"${ROOTPASSWD}" -e "FLUSH PRIVILEGES;" >> ${logfile} 2>&1
 echo -e "${LGREEN} == Done == ${NC}"
-​
-#cleanup Apache
 echo -e "${BLUE}<== 9. Cleanup Apache Configs ==> ${NC}"
 cd /var/ && rm -R www
 cd /etc/apache2/sites-enabled/ && rm -R *
 cd /etc/apache2/sites-available/ && rm -R *
+echo -e "${LGREEN} == Done == ${NC}"
 
 #Setup Host Directories
 echo -e "${BLUE}<== 9. Setting Up Host Directories ==> ${NC}"
