@@ -552,24 +552,24 @@ tar -zxvf catch-all.tar.gz  >> ${logfile} 2>&1
 rm catch-all.tar.gz
 echo -e "${YELLOW} Creating Apache Conf ${NC}"
 
-CATCHALL="<VirtualHost *:80>
-	ServerName catch.cl6.us
-	ServerAlias *.cl6.us
-	ServerAlias *.cl6web.com
-	ServerAlias www.*.cl6web.com
-	ServerAlias www.*.cl6.us
+#CATCHALL="<VirtualHost _default_:80>
+#	ServerName catch.cl6.us
+#	ServerAlias *.cl6.us
+#	ServerAlias *.cl6web.com
+#	ServerAlias www.*.cl6web.com
+#	ServerAlias www.*.cl6.us
 
-	ServerAdmin webmaster@cl6.us
-	DocumentRoot /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/catch-all
+#	ServerAdmin webmaster@cl6.us
+#	DocumentRoot /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/catch-all
 	
-	ErrorLog /opt/cl6/hosting/s${SERVERNUM}.cl6.us/logs/catch.log
-	CustomLog /opt/cl6/hosting/s${SERVERNUM}.cl6.us/logs/catch-custom.log combined
+#	ErrorLog /opt/cl6/hosting/s${SERVERNUM}.cl6.us/logs/catch.log
+#	CustomLog /opt/cl6/hosting/s${SERVERNUM}.cl6.us/logs/catch-custom.log combined
 
-	<Directory /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/catch-all>
-		AllowOverride All
-		Require all granted
-	</Directory>
-</VirtualHost>
+#	<Directory /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/catch-all>
+#		AllowOverride All
+#		Require all granted
+#	</Directory>
+#</VirtualHost>
 
 # vim: syntax=apache ts=4 sw=4 sts=4 sr noet"
 
