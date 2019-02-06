@@ -645,26 +645,22 @@ curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONEID2/dns_records
   -H "X-Auth-Key: $CFK" \
   -H "Content-Type: application/json" \
   --data '{"type":"A","name":"'"$DNSRECORD2"'","content":"'"$SERVERIP"'","proxied":false}' >> ${logfile} 2>&1
-  
+
 sleep 3s
 echo -e "${LGREEN} == Done == ${NC}"
 echo -e "${YELLOW} Generating CertBot Certs ${NC}"
 #certbot --apache-n -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
 #certbot certonly -m ssl@cl6web.com --agree-tos --no-eff-email --redirect --webroot -w /home/cl6web/s${SERVERNUM}.cl6.us/status -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
 certbot run -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -a webroot -i apache -w /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com >> ${logfile} 2>&1
-
 echo -e "${YELLOW} Setting HTACCESS File ${NC}"
 echo "${AUTH}" > /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/.htaccess
 ​echo -e "${LGREEN} == Done == ${NC}"
-
 #CRON SSL Renew
 crontab="0 0 1 * * certbot renew  >/dev/null 2>&1"
 #crontab -e root
 crontab -u root -l; echo "$crontab" | crontab -u root - >> ${logfile} 2>&1
-
 #CleanUp
 #sudo rm -R /home/scripts/setup
-
 #Reboot
 (apt-get update) >> ${logfile} & PID=$! 2>&1
     printf  "${GREEN}[UPDATE:"
@@ -681,7 +677,6 @@ while kill -0 $PID 2> /dev/null; do
     sleep 3
 done
 printf "${GREEN}]${NC} - Done\n"
-
 (apt-get autoremove -qq) >> ${logfile} & PID=$! 2>&1
     printf  "${GREEN}[AUTOREMOVE:"
 while kill -0 $PID 2> /dev/null; do 
