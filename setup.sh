@@ -573,7 +573,7 @@ echo -e "${YELLOW} Creating Apache Conf ${NC}"
 
 # vim: syntax=apache ts=4 sw=4 sts=4 sr noet"
 
-echo "${CATCHALL}" > /etc/apache2/sites-available/catch.cl6.us.conf
+#echo "${CATCHALL}" > /etc/apache2/sites-available/catch.cl6.us.conf
 echo -e "${YELLOW} Creating SymLink ${NC}"
 cd /etc/apache2/sites-enabled && ln -s /etc/apache2/sites-available/catch.cl6.us.conf
 echo -e "${YELLOW} Restarting Apache ${NC}"
