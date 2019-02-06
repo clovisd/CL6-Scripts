@@ -703,3 +703,4 @@ echo -e "${BLUE}<== 14. Setup Swap ==> ${NC}"
 
 echo -ne "${WHITE}Press Enter when Reboot Ready!${NC}" ; read input
 #reboot
+#shutdown -t
