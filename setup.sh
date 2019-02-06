@@ -424,6 +424,7 @@ echo "${SSHD}" > /etc/ssh/sshd_config
 #nano /etc/ssh/sshd_config
 #vi /etc/ssh/sshd_config
 echo -e "${YELLOW} Restarting SSH Service ${NC}"
+mkdir /var/run/sshd
 service sshd restart
 echo -e "${LGREEN} == Done == ${NC}"
 
