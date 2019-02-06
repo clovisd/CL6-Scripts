@@ -505,6 +505,7 @@ echo "${AUTH}" > /usr/share/phpmyadmin/.htaccess
 echo -e "${YELLOW} Set ${GREEN}AllowOverride All${YELLOW} for PHPMYAdmin ${NC}"
 echo -ne "${WHITE}Press Enter when ready!" ; read input
 nano /etc/apache2/conf-available/phpmyadmin.conf
+#mysql -u root -p"Q~NE!p9#PnC2m6Su" < /usr/share/doc/phpmyadmin/examples/create_tables.sql
 echo -e "${YELLOW} Enable Plugin ${NC}"
 phpenmod mbstring
 phpenmod mcrypt
