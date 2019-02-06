@@ -46,7 +46,7 @@ if [[ -z $SERVERNUM ]]; then
 	exit 1
 else
 	echo "${SERVERNUM}" > /opt/cl6/info/servernum.info
-    echo "Server Name Set to: S${input}.CL6.US (S${SERVERNUM}.CL6WEB.COM)"
+    echo "Server Name Set to: S${SERVERNUM}.CL6.US (S${SERVERNUM}.CL6WEB.COM)"
 fi
 echo -ne "\n${RED}>> clovisd account info:${NC}\n"
 read -s -p "Enter Password: " CLPASSWD
