@@ -655,7 +655,7 @@ echo -e "${YELLOW} Generating CertBot Certs ${NC}"
 certbot run -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -a webroot -i apache -w /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com >> ${logfile} 2>&1
 
 echo -e "${YELLOW} Setting HTACCESS File ${NC}"
-echo "${AUTH}" > /opt/cl6/hosting/s${SERVERNUM}.cl6.us/.htaccess
+echo "${AUTH}" > /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/.htaccess
 ​echo -e "${LGREEN} == Done == ${NC}"
 
 #CRON SSL Renew
