@@ -654,6 +654,8 @@ echo -e "${YELLOW} Generating CertBot Certs ${NC}"
 certbot run -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -a webroot -i apache -w /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com >> ${logfile} 2>&1
 echo -e "${YELLOW} Setting HTACCESS File ${NC}"
 echo "${AUTH}" > /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/.htaccess
+echo -e "${YELLOW} Restarting Apache ${NC}"
+service apache2 restart >> ${logfile} 2>&1
 ​echo -e "${LGREEN} == Done == ${NC}"
 #CRON SSL Renew
 crontab="0 0 1 * * certbot renew  >/dev/null 2>&1"
@@ -698,5 +700,5 @@ cd /opt/cl6/setup && ./discord.sh
 echo -e "${BLUE}<== 14. Setup Swap ==> ${NC}"
 
 echo -ne "${WHITE}Press Enter when Reboot Ready!${NC}" ; read input
-#reboot
+reboot
 #shutdown -t
