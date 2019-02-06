@@ -515,11 +515,9 @@ mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO 'clovisd'@'lo
 mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO 'cl6'@'localhost' IDENTIFIED BY '${C6PASSWD}';"
 #mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO ‘clovisd’@’%’;"
 #mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO ‘cl6’@’%’;"
-mysql -u root -p"${ROOTPASSWD}" -e "FLUSH PRIVILEGES;"
-
-​echo -e "${LGREEN} == Done == ${NC}"
-​
-#Cleanup Apache
+mysql -u root -p"${ROOTPASSWD}" -e "FLUSH PRIVILEGES;
+echo -e "${LGREEN} == Done == ${NC}"
+​#Cleanup Apache
 echo -e "${BLUE}<== 9. Cleanup Apache Configs ==> ${NC}"
 cd /var/ && rm -R www
 cd /etc/apache2/sites-enabled/ && rm -R *
@@ -659,7 +657,7 @@ echo "${AUTH}" > /opt/cl6/hosting/s${SERVERNUM}.cl6.us/.htaccess
 
 #CRON SSL Renew
 crontab="0 0 1 * * certbot renew  >/dev/null 2>&1"
-crontab -e root
+#crontab -e root
 crontab -u root -l; echo "$crontab" | crontab -u root - >> ${logfile} 2>&1
 
 #CleanUp
