@@ -652,7 +652,7 @@ echo -e "${LGREEN} == Done == ${NC}"
 echo -e "${YELLOW} Generating CertBot Certs ${NC}"
 #certbot --apache-n -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
 #certbot certonly -m ssl@cl6web.com --agree-tos --no-eff-email --redirect --webroot -w /home/cl6web/s${SERVERNUM}.cl6.us/status -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
-certbot run -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -a webroot -i apache -w /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com >> ${logfile} 2>&1
+certbot run -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -a webroot -i apache -w /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com #>> ${logfile} 2>&1
 echo -e "${YELLOW} Setting HTACCESS File ${NC}"
 echo "${AUTH}" > /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/.htaccess
 echo -e "${YELLOW} Restarting Apache ${NC}"
