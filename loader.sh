@@ -53,6 +53,15 @@ echo -e "${LGREEN} >> Done"
 #Log File
 logfile="/opt/cl6/logs/loader.log"
 
+#SetTimeZone
+echo -e "${YELLOW} >> Setting Timezone"
+timedatectl set-timezone America/Denver >> ${logfile} 2>&1
+locale-gen en_US.UTF-8 >> ${logfile} 2>&1
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US.UTF-8
+echo -e "${LGREEN} >> Done"
+
 #Setup Base Programs
 echo -e "${YELLOW} >> Installing Programs"
 (apt-get update -qq) >> ${logfile} & PID=$! 2>&1
@@ -76,15 +85,6 @@ while kill -0 $PID 2> /dev/null; do
     sleep 3
 done
 printf "${GREEN}]${NC} - Done\n"
-echo -e "${LGREEN} >> Done"
-
-#SetTimeZone
-echo -e "${YELLOW} >> Setting Timezone"
-timedatectl set-timezone America/Denver >> ${logfile} 2>&1
-locale-gen en_US.UTF-8 >> ${logfile} 2>&1
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
-export LANGUAGE=en_US.UTF-8
 echo -e "${LGREEN} >> Done"
 
 echo -e "${YELLOW} >> Cloning from GitHub"
