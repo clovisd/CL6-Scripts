@@ -63,8 +63,8 @@ if [[ -z $C6PASSWD ]]; then
     echo "No Value Entered. Exiting.${NC}"
 	exit 1
 else
-    echo "cl6web:$C6PASSWD" > /opt/cl6/vault/cl6web-string.vault
-    echo "$C6PASSWD" > /opt/cl6/vault/cl6web-passwd.vault
+    echo "cl6web:$C6PASSWD" > /opt/cl6/vault/cl6-string.vault
+    echo "$C6PASSWD" > /opt/cl6/vault/cl6-passwd.vault
 fi
 echo -ne "\n${RED}>> Root account info:${NC}\n"
 read -s -p "Enter Password: " ROOTPASSWD

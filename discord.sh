@@ -16,7 +16,7 @@ USERCL6PASSWD=$(</opt/cl6/vault/root-passwd.vault)
 curl -s -X POST "https://discordapp.com/api/webhooks/540485981564960768/dUFXcmnKquZxcWx4SmoSTbupdJ-bWZzBn8zO-yPIjo6ozbLUm-Cfa6e4HY0TLSwvzOm3" \
   -H "Content-Type: application/json" \
   --data '{
-  "content": "embeds",
+  "content": "**New Server Created:** *'$SERVERNUM'.cl6.us.*",
   "username": "CL6 Bot",
   "embeds": [
 	{
@@ -56,7 +56,7 @@ curl -s -X POST "https://discordapp.com/api/webhooks/540485981564960768/dUFXcmnK
         },
         {
           "name": "Database Info:",
-          "value": "PHPMyAdmin: [LINK](https://S'"$SERVERNUM"'.CL6WEB.COM)\nUsers:\nroot - '"$USERROOTPASSWD"'",
+          "value": "PHPMyAdmin: [Access](https://S'"$SERVERNUM"'.CL6WEB.COM)\nAccess:\ncl6 - '"$USERCL6PASSWD"'",
           "inline": true
         },
         {
