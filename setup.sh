@@ -701,5 +701,5 @@ cd /opt/cl6/setup && ./discord.sh
 echo -e "${BLUE}<== 14. Setup Swap ==> ${NC}"
 
 echo -ne "${WHITE}Press Enter when Reboot Ready!${NC}" ; read input
-reboot
+reboot & exit
 #shutdown -t
