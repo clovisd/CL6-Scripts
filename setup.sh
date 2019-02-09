@@ -85,6 +85,7 @@ read -p "Enter CloudFlare Email: " CFEMAIL
 if [[ -z $CFEMAIL ]]; then
     echo "No Value Entered. Using default."
 	echo "clovisdelmotte@gmail.com" > /opt/cl6/vault/cfemail.vault
+	CFEMAIL="clovisdelmotte@gmail.com"
 else
     echo "$CFEMAIL" > /opt/cl6/vault/cfemail.vault
 fi
@@ -453,7 +454,7 @@ STATUSPAGE="<VirtualHost *:80>
 		Require all granted
 	</Directory>
 </VirtualHost>
-
+	
 # vim: syntax=apache ts=4 sw=4 sts=4 sr noet"
 
 echo "${STATUSPAGE}" > /etc/apache2/sites-available/s${SERVERNUM}.cl6.us.conf
@@ -484,7 +485,7 @@ curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONEID1/dns_records
   -H "X-Auth-Email: $CFEMAIL" \
   -H "X-Auth-Key: $CFK" \
   -H "Content-Type: application/json" \
-  --data '{"type":"A","name":"'"$DNSRECORD1"'","content":"'"$SERVERIP"'","proxied":false}' >> ${logfile} 2>&1
+  --data '{"type":"A","name":"'"$DNSRECORD1"'","content":"'"$SERVERIP"'","proxied":false}' #>> ${logfile} 2>&1
   
 sleep 3s
 
@@ -492,7 +493,7 @@ curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONEID2/dns_records
   -H "X-Auth-Email: $CFEMAIL" \
   -H "X-Auth-Key: $CFK" \
   -H "Content-Type: application/json" \
-  --data '{"type":"A","name":"'"$DNSRECORD2"'","content":"'"$SERVERIP"'","proxied":false}' >> ${logfile} 2>&1
+  --data '{"type":"A","name":"'"$DNSRECORD2"'","content":"'"$SERVERIP"'","proxied":false}' #>> ${logfile} 2>&1
 
 sleep 3s
 echo -e "${LGREEN} == Done == ${NC}"
@@ -514,11 +515,11 @@ echo -e "${BLUE}<== 13. Uptime Robot ==> ${NC}"
 curl -X POST \
 	-H "Cache-Control: no-cache" \
 	-H "Content-Type: application/x-www-form-urlencoded" \
-	-d 'api_key='$UPTIMEKEY'&format=json&type=1&url=http://s'${SERVERNUM}'.cl6.us&friendly_name='S${SERVERNUM}'.CL6.US (HTTP)&http_username=cl6web&http_password='$C6PASSWD'' "https://api.uptimerobot.com/v2/newMonitor" 
+	-d 'api_key='$UPTIMEKEY'&format=json&type=1&url=http://s'${SERVERNUM}'.cl6.us&friendly_name='S${SERVERNUM}'.CL6.US (HTTP)&http_username=cl6web&http_password='$C6PASSWD'' "https://api.uptimerobot.com/v2/newMonitor" >> ${logfile} 2>&1
 curl -X POST \
 	-H "Cache-Control: no-cache" \
 	-H "Content-Type: application/x-www-form-urlencoded" \
-	-d 'api_key='$UPTIMEKEY'&format=json&type=1&url=https://s'${SERVERNUM}'.cl6.us&friendly_name=S'${SERVERNUM}'.CL6.US (HTTPS)&http_username=cl6web&http_password='$C6PASSWD'' "https://api.uptimerobot.com/v2/newMonitor" 
+	-d 'api_key='$UPTIMEKEY'&format=json&type=1&url=https://s'${SERVERNUM}'.cl6.us&friendly_name=S'${SERVERNUM}'.CL6.US (HTTPS)&http_username=cl6web&http_password='$C6PASSWD'' "https://api.uptimerobot.com/v2/newMonitor" >> ${logfile} 2>&1
 ​echo -e "${LGREEN} == Done == ${NC}"
 #sudo rm -R /home/scripts/setup
 #CleanUp
