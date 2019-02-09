@@ -244,7 +244,7 @@ echo -e "${LGREEN} == Done == ${NC}"
 #Setup user
 echo -e "${BLUE}<== 2. Users & Passwords ==> ${NC}"
 
-if [ ! -d /home/cl6 ]; then mkdir /home/cl6 ; fi
+if [ ! -d /home/cl6web ]; then mkdir /home/cl6web ; fi
 if [ ! -d /home/root ]; then mkdir /home/root ; fi
 
 echo -e "${YELLOW} Setup User: clovisd ${NC}"
