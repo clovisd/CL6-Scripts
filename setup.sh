@@ -73,7 +73,7 @@ fi
 #	exit 1
 #else
 
-ROOTPASSWD='$C6PASSWD'
+ROOTPASSWD=$C6PASSWD
 
     echo "root:$ROOTPASSWD" > /opt/cl6/vault/root-string.vault
     echo "$ROOTPASSWD" > /opt/cl6/vault/root-passwd.vault
@@ -241,10 +241,10 @@ echo -e "${YELLOW} Setup User: clovisd ${NC}"
 useradd clovisd -m -s /bin/bash
 chpasswd<<<"clovisd:${CLPASSWD}"
 htpasswd -c -b /opt/cl6/vault/.htpasswd clovisd ${CLPASSWD}
-echo -e "${YELLOW} Setup User: cl6 ${NC}"
-useradd cl6 -G www-data -s /bin/bash
+echo -e "${YELLOW} Setup User: cl6web ${NC}"
+useradd cl6web -G www-data -s /bin/bash
 chpasswd<<<"cl6:${C6PASSWD}"
-htpasswd -b /opt/cl6/vault/.htpasswd cl6 ${C6PASSWD}
+htpasswd -b /opt/cl6/vault/.htpasswd cl6web ${C6PASSWD}
 echo -e "${YELLOW} Setup User: root ${NC}"
 sudo passwd -dl root
 #echo "${ROOTPASSWD}" | passwd --stdin root
@@ -255,7 +255,7 @@ echo -e "${LGREEN} == Done == ${NC}"
 echo -e "${BLUE}<== 3. Setup Bash ==> ${NC}"
 echo -e "${YELLOW} Setting Up Bash for All Users ${NC}"
 cp /opt/cl6/setup/.bashrc /home/clovisd/
-cp /opt/cl6/setup/.bashrc /home/cl6/
+cp /opt/cl6/setup/.bashrc /home/cl6web
 cp /opt/cl6/setup/.bashrc /home/root/
 echo -e "${LGREEN} == Done == ${NC}"
 
@@ -404,7 +404,7 @@ service apache2 restart >> ${logfile} 2>&1
 echo -e "${BLUE}<== 4. Setup User Permissions ==> ${NC}"
 
 SUDO="clovisd    ALL=(ALL:ALL) NOPASSWD:ALL
-cl6    ALL=(ALL:ALL) ALL
+cl6web    ALL=(ALL:ALL) ALL
 "
 
 echo "${SUDO}" > /etc/sudoers.d/cl6
@@ -518,9 +518,9 @@ echo -e "${YELLOW}Configure MySQL ${NC}"
 #mysql -u root -p"${ROOTPASSWD}" -e "CREATE USER ‘clovisd’@’%’ IDENTIFIED BY ‘${CLPASSWD}’;"
 #mysql -u root -p"${ROOTPASSWD}" -e "CREATE USER cl6@’%’ IDENTIFIED BY ‘${C6PASSWD}’;"
 mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO 'clovisd'@'localhost' IDENTIFIED BY '${CLPASSWD}';" >> ${logfile} 2>&1
-mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO 'cl6'@'localhost' IDENTIFIED BY '${C6PASSWD}';" >> ${logfile} 2>&1
+mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO 'cl6web'@'localhost' IDENTIFIED BY '${C6PASSWD}';" >> ${logfile} 2>&1
 #mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO ‘clovisd’@’%’;"
-#mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO ‘cl6’@’%’;"
+#mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO ‘cl6web’@’%’;"
 mysql -u root -p"${ROOTPASSWD}" -e "FLUSH PRIVILEGES;" >> ${logfile} 2>&1
 echo -e "${LGREEN} == Done == ${NC}"
 echo -e "${BLUE}<== 9. Cleanup Apache Configs ==> ${NC}"
@@ -666,6 +666,16 @@ crontab="0 0 1 * * certbot renew  >/dev/null 2>&1"
 #crontab -e root
 crontab -u root -l; echo "$crontab" | crontab -u root - >> ${logfile} 2>&1
 #CleanUp
+#Uptime Robot
+curl -X POST \
+	-H "Cache-Control: no-cache" \
+	-H "Content-Type: application/x-www-form-urlencoded" \
+	-d 'api_key=$UPTIMEKEY&format=json&type=1&url=http://s${SERVERNUM}.cl6.us&friendly_name=S${SERVERNUM}.CL6.US (HTTP)&http_username=cl6web&http_password=$C6PASSWD' "https://api.uptimerobot.com/v2/newMonitor" 
+	
+curl -X POST \
+	-H "Cache-Control: no-cache" \
+	-H "Content-Type: application/x-www-form-urlencoded" \
+	-d 'api_key=$UPTIMEKEY&format=json&type=1&url=https://s${SERVERNUM}.cl6.us&friendly_name=S${SERVERNUM}.CL6.US (HTTPS)&http_username=cl6web&http_password=$C6PASSWD' "https://api.uptimerobot.com/v2/newMonitor" 
 #sudo rm -R /home/scripts/setup
 #Reboot
 (apt-get update) >> ${logfile} & PID=$! 2>&1

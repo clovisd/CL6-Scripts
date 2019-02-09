@@ -8,7 +8,7 @@
 #bash <(wget -O- -q https://raw.githubusercontent.com/clovisd/CL6-Scripts/master/loader.sh)
 #bash <(wget -O- -q https://goo.gl/yf18Rh)
 
-V='v2.7.2'
+V='v2.7.3'
 
 #Color Codes
 RED='\033[0;31m'
