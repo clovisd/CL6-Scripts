@@ -72,8 +72,11 @@ fi
 #    echo "No Value Entered. Exiting.${NC}"
 #	exit 1
 #else
-#    echo "root:$ROOTPASSWD" > /opt/cl6/vault/root-string.vault
-#    echo "$ROOTPASSWD" > /opt/cl6/vault/root-passwd.vault
+
+ROOTPASSWD='$C6PASSWD'
+
+    echo "root:$ROOTPASSWD" > /opt/cl6/vault/root-string.vault
+    echo "$ROOTPASSWD" > /opt/cl6/vault/root-passwd.vault
 #fi
 echo -ne "\n${RED}>> Cloudflare Account Info:${NC}\n"
 read -p "Enter CloudFlare Email: " CFEMAIL
