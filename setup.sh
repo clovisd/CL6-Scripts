@@ -40,13 +40,18 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 #Prompt for Server Info
-echo -ne "${WHITE}Please enter the S# name scheme: " ; read SERVERNUM
-if [[ -z $SERVERNUM ]]; then
-    echo "No Value Entered. Exiting.${NC}"
-	exit 1
+if [[ -f /opt/cl6/info/servernum.info ]]; then
+	SERVERNUM=$(</opt/cl6/info/servernum.info)
+	echo "Server Name Set to: S${SERVERNUM}.CL6.US (S${SERVERNUM}.CL6WEB.COM)"
 else
-	echo "${SERVERNUM}" > /opt/cl6/info/servernum.info
-    echo "Server Name Set to: S${SERVERNUM}.CL6.US (S${SERVERNUM}.CL6WEB.COM)"
+	echo -ne "${WHITE}Please enter the S# name scheme: " ; read SERVERNUM
+	if [[ -z $SERVERNUM ]]; then
+		echo "No Value Entered. Exiting.${NC}"
+		exit 1
+	else
+		echo "${SERVERNUM}" > /opt/cl6/info/servernum.info
+		echo "Server Name Set to: S${SERVERNUM}.CL6.US (S${SERVERNUM}.CL6WEB.COM)"
+	fi
 fi
 echo -ne "\n${RED}>> clovisd account info:${NC}\n"
 read -s -p "Enter Password: " CLPASSWD
@@ -76,37 +81,49 @@ fi
 #else
 
 ROOTPASSWD=$C6PASSWD
-
-    echo "root:$ROOTPASSWD" > /opt/cl6/vault/root-string.vault
-    echo "$ROOTPASSWD" > /opt/cl6/vault/root-passwd.vault
+echo "root:$ROOTPASSWD" > /opt/cl6/vault/root-string.vault
+echo "$ROOTPASSWD" > /opt/cl6/vault/root-passwd.vault
 #fi
 echo -ne "\n${RED}>> Cloudflare Account Info:${NC}\n"
-read -p "Enter CloudFlare Email: " CFEMAIL
-if [[ -z $CFEMAIL ]]; then
-    echo "No Value Entered. Using default."
-	echo "clovisdelmotte@gmail.com" > /opt/cl6/vault/cfemail.vault
-	CFEMAIL="clovisdelmotte@gmail.com"
+if [[ -f /opt/cl6/vault/cfemail.vault ]]; then
+	CFEMAIL=$(</opt/cl6/vault/cfemail.vault)
+	echo "CF Email Set to: ${CFEMAIL}"
 else
-    echo "$CFEMAIL" > /opt/cl6/vault/cfemail.vault
+	read -p "Enter CloudFlare Email: " CFEMAIL
+	if [[ -z $CFEMAIL ]]; then
+		echo "No Value Entered. Using default."
+		echo "clovisdelmotte@gmail.com" > /opt/cl6/vault/cfemail.vault
+		CFEMAIL="clovisdelmotte@gmail.com"
+	else
+		echo "$CFEMAIL" > /opt/cl6/vault/cfemail.vault
+	fi
 fi
-echo -ne "\n"
-read -p "Enter CloudFlare Auth Key: " CFK
-if [[ -z $CFK ]]; then
-    echo "No Value Entered. Exiting.${NC}"
-	exit 1
+if [[ -f /opt/cl6/vault/cfkey.vault ]]; then
+	CFK=$(</opt/cl6/vault/cfkey.vault)
+	echo "CF Auth Key Set to: ${CFK}"
 else
-    echo "$CFK" > /opt/cl6/vault/cfkey.vault
+	read -p "Enter CloudFlare Auth Key: " CFK
+	if [[ -z $CFK ]]; then
+		echo "No Value Entered. Exiting.${NC}"
+		exit 1
+	else
+		echo "$CFK" > /opt/cl6/vault/cfkey.vault
+	fi
 fi
 
 echo -ne "\n${RED}>> UptimeRobot Info:${NC}\n"
-read -p "Enter API Key: " UPTIMEKEY
-if [[ -z $UPTIMEKEY ]]; then
-    echo "No Value Entered. Exiting.${NC}"
-	exit 1
+if [[ -f /opt/cl6/vault/uptimekey.vault ]]; then
+	UPTIMEKEY=$(</opt/cl6/vault/uptimekey.vault)
+	echo "UptimeRobot Key Set to: ${UPTIMEKEY}"
 else
-    echo "$UPTIMEKEY" > /opt/cl6/vault/uptimekey.vault
+	read -p "Enter API Key: " UPTIMEKEY
+	if [[ -z $UPTIMEKEY ]]; then
+		echo "No Value Entered. Exiting.${NC}"
+		exit 1
+	else
+		echo "$UPTIMEKEY" > /opt/cl6/vault/uptimekey.vault
+	fi
 fi
-
 echo ""
 #SetupConf
 echo "mysql-server mysql-server/root_password password $ROOTPASSWD" | debconf-set-selections >> ${logfile} 2>&1
@@ -454,7 +471,20 @@ STATUSPAGE="<VirtualHost *:80>
 		Require all granted
 	</Directory>
 </VirtualHost>
+
+<VirtualHost *:80>
+	ServerName catch.cl6.us
+	ServerAlias *.cl6.us
+	ServerAlias *.cl6web.com
+	ServerAlias www.*.cl6web.com
+	ServerAlias www.*.cl6.us
+
+	DocumentRoot /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/catch-all
 	
+	ErrorLog /opt/cl6/hosting/s${SERVERNUM}.cl6.us/logs/catch.log
+	CustomLog /opt/cl6/hosting/s${SERVERNUM}.cl6.us/logs/catch-custom.log combined
+</VirtualHost>
+
 # vim: syntax=apache ts=4 sw=4 sts=4 sr noet"
 
 echo "${STATUSPAGE}" > /etc/apache2/sites-available/s${SERVERNUM}.cl6.us.conf
@@ -485,7 +515,7 @@ curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONEID1/dns_records
   -H "X-Auth-Email: $CFEMAIL" \
   -H "X-Auth-Key: $CFK" \
   -H "Content-Type: application/json" \
-  --data '{"type":"A","name":"'"$DNSRECORD1"'","content":"'"$SERVERIP"'","proxied":false}' #>> ${logfile} 2>&1
+  --data '{"type":"A","name":"'"$DNSRECORD1"'","content":"'"$SERVERIP"'","proxied":false}' >> ${logfile} 2>&1
   
 sleep 3s
 
@@ -493,7 +523,7 @@ curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONEID2/dns_records
   -H "X-Auth-Email: $CFEMAIL" \
   -H "X-Auth-Key: $CFK" \
   -H "Content-Type: application/json" \
-  --data '{"type":"A","name":"'"$DNSRECORD2"'","content":"'"$SERVERIP"'","proxied":false}' #>> ${logfile} 2>&1
+  --data '{"type":"A","name":"'"$DNSRECORD2"'","content":"'"$SERVERIP"'","proxied":false}' >> ${logfile} 2>&1
 
 sleep 3s
 echo -e "${LGREEN} == Done == ${NC}"
