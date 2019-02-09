@@ -68,13 +68,13 @@ else
 fi
 #echo -ne "\n${RED}>> Root account info:${NC}\n"
 #read -s -p "Enter Password: " ROOTPASSWD
-if [[ -z $ROOTPASSWD ]]; then
-    echo "No Value Entered. Exiting.${NC}"
-	exit 1
-else
-    echo "root:$ROOTPASSWD" > /opt/cl6/vault/root-string.vault
-    echo "$ROOTPASSWD" > /opt/cl6/vault/root-passwd.vault
-fi
+#if [[ -z $ROOTPASSWD ]]; then
+#    echo "No Value Entered. Exiting.${NC}"
+#	exit 1
+#else
+#    echo "root:$ROOTPASSWD" > /opt/cl6/vault/root-string.vault
+#    echo "$ROOTPASSWD" > /opt/cl6/vault/root-passwd.vault
+#fi
 echo -ne "\n${RED}>> Cloudflare Account Info:${NC}\n"
 read -p "Enter CloudFlare Email: " CFEMAIL
 if [[ -z $CFEMAIL ]]; then
