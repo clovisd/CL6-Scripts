@@ -7,6 +7,7 @@
 
 #bash <(wget -O- -q https://raw.githubusercontent.com/clovisd/CL6-Scripts/master/loader.sh)
 #bash <(wget -O- -q https://goo.gl/yf18Rh)
+#clear && bash <(wget -O- -q https://goo.gl/yf18Rh)
 
 V='v2.8.1'
 
