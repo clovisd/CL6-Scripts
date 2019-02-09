@@ -522,6 +522,7 @@ curl -X POST \
 	-H "Content-Type: application/x-www-form-urlencoded" \
 	-d 'api_key='$UPTIMEKEY'&format=json&type=1&url=https://s'${SERVERNUM}'.cl6.us&friendly_name=S'${SERVERNUM}'.CL6.US (HTTPS)&http_username=cl6web&http_password='$C6PASSWD'' "https://api.uptimerobot.com/v2/newMonitor" 
 echo -ne "${WHITE}Press Enter when Ready!${NC}\n" ; read input
+echo ""
 ​echo -e "${LGREEN} == Done == ${NC}"
 #sudo rm -R /home/scripts/setup
 #Reboot
