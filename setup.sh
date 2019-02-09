@@ -253,7 +253,7 @@ chpasswd<<<"clovisd:${CLPASSWD}"
 htpasswd -c -b /opt/cl6/vault/.htpasswd clovisd ${CLPASSWD}
 echo -e "${YELLOW} Setup User: cl6web ${NC}"
 useradd cl6web -G www-data -s /bin/bash
-chpasswd<<<"cl6:${C6PASSWD}"
+chpasswd<<<"cl6web:${C6PASSWD}"
 htpasswd -b /opt/cl6/vault/.htpasswd cl6web ${C6PASSWD}
 echo -e "${YELLOW} Setup User: root ${NC}"
 sudo passwd -dl root
@@ -272,142 +272,8 @@ echo -e "${LGREEN} == Done == ${NC}"
 #Setup PHP
 echo -e "${BLUE}<== 3. Setup PHP ==> ${NC}"
 echo -e "${YELLOW} Copying Content to PHP.INI ${NC}"
-PHPSETTINGS='[PHP]
-#INSERT LOADERS HERE
-
-#CUSTOM
-date.timezone = "US/Central"
-upload_max_filesize = 2048M
-memory_limit = 512M
-post_max_size = 8M
-extension = mcrypt.so
-
-#REST
-engine = On
-short_open_tag = Off
-precision = 14
-output_buffering = 4096
-zlib.output_compression = Off
-implicit_flush = Off
-serialize_precision = -1
-disable_functions = pcntl_alarm,pcntl_fork,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,pcntl_wifsignaled,pcntl_wifcontinued,pcntl_wexitstatus,pcntl_wtermsig,pcntl_wstopsig,pcntl_signal,pcntl_signal_get_handler,pcntl_signal_dispatch,pcntl_get_last_error,pcntl_strerror,pcntl_sigprocmask,pcntl_sigwaitinfo,pcntl_sigtimedwait,pcntl_exec,pcntl_getpriority,pcntl_setpriority,pcntl_async_signals,
-zend.enable_gc = On
-expose_php = Off
-max_execution_time = 30
-max_input_time = 60
-error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT
-display_errors = Off
-display_startup_errors = Off
-log_errors = On
-log_errors_max_len = 1024
-ignore_repeated_errors = Off
-ignore_repeated_source = Off
-report_memleaks = On
-request_order = "GP"
-register_argc_argv = Off
-auto_globals_jit = On
-default_mimetype = "text/html"
-default_charset = "UTF-8"
-enable_dl = Off
-file_uploads = On
-max_file_uploads = 20
-allow_url_fopen = On
-allow_url_include = Off
-default_socket_timeout = 60
-[CLI Server]
-cli_server.color = On
-[Date]
-[filter]
-[iconv]
-[intl]
-[sqlite3]
-[Pcre]
-[Pdo]
-[Pdo_mysql]
-pdo_mysql.cache_size = 2000
-[Phar]
-[mail function]
-SMTP = localhost
-smtp_port = 25
-mail.add_x_header = Off
-[ODBC]
-odbc.allow_persistent = On
-odbc.check_persistent = On
-odbc.max_persistent = -1
-odbc.max_links = -1
-odbc.defaultlrl = 4096
-odbc.defaultbinmode = 1
-[Interbase]
-ibase.allow_persistent = 1
-ibase.max_persistent = -1
-ibase.max_links = -1
-ibase.timestampformat = "%Y-%m-%d %H:%M:%S"
-ibase.dateformat = "%Y-%m-%d"
-ibase.timeformat = "%H:%M:%S"
-[MySQLi]
-mysqli.max_persistent = -1
-mysqli.allow_persistent = On
-mysqli.max_links = -1
-mysqli.cache_size = 2000
-mysqli.default_port = 3306
-mysqli.reconnect = Off
-[mysqlnd]
-mysqlnd.collect_statistics = On
-mysqlnd.collect_memory_statistics = Off
-[OCI8]
-[PostgreSQL]
-pgsql.allow_persistent = On
-pgsql.auto_reset_persistent = Off
-pgsql.max_persistent = -1
-pgsql.max_links = -1
-pgsql.ignore_notice = 0
-pgsql.log_notice = 0
-[bcmath]
-bcmath.scale = 0
-[browscap]
-[Session]
-session.save_handler = files
-session.use_strict_mode = 0
-session.use_cookies = 1
-session.use_only_cookies = 1
-session.name = PHPSESSID
-session.auto_start = 0
-session.cookie_lifetime = 0
-session.cookie_path = /
-session.cookie_domain =
-session.cookie_httponly =
-session.serialize_handler = php
-session.gc_probability = 0
-session.gc_divisor = 1000
-session.gc_maxlifetime = 1440
-session.referer_check =
-session.cache_limiter = nocache
-session.cache_expire = 180
-session.use_trans_sid = 0
-session.sid_length = 26
-session.trans_sid_tags = "a=href,area=href,frame=src,form="
-session.sid_bits_per_character = 5[Assertion]
-zend.assertions = -1
-[COM]
-[mbstring]
-[gd]
-[exif]
-[Tidy]
-tidy.clean_output = Off
-[soap]
-soap.wsdl_cache_enabled=1
-soap.wsdl_cache_dir="/tmp"
-soap.wsdl_cache_ttl=86400
-soap.wsdl_cache_limit = 5
-[sysvshm]
-[ldap]
-ldap.max_links = -1
-[dba]
-[opcache]
-[curl]
-[openssl]'
-echo "${PHPSETTINGS}" > /etc/php/7.2/apache2/php.ini
-echo "${PHPSETTINGS}" > /etc/php/7.2/cli/php.ini
+cp /opt/cl6/setup/extract/php.ini /etc/php/7.2/apache2/php.ini
+cp /opt/cl6/setup/extract/php.ini /etc/php/7.2/cli/php.ini
 echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
 service apache2 restart >> ${logfile} 2>&1
 #Setup permissions
@@ -422,59 +288,28 @@ echo -e "${LGREEN} == Done == ${NC}"
 
 #Setup SSH Port
 echo -e "${BLUE}<== 5. Setup SSH Settings ==> ${NC}"
-echo -e "${YELLOW} Setting settings ${NC}"
+echo -e "${YELLOW} Setting SSHD settings ${NC}"
 
-SSHD="Port 42806
-ChallengeResponseAuthentication no
-UsePAM yes
-X11Forwarding yes
-PrintMotd no
-AcceptEnv LANG LC_*
-Subsystem sftp	/usr/lib/openssh/sftp-server"
+cp /opt/cl6/setup/extract/sshd_config /etc/ssh
 
-echo "${SSHD}" > /etc/ssh/sshd_config
-
-#nano /etc/ssh/sshd_config
-#vi /etc/ssh/sshd_config
 echo -e "${YELLOW} Restarting SSH Service ${NC}"
 echo "d /run/sshd 0755 root root" > /usr/lib/tmpfiles.d/sshd.conf
 service sshd restart
 echo -e "${LGREEN} == Done == ${NC}"
 
 #Setup Hosts
-echo -e "${BLUE}<== 6. Set Server Name & Hosts ==> ${NC}"
-echo -e "${GREEN} Set Hostname ${NC}"
+#echo -e "${BLUE}<== 6. Set Server Name & Hosts ==> ${NC}"
+#echo -e "${GREEN} Set Hostname ${NC}"
 
-HOSTNAME="S${SERVERNUM}"
+#HOSTNAME="S${SERVERNUM}"
 
-echo "${HOSTNAME}" > /etc/hostname
+#echo "${HOSTNAME}" > /etc/hostname
 #nano /etc/hostname
-echo -e "${GREEN} Set Hosts ${NC}"
+#echo -e "${GREEN} Set Hosts ${NC}"
 
-HOSTS="# Basic Hosts
-127.0.0.1 localhost.localdomain localhost
-# Auto-generated hostname. Please do not remove this comment.
-
-${SERVERIP} S${SERVERNUM}.CL6.US S${SERVERNUM}
-127.0.1.1 CL6-${SERVERNUM}.localdomain CL6-${SERVERNUM}
-127.0.1.1 S${SERVERNUM}.CL6.US CL6-${SERVERNUM}
-127.0.0.1 localhost
-
-# IPv6 Hosts
-::1 ip6-localhost ip6-loopback
-fe00::0 ip6-localnet
-ff00::0 ip6-mcastprefix
-ff02::1 ip6-allnodes
-ff02::2 ip6-allrouters
-ff02::3 ip6-allhosts
-
-# Net Hosts
-​${SERVERIP} S${SERVERNUM}.CL6.US
-​${SERVERIP} S${SERVERNUM}.CL6WEB.COM"
-
-echo "${HOSTS}" > /etc/hosts
+#cp /opt/cl6/setup/extract/hosts /etc
 #nano /etc/hosts
-echo -e "${LGREEN} == Done == ${NC}"
+#echo -e "${LGREEN} == Done == ${NC}"
 
 #SetupPHPAdmin
 echo -e "${BLUE}<== 8. PHPMyAdmin ==> ${NC}"
@@ -510,14 +345,11 @@ done
 printf "${GREEN}]${NC} - Done\n"
 echo -e "${YELLOW}Setting Auth File ${NC}"
 
-AUTH='AuthType Basic
-AuthName "Restricted Files"
-AuthUserFile /opt/cl6/vault/.htpasswd
-Require valid-user'
-echo "${AUTH}" > /usr/share/phpmyadmin/.htaccess
-echo -e "${YELLOW} Set ${GREEN}AllowOverride All${YELLOW} for PHPMYAdmin ${NC}"
-echo -ne "${WHITE}Press Enter when ready!" ; read input
-nano /etc/apache2/conf-available/phpmyadmin.conf
+cp /opt/cl6/setup/extract/.htaccess /usr/share/phpmyadmin
+
+#echo -e "${YELLOW} Set ${GREEN}AllowOverride All${YELLOW} for PHPMYAdmin ${NC}"
+#echo -ne "${WHITE}Press Enter when ready!" ; read input
+cp /opt/cl6/setup/extract/phpmyadmin.conf /etc/apache2/conf-available/
 #mysql -u root -p"Q~NE!p9#PnC2m6Su" < /usr/share/doc/phpmyadmin/examples/create_tables.sql
 echo -e "${YELLOW} Enable Plugin ${NC}"
 phpenmod mbstring
@@ -678,18 +510,18 @@ crontab -u root -l; echo "$crontab" | crontab -u root - >> ${logfile} 2>&1
 #CleanUp
 #Uptime Robot
 echo -e "${BLUE}<== 13. Uptime Robot ==> ${NC}"
-echo -ne "${WHITE}Press Enter when Ready!${NC}" ; read input
+echo -ne "${WHITE}Press Enter when Ready!${NC}\n" ; read input
 curl -X POST \
 	-H "Cache-Control: no-cache" \
 	-H "Content-Type: application/x-www-form-urlencoded" \
-	-d 'api_key=$UPTIMEKEY&format=json&type=1&url=http://s${SERVERNUM}.cl6.us&friendly_name=S${SERVERNUM}.CL6.US (HTTP)&http_username=cl6web&http_password=$C6PASSWD' "https://api.uptimerobot.com/v2/newMonitor" 
-echo -ne "${WHITE}Press Enter when Ready!${NC}" ; read input
+	-d 'api_key="'$UPTIMEKEY'"&format=json&type=1&url=http://s"'${SERVERNUM}'".cl6.us&friendly_name="'S${SERVERNUM}'".CL6.US (HTTP)&http_username=cl6web&http_password="'$C6PASSWD'"' "https://api.uptimerobot.com/v2/newMonitor" 
+echo -ne "${WHITE}Press Enter when Ready!${NC}\n" ; read input
 
 curl -X POST \
 	-H "Cache-Control: no-cache" \
 	-H "Content-Type: application/x-www-form-urlencoded" \
-	-d 'api_key=$UPTIMEKEY&format=json&type=1&url=https://s${SERVERNUM}.cl6.us&friendly_name=S${SERVERNUM}.CL6.US (HTTPS)&http_username=cl6web&http_password=$C6PASSWD' "https://api.uptimerobot.com/v2/newMonitor" 
-echo -ne "${WHITE}Press Enter when Ready!${NC}" ; read input
+	-d 'api_key="'$UPTIMEKEY'"&format=json&type=1&url=https://s"'${SERVERNUM}'".cl6.us&friendly_name=S"'${SERVERNUM}'".CL6.US (HTTPS)&http_username=cl6web&http_password="'$C6PASSWD'"' "https://api.uptimerobot.com/v2/newMonitor" 
+echo -ne "${WHITE}Press Enter when Ready!${NC}\n" ; read input
 ​echo -e "${LGREEN} == Done == ${NC}"
 #sudo rm -R /home/scripts/setup
 #Reboot
@@ -729,5 +561,5 @@ cd /opt/cl6/setup && ./discord.sh
 echo -e "${BLUE}<== 14. Setup Swap ==> ${NC}"
 
 echo -ne "${WHITE}Press Enter when Reboot Ready!${NC}" ; read input
-reboot & exit
+reboot && exit
 #shutdown -t

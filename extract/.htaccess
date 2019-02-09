@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Restricted Files"
+AuthUserFile /opt/cl6/vault/.htpasswd
+Require valid-user
