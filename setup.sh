@@ -94,6 +94,16 @@ if [[ -z $CFK ]]; then
 else
     echo "$CFK" > /opt/cl6/vault/cfkey.vault
 fi
+
+echo -ne "\n${RED}>> UptimeRobot Info:${NC}\n"
+read -p "Enter API Key: " UPTIMEKEY
+if [[ -z $UPTIMEKEY ]]; then
+    echo "No Value Entered. Exiting.${NC}"
+	exit 1
+else
+    echo "$UPTIMEKEY" > /opt/cl6/vault/uptimekey.vault
+fi
+
 echo ""
 #SetupConf
 echo "mysql-server mysql-server/root_password password $ROOTPASSWD" | debconf-set-selections >> ${logfile} 2>&1
@@ -667,15 +677,20 @@ crontab="0 0 1 * * certbot renew  >/dev/null 2>&1"
 crontab -u root -l; echo "$crontab" | crontab -u root - >> ${logfile} 2>&1
 #CleanUp
 #Uptime Robot
+echo -e "${BLUE}<== 13. Uptime Robot ==> ${NC}"
+echo -ne "${WHITE}Press Enter when Ready!${NC}" ; read input
 curl -X POST \
 	-H "Cache-Control: no-cache" \
 	-H "Content-Type: application/x-www-form-urlencoded" \
 	-d 'api_key=$UPTIMEKEY&format=json&type=1&url=http://s${SERVERNUM}.cl6.us&friendly_name=S${SERVERNUM}.CL6.US (HTTP)&http_username=cl6web&http_password=$C6PASSWD' "https://api.uptimerobot.com/v2/newMonitor" 
-	
+echo -ne "${WHITE}Press Enter when Ready!${NC}" ; read input
+
 curl -X POST \
 	-H "Cache-Control: no-cache" \
 	-H "Content-Type: application/x-www-form-urlencoded" \
 	-d 'api_key=$UPTIMEKEY&format=json&type=1&url=https://s${SERVERNUM}.cl6.us&friendly_name=S${SERVERNUM}.CL6.US (HTTPS)&http_username=cl6web&http_password=$C6PASSWD' "https://api.uptimerobot.com/v2/newMonitor" 
+echo -ne "${WHITE}Press Enter when Ready!${NC}" ; read input
+​echo -e "${LGREEN} == Done == ${NC}"
 #sudo rm -R /home/scripts/setup
 #Reboot
 (apt-get update) >> ${logfile} & PID=$! 2>&1
