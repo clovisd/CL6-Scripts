@@ -507,24 +507,21 @@ service apache2 restart >> ${logfile} 2>&1
 crontab="0 0 1 * * certbot renew  >/dev/null 2>&1"
 #crontab -e root
 crontab -u root -l; echo "$crontab" | crontab -u root - >> ${logfile} 2>&1
-#CleanUp
 #Uptime Robot
 echo -e "${BLUE}<== 13. Uptime Robot ==> ${NC}"
-echo -ne "${WHITE}Press Enter when Ready!${NC}\n" ; read input
 curl -X POST \
 	-H "Cache-Control: no-cache" \
 	-H "Content-Type: application/x-www-form-urlencoded" \
 	-d 'api_key='$UPTIMEKEY'&format=json&type=1&url=http://s'${SERVERNUM}'.cl6.us&friendly_name='S${SERVERNUM}'.CL6.US (HTTP)&http_username=cl6web&http_password='$C6PASSWD'' "https://api.uptimerobot.com/v2/newMonitor" 
-echo -ne "${WHITE}Press Enter when Ready!${NC}\n" ; read input
-
 curl -X POST \
 	-H "Cache-Control: no-cache" \
 	-H "Content-Type: application/x-www-form-urlencoded" \
 	-d 'api_key='$UPTIMEKEY'&format=json&type=1&url=https://s'${SERVERNUM}'.cl6.us&friendly_name=S'${SERVERNUM}'.CL6.US (HTTPS)&http_username=cl6web&http_password='$C6PASSWD'' "https://api.uptimerobot.com/v2/newMonitor" 
-echo -ne "${WHITE}Press Enter when Ready!${NC}\n" ; read input
-echo ""
 ​echo -e "${LGREEN} == Done == ${NC}"
 #sudo rm -R /home/scripts/setup
+#CleanUp
+rm /opt/cl6/vault/clovisd-passwd.vault
+rm /opt/cl6/vault/clovisd-string.vault
 #Reboot
 (apt-get update) >> ${logfile} & PID=$! 2>&1
     printf  "${GREEN}[UPDATE:"
