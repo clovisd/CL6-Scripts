@@ -60,8 +60,10 @@ fi
 echo -ne "\n${RED}>> Cl6Web account info:${NC}\n"
 read -s -p "Enter Password: " C6PASSWD
 if [[ -z $C6PASSWD ]]; then
-    echo "No Value Entered. Exiting.${NC}"
-	exit 1
+    echo "No Value Entered. Using clovisd password.${NC}"
+    echo "cl6web:$CLPASSWD" > /opt/cl6/vault/cl6-string.vault
+    echo "$CLPASSWD" > /opt/cl6/vault/cl6-passwd.vault
+	C6PASSWD=$CLPASSWD
 else
     echo "cl6web:$C6PASSWD" > /opt/cl6/vault/cl6-string.vault
     echo "$C6PASSWD" > /opt/cl6/vault/cl6-passwd.vault
