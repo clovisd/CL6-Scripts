@@ -223,8 +223,8 @@ done
 printf "${GREEN}]${NC} - Done\n"
 echo -e "${YELLOW} Setting Up mcrypt ${NC}"
 echo extension=/usr/lib/php/20170718/mcrypt.so > /etc/php/7.2/mods-available/mcrypt.ini
-cd /etc/php/7.2/cli/conf.d/ && ln -s /etc/php/7.2/mods-available/20-mcrypt.ini
-cd /etc/php/7.2/apache2/conf.d/ && ln -s /etc/php/7.2/mods-available/20-mcrypt.ini
+ln -s /etc/php/7.2/mods-available/mcrypt.ini /etc/php/7.2/cli/conf.d/20-mcrypt.ini
+ln -s /etc/php/7.2/mods-available/mcrypt.ini /etc/php/7.2/apache2/conf.d/20-mcrypt.ini
 echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
 service mysql restart >> ${logfile} 2>&1
 service apache2 restart >> ${logfile} 2>&1
@@ -440,7 +440,7 @@ echo -e "${YELLOW} Creating Apache Conf ${NC}"
 
 #echo "${CATCHALL}" > /etc/apache2/sites-available/catch.cl6.us.conf
 echo -e "${YELLOW} Creating SymLink ${NC}"
-cd /etc/apache2/sites-enabled && ln -s /etc/apache2/sites-available/catch.cl6.us.conf
+#cd /etc/apache2/sites-enabled && ln -s /etc/apache2/sites-available/catch.cl6.us.conf
 echo -e "${YELLOW} Restarting Apache ${NC}"
 service apache2 restart >> ${logfile} 2>&1
 echo -e "${LGREEN} == Done == ${NC}"

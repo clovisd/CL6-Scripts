@@ -9,7 +9,7 @@
 #bash <(wget -O- -q https://goo.gl/yf18Rh)
 #clear && bash <(wget -O- -q https://goo.gl/yf18Rh)
 
-V='v2.9.1'
+V='v2.9.5'
 
 #Color Codes
 RED='\033[0;31m'
@@ -21,6 +21,15 @@ LGREEN='\033[1;32m'
 WHITE='\033[1;37m'
 
 export DEBIAN_FRONTEND=noninteractive
+
+while getopts ud option
+do
+case "${option}"
+in
+u) URL=${OPTARG};;
+h) HELP=${OPTARG};;
+esac
+done
 
 echo -e "\n
 ${RED}   ____ _     __   _   _ ____  
@@ -49,6 +58,38 @@ if [ ! -d /opt/cl6/info ]; then mkdir /opt/cl6/info ; fi
 if [ ! -d /opt/cl6/vault ]; then mkdir /opt/cl6/vault ; fi
 if [ ! -d /opt/cl6/hosting ]; then mkdir /opt/cl6/hosting ; fi
 if [ ! -d /opt/cl6/locks ]; then mkdir /opt/cl6/locks ; fi
+echo -e "${LGREEN} >> Done"
+
+#Load Config Zip
+echo -e "${YELLOW} >> Checking Setup Packs"
+if [[ -z $URL ]]; then
+	echo -e "${LGREEN} No Setup Pack to Load${NC}"
+else
+	mkdir /opt/cl6/setup/autoload
+	cd /opt/cl6/setup/autoload && wget $URL
+	unzip pack.zip
+	if [[ -f servernum.info ]]; then
+		echo -e "${YELLOW}   >> No ServerNum Found"
+	else
+		cp servernum.info /opt/cl6/info
+	fi
+	if [[ -f cfemail.vault ]]; then
+		echo -e "${YELLOW}   >> No CFEmail Found"
+	else
+		cp cfemail.vault /opt/cl6/vault
+	fi
+	if [[ -f cfkey.vault ]]; then
+		echo -e "${YELLOW}   >> No CFKey Found"
+	else
+		cp cfkey.vault /opt/cl6/vault
+	fi
+	if [[ -f uptimekey.vault ]]; then
+		echo -e "${YELLOW}   >> No UTKey Found"
+	else
+		cp uptimekey.vault /opt/cl6/vault
+	fi
+	echo -e "${LGREEN} Setup Packs Loaded${NC}"
+fi
 echo -e "${LGREEN} >> Done"
 
 #Log File
