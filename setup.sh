@@ -545,12 +545,12 @@ echo -e "${BLUE}<== 13. Uptime Robot ==> ${NC}"
 curl -X POST \
 	-H "Cache-Control: no-cache" \
 	-H "Content-Type: application/x-www-form-urlencoded" \
-	-d 'api_key='$UPTIMEKEY'&format=json&type=4&sub_type=1&url=http://s'${SERVERNUM}'.cl6.us&friendly_name='S${SERVERNUM}' (HTTP)&http_username=cl6web&http_password='$C6PASSWD'' "https://api.uptimerobot.com/v2/newMonitor" #>> ${logfile} 2>&1
+	-d 'api_key='$UPTIMEKEY'&format=json&type=4&sub_type=1&url=http://s'${SERVERNUM}'.cl6.us&friendly_name='S${SERVERNUM}' (HTTP)&http_username=cl6web&http_password='$C6PASSWD'' "https://api.uptimerobot.com/v2/newMonitor" >> ${logfile} 2>&1
 echo "\n"
 curl -X POST \
 	-H "Cache-Control: no-cache" \
 	-H "Content-Type: application/x-www-form-urlencoded" \
-	-d 'api_key='$UPTIMEKEY'&format=json&type=4&sub_type=2&url=https://s'${SERVERNUM}'.cl6.us&friendly_name=S'${SERVERNUM}' (HTTPS)&http_username=cl6web&http_password='$C6PASSWD'' "https://api.uptimerobot.com/v2/newMonitor" #>> ${logfile} 2>&1
+	-d 'api_key='$UPTIMEKEY'&format=json&type=4&sub_type=2&url=https://s'${SERVERNUM}'.cl6.us&friendly_name=S'${SERVERNUM}' (HTTPS)&http_username=cl6web&http_password='$C6PASSWD'' "https://api.uptimerobot.com/v2/newMonitor" >> ${logfile} 2>&1
 ​echo -e "${LGREEN} == Done == ${NC}"
 #sudo rm -R /home/scripts/setup
 #CleanUp
