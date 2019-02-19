@@ -196,7 +196,7 @@ service mysql restart >> ${logfile} 2>&1
 service apache2 restart >> ${logfile} 2>&1
 echo -e "${YELLOW} Installing PHP Packages ${NC}"
 #PHP Base Packages
-(apt-get install -qq php7.2 php7.2-mysql php7.2-curl php7.2-xml php7.2-zip  php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap) >> ${logfile} & PID=$! 2>&1
+(apt-get install -qq php7.2 php7.2-mysql php7.2-curl php7.2-xml php7.2-zip  php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-gmp php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap) >> ${logfile} & PID=$! 2>&1
 #php-pear
     printf  "${GREEN}[INSTALL 1:\n"
 while kill -0 $PID 2> /dev/null; do 
@@ -229,7 +229,7 @@ echo -e "${YELLOW} Restarting Apache/MySQL ${NC}"
 service mysql restart >> ${logfile} 2>&1
 service apache2 restart >> ${logfile} 2>&1
 echo -e "${YELLOW} Installing Other QOL Packages ${NC}"
-(apt-get install -qq mc sl screen htop) >> ${logfile} & PID=$! 2>&1
+(apt-get install -qq mc sl screen htop fish) >> ${logfile} & PID=$! 2>&1
     printf  "${GREEN}[INSTALL:\n"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
@@ -452,6 +452,7 @@ cp /opt/cl6/setup/status-page.tar.gz /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html
 cd /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html
 echo -e "${YELLOW} Extracting Archive ${NC}"
 tar -zxvf status-page.tar.gz  >> ${logfile} 2>&1
+rm status-page.tar.gz >> ${logfile} 2>&1
 echo -e "${YELLOW} Creating Apache Conf ${NC}"
 
 STATUSPAGE="<VirtualHost *:80>
