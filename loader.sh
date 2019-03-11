@@ -120,7 +120,7 @@ while kill -0 $PID 2> /dev/null; do
     sleep 3
 done
 printf "${GREEN}]${NC} - Done\n"
-(apt-get install -qq git software-properties-common dnsutils dbus tzdata nano jq curl) >> ${logfile} & PID=$! 2>&1
+(apt-get install -qq git software-properties-common apt-transport-https dnsutils dbus tzdata nano jq curl) >> ${logfile} & PID=$! 2>&1
     printf  "${GREEN}[INSTALL:\n"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
