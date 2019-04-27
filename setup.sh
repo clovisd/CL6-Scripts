@@ -86,7 +86,7 @@ systemInstall () {
 systemUpdate () {
 
 	(apt-get update) >> ${logfile} & PID=$! 2>&1
-		printf  "%s[UPDATE:" "${GREEN}"
+		printf  "${GREEN}[UPDATE:"
 	while kill -0 $PID 2> /dev/null; do 
 		printf  "."
 		sleep 3
@@ -152,7 +152,7 @@ systemServiceStart () {
 basicSetupUtility () {
 
 	#Setup Updates for New Server
-	echo -e "${WHITE}>> ${BLUE}[$0] ${GREEN}Running Updates, Upgrade, and AutoRemove. ${NC}"
+	echo -e "${WHITE} >> ${BLUE}[basicSetupUtility] ${GREEN}Running Updates, Upgrade, and AutoRemove. ${NC}"
 		
 	systemUpdate
 	systemUpgrade
@@ -166,7 +166,7 @@ basicSetupUtility () {
 setupHostDirectories () {
 
 	#Setup Host Directories
-	echo -e "${WHITE}>> ${BLUE}[setupHostDirectories] ${GREEN}Setup CL6 OPT Directory. ${NC}"
+	echo -e "${WHITE} >> ${BLUE}[setupHostDirectories] ${GREEN}Setup CL6 OPT Directory. ${NC}"
 	
 	if [ ! -d /opt/cl6/hosting/ ]; then mkdir /opt/cl6/hosting/ ; fi
 	if [ ! -d /opt/cl6/hosting/s"${SERVERNUM}".cl6.us ]; then mkdir /opt/cl6/hosting/s"${SERVERNUM}".cl6.us ; fi
@@ -186,7 +186,7 @@ setupHostDirectories () {
 
 setupUsers () {
 
-	echo -e "${WHITE}>> ${BLUE}[userManager] ${GREEN}Creating Users and Setting Directories"
+	echo -e "${WHITE} >> ${BLUE}[userManager] ${GREEN}Creating Users and Setting Directories"
 
 	echo -ne "\n${RED}>> clovisd account info:${NC}\n"
 	read -r -s -p "Enter Password: " CLPASSWD
@@ -249,7 +249,7 @@ setupUsers () {
 cloudflareInfo () {
 
 	#Save and Configure CloudFlare Info
-	echo -e "${WHITE}>> ${BLUE}[cloudflareInfo] ${GREEN}Collecting API and Email Info. ${NC}"
+	echo -e "${WHITE} >> ${BLUE}[cloudflareInfo] ${GREEN}Collecting API and Email Info. ${NC}"
 
 	echo -ne "\n${RED}>> Cloudflare Account Info:${NC}\n"
 	if [[ -f /opt/cl6/vault/cfemail.vault ]]; then
@@ -284,7 +284,7 @@ cloudflareInfo () {
 uptimerobotInfo () {
 
 	#Save and Configure UptimeRobot Info
-	echo -e "${WHITE}>> ${BLUE}[uptimerobotInfo] ${GREEN}Collecting API Info. ${NC}"
+	echo -e "${WHITE} >> ${BLUE}[uptimerobotInfo] ${GREEN}Collecting API Info. ${NC}"
 
 	echo -ne "\n${RED}>> UptimeRobot Info:${NC}\n"
 	if [[ -f /opt/cl6/vault/uptimekey.vault ]]; then
@@ -306,7 +306,7 @@ uptimerobotInfo () {
 installConfigureAPACHE () {
 
 	#Setup Apache
-	echo -e "${WHITE}>> ${BLUE}[installConfigureAPACHE] ${GREEN}Setting up Apache. ${NC}"
+	echo -e "${WHITE} >> ${BLUE}[installConfigureAPACHE] ${GREEN}Setting up Apache. ${NC}"
 
 	systemUpdate
 	systemInstall "apache2"
@@ -333,7 +333,7 @@ installConfigureAPACHE () {
 installConfigureMYSQL () {
 
 	#Installing, Setting Up, & Securing MySQL Server
-	echo -e "${WHITE}>> ${BLUE}[installConfigureMYSQL] ${GREEN}Installing, Setting Up, & Securing MySQL Server. ${NC}"
+	echo -e "${WHITE} >> ${BLUE}[installConfigureMYSQL] ${GREEN}Installing, Setting Up, & Securing MySQL Server. ${NC}"
 
 	echo "mysql-server mysql-server/root_password password $ROOTPASSWD" | debconf-set-selections >> ${logfile} 2>&1
 	echo "mysql-server mysql-server/root_password_again password $ROOTPASSWD" | debconf-set-selections >> ${logfile} 2>&1
@@ -380,7 +380,7 @@ installConfigureMYSQL () {
 installConfigurePHP () {
 
 	#Installing & Setting Up PHP + Modules
-	echo -e "${WHITE}>> ${BLUE}[installConfigurePHP] ${GREEN}Installing & Setting Up PHP and its Modules. ${NC}"
+	echo -e "${WHITE} >> ${BLUE}[installConfigurePHP] ${GREEN}Installing & Setting Up PHP and its Modules. ${NC}"
 	
 	echo -e "${YELLOW} Setting up PHP Repo ${NC}"
 	add-apt-repository -y ppa:ondrej/php >> ${logfile} 2>&1
@@ -442,7 +442,7 @@ installConfigurePHP () {
 installConfigurePHPMYADMIN() {
 
 	#Installing, Setting Up, & Securing PHPMyAdmin
-	echo -e "${WHITE}>> ${BLUE}[installConfigurePHPMYADMIN] ${GREEN}Installing, Setting Up, & Securing PHPMYAdmin. ${NC}"
+	echo -e "${WHITE} >> ${BLUE}[installConfigurePHPMYADMIN] ${GREEN}Installing, Setting Up, & Securing PHPMYAdmin. ${NC}"
 
 	echo -e "${YELLOW} Setting up PHPMyAdmin Repo ${NC}"
 	add-apt-repository -y ppa:nijel/phpmyadmin >> ${logfile} 2>&1
@@ -492,7 +492,7 @@ installConfigurePHPMYADMIN() {
 installConfigureCERTBOT () {
 
 	#Installing & Setting Up Certbot
-	echo -e "${WHITE}>> ${BLUE}[installConfigureCERTBOT] ${GREEN}Installing & Setting Up Cerbot. ${NC}"
+	echo -e "${WHITE} >> ${BLUE}[installConfigureCERTBOT] ${GREEN}Installing & Setting Up Cerbot. ${NC}"
 
 	echo -e "${YELLOW} Setting up CertBot Repo ${NC}"
 
@@ -525,7 +525,7 @@ installConfigureCERTBOT () {
 certbotCreateCert () {
 
 	#Creating Cerbot Cert
-	echo -e "${WHITE}>> ${BLUE}[certbotCreateCert] ${GREEN}Setting up a new Cert. ${NC}"
+	echo -e "${WHITE} >> ${BLUE}[certbotCreateCert] ${GREEN}Setting up a new Cert. ${NC}"
 
 	echo -e "${YELLOW} Generating CertBot Certs ${NC}"
 	certbot run -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -a webroot -i apache -w /opt/cl6/hosting/"$1"/html -d "$1" -d "$2" >> ${logfile} 2>&1
@@ -542,7 +542,7 @@ certbotCreateCert () {
 installPersonalPackages () {
 
 	#Setup QOL Packages
-	echo -e "${WHITE}>> ${BLUE}[installPersonalPackages] ${GREEN}Setting up Personal / QOL Packages. ${NC}"
+	echo -e "${WHITE} >> ${BLUE}[installPersonalPackages] ${GREEN}Setting up Personal / QOL Packages. ${NC}"
 
 	echo -e "${YELLOW} Installing Other QOL Packages ${NC}"
 	
@@ -564,7 +564,7 @@ installPersonalPackages () {
 setupBashFiles () {
 
 	#Setting up Bashrc files for users
-	echo -e "${WHITE}>> ${BLUE}[setupBashFiles] ${GREEN}Setting up Bash Files. ${NC}"
+	echo -e "${WHITE} >> ${BLUE}[setupBashFiles] ${GREEN}Setting up Bash Files. ${NC}"
 
 	echo -e "${BLUE}<== 3. Setup Bash ==> ${NC}"
 	echo -e "${YELLOW} Setting Up Bash for All Users ${NC}"
@@ -580,7 +580,7 @@ setupBashFiles () {
 setupSudoUsers () {
 
 	#Creating Cerbot Cert
-	echo -e "${WHITE}>> ${BLUE}[setupSudoUsers] ${GREEN}Setting up a new Cert. ${NC}"
+	echo -e "${WHITE} >> ${BLUE}[setupSudoUsers] ${GREEN}Setting up a new Cert. ${NC}"
 
 	#Setup permissions
 	echo -e "${BLUE}<== 4. Setup User Permissions ==> ${NC}"
@@ -599,7 +599,7 @@ setupSudoUsers () {
 setupSSHD () {
 
 	#Creating Cerbot Cert
-	echo -e "${WHITE}>> ${BLUE}[setupSSHD] ${GREEN}Setting up SSHD Security. ${NC}"
+	echo -e "${WHITE} >> ${BLUE}[setupSSHD] ${GREEN}Setting up SSHD Security. ${NC}"
 
 	#Setup SSH Port
 	echo -e "${BLUE}<== 5. Setup SSH Settings ==> ${NC}"
@@ -621,7 +621,7 @@ setupSSHD () {
 setupHosts () {
 
 	#Setting up Server Hosts File
-	echo -e "${WHITE}>> ${BLUE}[setupHosts] ${GREEN}Setting up Hosts File. ${NC}"
+	echo -e "${WHITE} >> ${BLUE}[setupHosts] ${GREEN}Setting up Hosts File. ${NC}"
 
 	#Setup Hosts
 	echo -e "${BLUE}<== 6. Set Server Name & Hosts ==> ${NC}"
@@ -644,7 +644,7 @@ setupHosts () {
 cloudflareCreateA () {
 
 	#Setting up Server Hosts File
-	echo -e "${WHITE}>> ${BLUE}[cloudflareCreateA] ${GREEN}Creating A Record for Domain $1 and address $2. ${NC}"
+	echo -e "${WHITE} >> ${BLUE}[cloudflareCreateA] ${GREEN}Creating A Record for Domain $1 and address $2. ${NC}"
 
 	echo -e "${YELLOW} Creating A Records w/ CloudFlare ${NC}"
 
@@ -673,7 +673,7 @@ cloudflareCreateA () {
 uptimerobotCreateMonitor () {
 
 	#Setting up Server Hosts File
-	echo -e "${WHITE}>> ${BLUE}[uptimerobotCreateMonitor] ${GREEN}Creating Uptime Record for URL $1 with name $2. ${NC}"
+	echo -e "${WHITE} >> ${BLUE}[uptimerobotCreateMonitor] ${GREEN}Creating Uptime Record for URL $1 with name $2. ${NC}"
 
 	#Uptime Robot
 	echo -e "${BLUE}<== 13. Uptime Robot ==> ${NC}"
@@ -699,7 +699,7 @@ uptimerobotCreateMonitor () {
 websiteCatchAll () {
 
 	#Setting up Catch-All
-	echo -e "${WHITE}>> ${BLUE}[websiteCatchAll] ${GREEN}Setting up Catch All. ${NC}"
+	echo -e "${WHITE} >> ${BLUE}[websiteCatchAll] ${GREEN}Setting up Catch All. ${NC}"
 
 	#Setup Catch-All
 	echo -e "${BLUE}<== 11. Setup Catch-All Page ==> ${NC}"
@@ -751,7 +751,7 @@ websiteCatchAll () {
 websiteStatusPage () {
 
 	#Setting up Catch-All
-	echo -e "${WHITE}>> ${BLUE}[websiteStatusPage] ${GREEN}Setting up Status Page. ${NC}"
+	echo -e "${WHITE} >> ${BLUE}[websiteStatusPage] ${GREEN}Setting up Status Page. ${NC}"
 	
 	#Setup Server Status
 	echo -e "${BLUE}<== 12. Setup Status Page ==> ${NC}"
@@ -813,7 +813,7 @@ websiteStatusPage () {
 setupCleanUp () {
 
 	#Cleaning up and Setting Security Settings
-	echo -e "${WHITE}>> ${BLUE}[setupCleanUp] ${GREEN}Cleaning and Securing Directorys. ${NC}"
+	echo -e "${WHITE} >> ${BLUE}[setupCleanUp] ${GREEN}Cleaning and Securing Directorys. ${NC}"
 
 	#CleanUp
 	rm /opt/cl6/vault/clovisd-passwd.vault
@@ -826,7 +826,7 @@ setupCleanUp () {
 discordWebhook () {
 
 	#Discord Ping
-	echo -e "${WHITE}>> ${BLUE}[discordPhoneHome] ${GREEN}Discord Phone Home Webhook ${NC}"
+	echo -e "${WHITE} >> ${BLUE}[discordPhoneHome] ${GREEN}Discord Phone Home Webhook ${NC}"
 
 	echo -e "${YELLOW} Discord Ping ${NC}"
 	cd /opt/cl6/setup && ./discord.sh
