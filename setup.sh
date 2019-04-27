@@ -784,11 +784,14 @@ websiteStatusPage () {
 	cp /opt/cl6/setup/status-page.tar /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html
 	cd /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html
 	echo -e "${YELLOW} Extracting Archive ${NC}"
-	tar -zxvf status-page.tar.gz  >> ${logfile} 2>&1
-	rm status-page.tar.gz >> ${logfile} 2>&1
+	tar -xvf status-page.tar  >> ${logfile} 2>&1
+	cd status-page
+	cp -R * /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html
+	rm -R /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html/status-page
+	rm status-page.tar >> ${logfile} 2>&1
 		
 	echo -e "${YELLOW} Setting HTACCESS File ${NC}"
-	cp /opt/cl6/setup/extract/.htaccess /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html/status
+	cp /opt/cl6/setup/extract/.htaccess /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html/status/
 	
 	echo -e "${YELLOW} Creating Apache Conf ${NC}"
 
@@ -876,7 +879,7 @@ echo -e "Please select Install Type:"
 
 #Setup Base Programs
 PS3='Select Install Type: '
-options=("Full" "DigitalOcean" "GoogleCloud" "SparkVPS" "Exit")
+options=("Test Sequence" "Full" "DigitalOcean" "GoogleCloud" "SparkVPS" "Exit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -918,6 +921,15 @@ do
             ;;
         "SparkVPS")
             echo -e "${RED} >> RUNNING SPARKVPS INSTALL! ${NC}"
+            ;;
+        "Test Sequence")
+            echo -e "${RED} >> RUNNING TEST SEQUENCE! ${NC}"
+			cloudflareCreateA
+			
+			uptimerobotCreateMonitor
+			
+			setupReboot
+            break
             ;;
         "Exit")
             break
