@@ -7,6 +7,15 @@
 
 #bash <(wget -O- -q https://raw.githubusercontent.com/clovisd/CL6-Scripts/master/test.sh)
 
+#Color Codes
+RED='\033[0;31m'
+NC='\033[0m'
+YELLOW='\033[1;33m'
+GREEN='\033[0;32m'
+BLUE='\033[1;34m'
+LGREEN='\033[1;32m'
+WHITE='\033[1;37m'
+
 #Check Root
 if [[ $EUID -ne 0 ]]; then
   echo "${RED} Need Root to Run! Please try running as Root again."
@@ -20,37 +29,26 @@ DEBIAN_FRONTEND=noninteractive
 #Log File
 logfile="/home/test.log"
 
-#Color Codes
-RED='\033[0;31m'
-NC='\033[0m'
-YELLOW='\033[1;33m'
-GREEN='\033[0;32m'
-BLUE='\033[1;34m'
-LGREEN='\033[1;32m'
-WHITE='\033[1;37m'
+echo -e "Please select Install Type:"
 
 #Setup Base Programs
-echo -e "${YELLOW} >> Installing Programs"
-
-(apt-get update -qq) >> ${logfile} & PID=$! 2>&1
-    printf  "${GREEN}[UPDATE:"
-while kill -0 $PID 2> /dev/null; do 
-    printf  "."
-    sleep 3
+PS3='Select Install Type: '
+options=("🔼 DigitalOcean" "🔼 GoogleCloud" "🔼 SparkVPS" "Exit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "🔼 DigitalOcean")
+            echo "you chose choice 1"
+            ;;
+        "🔼 GoogleCloud")
+            echo "you chose choice 2"
+            ;;
+        "🔼 SparkVPS")
+            echo "you chose choice 3"
+            ;;
+        "Exit")
+            break
+            ;;
+        *) echo invalid option;;
+    esac
 done
-printf "${GREEN}]${NC} - Done\n"
-(apt-get remove --purge -qq postfix apache2) >> ${logfile} & PID=$! 2>&1
-    printf  "${GREEN}[REMOVE:"
-while kill -0 $PID 2> /dev/null; do 
-    printf  "."
-    sleep 3
-done
-printf "${GREEN}]${NC} - Done\n"
-(apt-get install -qq git software-properties-common dnsutils dbus tzdata) >> ${logfile} & PID=$! 2>&1
-    printf  "${GREEN}[INSTALL:"
-while kill -0 $PID 2> /dev/null; do 
-    printf  "."
-    sleep 3
-done
-printf "${GREEN}]${NC} - Done\n"
-echo -e "${LGREEN} >> Done${NC}"

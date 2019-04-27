@@ -9,7 +9,7 @@
 #bash <(wget -O- -q https://goo.gl/yf18Rh)
 #clear && bash <(wget -O- -q https://goo.gl/yf18Rh)
 
-V='v2.9.5'
+V='v3.0.0'
 
 #Color Codes
 RED='\033[0;31m'
