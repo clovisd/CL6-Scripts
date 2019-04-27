@@ -107,21 +107,21 @@ echo -e "${LGREEN} >> Done"
 #Setup Base Programs
 echo -e "${YELLOW} >> Installing Programs"
 (apt-get update -qq) >> ${logfile} & PID=$! 2>&1
-    printf  "${GREEN}[UPDATE:"
+    printf  "%s[UPDATE:" "${GREEN}"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
 done
 printf "${GREEN}]${NC} - Done\n"
 (apt-get remove --purge -qq postfix* apache2*) >> ${logfile} & PID=$! 2>&1
-    printf  "${GREEN}[REMOVE:"
+    printf  "%s[REMOVE:" "${GREEN}"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3
 done
 printf "${GREEN}]${NC} - Done\n"
 (apt-get install -qq git software-properties-common apt-transport-https dnsutils dbus tzdata nano jq curl) >> ${logfile} & PID=$! 2>&1
-    printf  "${GREEN}[INSTALL:\n"
+    printf  "%s[INSTALL:\n" "${GREEN}"
 while kill -0 $PID 2> /dev/null; do 
     printf  "."
     sleep 3

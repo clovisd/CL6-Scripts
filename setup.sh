@@ -28,7 +28,7 @@ echo -e "VER: ${VER}"
 
 echo -e "${GREEN}<== CL6 Server Setup Script ==>"
 echo -e "${LGREEN} ${V} - clovisd"
-echo -ne "${RED}Press Enter when read -ry!${NC}" ; read -r input
+echo -ne "${RED}Press Enter when ready!${NC}" ; read -r input
 
 #Log File
 logfile="/opt/cl6/logs/setup.log"
@@ -58,61 +58,6 @@ fi
 SERVERIP="$(dig +short myip.opendns.com @resolver1.opendns.com)"
 echo "Server IP is: ${SERVERIP}"
 echo "${SERVERIP}" > /opt/cl6/info/serverip.info
-
-#Select Server Install Setup to Run
-echo -e "Please select Install Type:"
-
-#Setup Base Programs
-PS3='Select Install Type: '
-options=("Full" "🔼 DigitalOcean" "🔼 GoogleCloud" "🔼 SparkVPS" "Exit")
-select opt in "${options[@]}"
-do
-    case $opt in
-        "Full")
-            echo -e "${RED} >> RUNNING FULL INSTALL! ${NC}"
-			basicSetupUtility
-			setupHostDirectories
-			setupUsers
-			cloudflareInfo
-			uptimerobotInfo
-			
-			systemUpdate
-			systemUpgrade
-			systemAutoRemove
-			
-			setupBashFiles
-			setupSudoUsers
-			setupSSHD
-			setupHosts
-			
-			installConfigureAPACHE
-			installConfigureMYSQL
-			installConfigurePHP
-			installConfigurePHPMYADMIN
-			installConfigureCERTBOT
-			
-			installPersonalPackages
-			
-			websiteStatusPage
-			setupCleanUp
-			discordWebhook
-			setupReboot
-            ;;
-        "🔼 DigitalOcean")
-            echo -e "${RED} >> RUNNING DIGITAL OCEAN INSTALL! ${NC}"
-            ;;
-        "🔼 GoogleCloud")
-            echo -e "${RED} >> RUNNING GCD INSTALL! ${NC}"
-            ;;
-        "🔼 SparkVPS")
-            echo -e "${RED} >> RUNNING SPARKVPS INSTALL! ${NC}"
-            ;;
-        "Exit")
-            break
-            ;;
-        *) echo invalid option;;
-    esac
-done
 
 systemRemove () {
 
@@ -900,6 +845,61 @@ setupReboot () {
 
 exit
 }
+
+#Select Server Install Setup to Run
+echo -e "Please select Install Type:"
+
+#Setup Base Programs
+PS3='Select Install Type: '
+options=("Full" "DigitalOcean" "GoogleCloud" "SparkVPS" "Exit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "Full")
+            echo -e "${RED} >> RUNNING FULL INSTALL! ${NC}"
+			basicSetupUtility
+			setupHostDirectories
+			setupUsers
+			cloudflareInfo
+			uptimerobotInfo
+			
+			systemUpdate
+			systemUpgrade
+			systemAutoRemove
+			
+			setupBashFiles
+			setupSudoUsers
+			setupSSHD
+			setupHosts
+			
+			installConfigureAPACHE
+			installConfigureMYSQL
+			installConfigurePHP
+			installConfigurePHPMYADMIN
+			installConfigureCERTBOT
+			
+			installPersonalPackages
+			
+			websiteStatusPage
+			setupCleanUp
+			discordWebhook
+			setupReboot
+            ;;
+        "DigitalOcean")
+            echo -e "${RED} >> RUNNING DIGITAL OCEAN INSTALL! ${NC}"
+            ;;
+        "GoogleCloud")
+            echo -e "${RED} >> RUNNING GCD INSTALL! ${NC}"
+            ;;
+        "SparkVPS")
+            echo -e "${RED} >> RUNNING SPARKVPS INSTALL! ${NC}"
+            ;;
+        "Exit")
+            break
+            ;;
+        *) echo invalid option;;
+    esac
+done
 
 echo "This shouldn't happen! Exiting! - Code Null"
 
