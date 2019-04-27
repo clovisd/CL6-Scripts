@@ -403,7 +403,7 @@ installConfigurePHP () {
 	# printf "${GREEN}]${NC} - Done\n"
 	
 	#PHP Secondary Packages
-	systemUpdate
+	
 	systemInstall "libmcrypt-dev"
 	
 	# (apt-get install -qq libmcrypt-dev) >> ${logfile} & PID=$! 2>&1
@@ -417,7 +417,7 @@ installConfigurePHP () {
 	
 	#PHP 3rd Party Packages
 	(pecl -q install mcrypt-1.0.1) >> ${logfile} & PID=$! 2>&1
-		printf  "${GREEN}[INSTALL 3:\n"
+		printf  "${GREEN}[INSTALL:\n"
 	while kill -0 $PID 2> /dev/null; do 
 		printf  "."
 		sleep 3
