@@ -97,7 +97,7 @@ systemUpdate () {
 
 systemUpgrade () {
 
-	(DEBIAN_FRONTEND=read -rline apt-get upgrade -y) >> ${logfile} & PID=$! 2>&1
+	(DEBIAN_FRONTEND=readline apt-get upgrade -y) >> ${logfile} & PID=$! 2>&1
 		printf  "${GREEN}[UPGRADE:"
 	while kill -0 $PID 2> /dev/null; do 
 		printf  "."
@@ -233,11 +233,10 @@ setupUsers () {
 	echo -e "${YELLOW} Setup User: clovisd ${NC}"
 	useradd clovisd -m -s /bin/bash
 	chpasswd<<<"clovisd:${CLPASSWD}"
-	htpasswd -c -b /opt/cl6/vault/.htpasswd clovisd "${CLPASSWD}"
 	echo -e "${YELLOW} Setup User: cl6web ${NC}"
 	useradd cl6web -G www-data -s /bin/bash
 	chpasswd<<<"cl6web:${C6PASSWD}"
-	htpasswd -b /opt/cl6/vault/.htpasswd cl6web "${C6PASSWD}"
+	
 	echo -e "${YELLOW} Setup User: root ${NC}"
 	sudo passwd -dl root
 	#echo "${ROOTPASSWD}" | passwd --stdin root
@@ -325,6 +324,9 @@ installConfigureAPACHE () {
 	echo -e "${LGREEN} == Done == ${NC}"
 	
 	systemServiceRestart "apache2"
+
+	htpasswd -c -b /opt/cl6/vault/.htpasswd clovisd "${CLPASSWD}"
+	htpasswd -b /opt/cl6/vault/.htpasswd cl6web "${C6PASSWD}"
 
 	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
 	
