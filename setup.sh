@@ -61,7 +61,7 @@ echo "${SERVERIP}" > /opt/cl6/info/serverip.info
 
 systemRemove () {
 
-	(apt-get remove -qq "$1") >> ${logfile} & PID=$! 2>&1
+	(apt-get remove -qq $1) >> ${logfile} & PID=$! 2>&1
 		printf  "${GREEN}[UPDATE:"
 	while kill -0 $PID 2> /dev/null; do 
 		printf  "."
@@ -73,7 +73,7 @@ systemRemove () {
 
 systemInstall () {
 
-	(apt-get install -qq "$1") >> ${logfile} & PID=$! 2>&1
+	(apt-get install -qq $1) >> ${logfile} & PID=$! 2>&1
 		printf  "${GREEN}[UPDATE:"
 	while kill -0 $PID 2> /dev/null; do 
 		printf  "."
@@ -339,7 +339,7 @@ installConfigureMYSQL () {
 
 	echo "mysql-server mysql-server/root_password password $ROOTPASSWD" | debconf-set-selections >> ${logfile} 2>&1
 	echo "mysql-server mysql-server/root_password_again password $ROOTPASSWD" | debconf-set-selections >> ${logfile} 2>&1
-	debconf-get-selections | grep mysql-server >> ${logfile} 2>&1
+	#debconf-get-selections | grep mysql-server >> ${logfile} 2>&1
 
 	systemUpdate
 	systemInstall "mysql-server"
@@ -456,7 +456,7 @@ installConfigurePHPMYADMIN() {
 	echo "phpmyadmin phpmyadmin/app-password-confirm password $ROOTPASSWD" | debconf-set-selections >> ${logfile} 2>&1
 	echo "phpmyadmin phpmyadmin/mysql/admin-pass password $ROOTPASSWD" | debconf-set-selections >> ${logfile} 2>&1
 	echo "phpmyadmin phpmyadmin/mysql/app-pass password $ROOTPASSWD" | debconf-set-selections >> ${logfile} 2>&1
-	debconf-get-selections | grep phpmyadmin >> ${logfile} 2>&1
+	#debconf-get-selections | grep phpmyadmin >> ${logfile} 2>&1
 
 	#SetupPHPAdmin
 	echo -e "${BLUE}<== 8. PHPMyAdmin ==> ${NC}"
