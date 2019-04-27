@@ -339,7 +339,7 @@ installConfigureMYSQL () {
 
 	echo "mysql-server mysql-server/root_password password $ROOTPASSWD" | debconf-set-selections >> ${logfile} 2>&1
 	echo "mysql-server mysql-server/root_password_again password $ROOTPASSWD" | debconf-set-selections >> ${logfile} 2>&1
-	debconf-get-selections|grep mysql-server >> ${logfile} 2>&1
+	debconf-get-selections | grep mysql-server >> ${logfile} 2>&1
 
 	systemUpdate
 	systemInstall "mysql-server"
@@ -390,10 +390,10 @@ installConfigurePHP () {
 	echo -e "${YELLOW} Installing PHP Packages ${NC}"
 	
 	systemUpdate
-	systemInstall "php7.2 php7.2-mysql php7.2-curl php7.2-xml php7.2-zip php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-read -rline php7.2-dev php7.2-gmp php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap"
+	systemInstall "php7.2 php7.2-mysql php7.2-curl php7.2-xml php7.2-zip php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-gmp php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap"
 	
 	#PHP Base Packages
-	# (apt-get install -qq php7.2 php7.2-mysql php7.2-curl php7.2-xml php7.2-zip php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-read -rline php7.2-dev php7.2-gmp php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap) >> ${logfile} & PID=$! 2>&1
+	# (apt-get install -qq php7.2 php7.2-mysql php7.2-curl php7.2-xml php7.2-zip php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-gmp php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap) >> ${logfile} & PID=$! 2>&1
 	#php-pear
 		# printf  "${GREEN}[INSTALL 1:\n"
 	# while kill -0 $PID 2> /dev/null; do 
@@ -456,7 +456,7 @@ installConfigurePHPMYADMIN() {
 	echo "phpmyadmin phpmyadmin/app-password-confirm password $ROOTPASSWD" | debconf-set-selections >> ${logfile} 2>&1
 	echo "phpmyadmin phpmyadmin/mysql/admin-pass password $ROOTPASSWD" | debconf-set-selections >> ${logfile} 2>&1
 	echo "phpmyadmin phpmyadmin/mysql/app-pass password $ROOTPASSWD" | debconf-set-selections >> ${logfile} 2>&1
-	debconf-get-selections|grep phpmyadmin >> ${logfile} 2>&1
+	debconf-get-selections | grep phpmyadmin >> ${logfile} 2>&1
 
 	#SetupPHPAdmin
 	echo -e "${BLUE}<== 8. PHPMyAdmin ==> ${NC}"
@@ -758,7 +758,7 @@ websiteStatusPage () {
 	#Setup Server Status
 	echo -e "${BLUE}<== 12. Setup Status Page ==> ${NC}"
 	echo -e "${YELLOW} Moving Archive ${NC}"
-	cp /opt/cl6/setup/status-page.tar.gz /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html
+	cp /opt/cl6/setup/status-page.tar /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html
 	cd /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html
 	echo -e "${YELLOW} Extracting Archive ${NC}"
 	tar -zxvf status-page.tar.gz  >> ${logfile} 2>&1
@@ -839,7 +839,7 @@ discordWebhook () {
 
 setupReboot () {
 
-	echo -ne "${WHITE}Press Enter when Reboot read -ry!${NC}" ; read -r input
+	echo -ne "${WHITE}Press Enter when Reboot ready!${NC}" ; read -r input
 	reboot && exit
 	#shutdown -t
 
