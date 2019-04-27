@@ -632,11 +632,34 @@ setupHosts () {
 	HOSTNAME="S${SERVERNUM}"
 
 	echo "${HOSTNAME}" > /etc/hostname
-	nano /etc/hostname
+	#nano /etc/hostname
+	
 	echo -e "${GREEN} Set Hosts ${NC}"
 
-	cp /opt/cl6/setup/extract/hosts /etc
-	nano /etc/hosts
+	HOSTS="# Basic Hosts
+127.0.0.1 localhost.localdomain localhost
+# Auto-generated hostname. Please do not remove this comment.
+
+${SERVERIP} S${SERVERNUM}.CL6.US S${SERVERNUM}
+127.0.1.1 CL6-${SERVERNUM}.localdomain CL6-${SERVERNUM}
+127.0.1.1 S${SERVERNUM}.CL6.US CL6-${SERVERNUM}
+127.0.0.1 localhost
+
+# IPv6 Hosts
+::1 ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+ff02::3 ip6-allhosts
+
+# Net Hosts
+​${SERVERIP} S${SERVERNUM}.CL6.US
+​${SERVERIP} S${SERVERNUM}.CL6WEB.COM"
+
+	echo "${HOSTS}" > /etc/hosts
+	
+	#nano /etc/hosts
 	echo -e "${LGREEN} == Done == ${NC}"
 	
 	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
@@ -859,15 +882,15 @@ do
     case $opt in
         "Full")
             echo -e "${RED} >> RUNNING FULL INSTALL! ${NC}"
-			basicSetupUtility
-			setupHostDirectories
 			setupUsers
 			cloudflareInfo
 			uptimerobotInfo
+			basicSetupUtility
+			setupHostDirectories
 			
-			systemUpdate
-			systemUpgrade
-			systemAutoRemove
+			#systemUpdate
+			#systemUpgrade
+			#systemAutoRemove
 			
 			setupBashFiles
 			setupSudoUsers
