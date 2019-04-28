@@ -392,8 +392,8 @@ installConfigurePHP () {
 	echo -e "${YELLOW} Installing PHP Packages ${NC}"
 	
 	systemUpdate
-	systemInstall "php7.2 php7.2-mysql php7.2-curl php7.2-xml php7.2-zip php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-gmp php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap"
-	
+	#systemInstall "php7.2 php7.2-mysql php7.2-curl php7.2-xml php7.2-zip php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-gmp php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap"
+	systemInstall "php7.3 php7.3-mysql php7.3-curl php7.3-xml php7.3-zip php7.3-gd php7.3-common php7.3-json php7.3-opcache php7.3-readline php7.3-dev php7.3-gmp php7.3-mbstring php7.3-soap php7.3-xmlrpc php7.3-imap"
 	#PHP Base Packages
 	# (apt-get install -qq php7.2 php7.2-mysql php7.2-curl php7.2-xml php7.2-zip php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-gmp php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap) >> ${logfile} & PID=$! 2>&1
 	#php-pear
@@ -406,7 +406,7 @@ installConfigurePHP () {
 	
 	#PHP Secondary Packages
 	
-	systemInstall "libmcrypt-dev"
+	systemInstall "libmcrypt-dev libapache2-modsecurity"
 	
 	# (apt-get install -qq libmcrypt-dev) >> ${logfile} & PID=$! 2>&1
 	#php-pecl
@@ -523,6 +523,17 @@ installConfigureCERTBOT () {
 	systemServiceRestart "apache2"
 
 	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
+
+}
+
+installPageSpeed () {
+
+	cd /opt/cl6/setup || return
+
+	wget https://dl-ssl.google.com/dl/linux/direct/mod-pagespeed-beta_current_amd64.deb
+	pkg -i mod-pagespeed-beta_current_amd64.deb 
+
+	apt-get -f install
 
 }
 
@@ -905,6 +916,7 @@ do
 			installConfigurePHP
 			installConfigurePHPMYADMIN
 			installConfigureCERTBOT
+			installPageSpeed
 			
 			installPersonalPackages
 			
@@ -915,19 +927,6 @@ do
             ;;
         "DigitalOcean")
             echo -e "${RED} >> RUNNING DIGITAL OCEAN INSTALL! ${NC}"
-			
-            ;;
-        "GoogleCloud")
-            echo -e "${RED} >> RUNNING GCD INSTALL! ${NC}"
-            ;;
-        "SparkVPS")
-            echo -e "${RED} >> RUNNING SPARKVPS INSTALL! ${NC}"
-            ;;
-        "Test Sequence")
-            echo -e "${RED} >> STARTING TASKS! ${NC}"
-			logfile="/opt/cl6/logs/testsequence.log"
-			echo -e "Log File: ${logfile}"
-			
 			setupUsers
 			cloudflareInfo
 			uptimerobotInfo
@@ -940,11 +939,76 @@ do
 			
 			installConfigureAPACHE
 			installConfigureMYSQL
+			installConfigurePHP
+			installConfigurePHPMYADMIN
+			installConfigureCERTBOT
+			installPageSpeed
 			
+			installPersonalPackages
+			
+			websiteStatusPage
+			setupCleanUp
+			discordWebhook
+			setupReboot
+            ;;
+        "GoogleCloud")
+            echo -e "${RED} >> RUNNING GCD INSTALL! ${NC}"
+			setupUsers
+			cloudflareInfo
+			uptimerobotInfo
+			basicSetupUtility
+			
+			setupBashFiles
+			#setupSudoUsers
+			#setupSSHD
+			setupHosts
+			
+			installConfigureAPACHE
+			installConfigureMYSQL
+			installConfigurePHP
+			installConfigurePHPMYADMIN
+			installConfigureCERTBOT
+			installPageSpeed
+			
+			installPersonalPackages
+			
+			websiteStatusPage
+			setupCleanUp
+			discordWebhook
+			setupReboot
+            ;;
+        "SparkVPS")
+            echo -e "${RED} >> RUNNING SPARKVPS INSTALL! ${NC}"
+			setupUsers
+			cloudflareInfo
+			uptimerobotInfo
+			basicSetupUtility
+			
+			setupBashFiles
+			setupSudoUsers
+			setupSSHD
+			#setupHosts
+			
+			installConfigureAPACHE
+			installConfigureMYSQL
+			installConfigurePHP
+			installConfigurePHPMYADMIN
+			installConfigureCERTBOT
+			installPageSpeed
+			
+			installPersonalPackages
+			
+			websiteStatusPage
+			setupCleanUp
+			discordWebhook
+			setupReboot
+            ;;
+        "Test Sequence")
+            echo -e "${RED} >> STARTING TASKS! ${NC}"
+			logfile="/opt/cl6/logs/testsequence.log"
+			echo -e "Log File: ${logfile}"
 			echo -ne "${WHITE}PHP Install Cancelled!${NC}" ; read -r input
-
-			setupReboot		
-			
+			setupReboot
             break
             ;;
         "Exit")
