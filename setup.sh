@@ -689,9 +689,9 @@ cloudflareCreateA () {
 	-H "Content-Type: application/json" \
 	--data '{"type":"A","name":"'"$DNSRECORD"'","content":"'"$SERVERIP"'","proxied":false}' >> ${logfile} 2>&1
 
-	sleep 3s
-
 	echo -e "${LGREEN} == Done == ${NC}"
+	
+	sleep 3s
 	
 	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
 
@@ -827,13 +827,17 @@ websiteStatusPage () {
 	cloudflareCreateA "cl6web.com" "s${SERVERNUM}.cl6web.com"
 
 	systemServiceRestart "apache2"
+	
+	uptimerobotCreateMonitor "http://s${SERVERNUM}.cl6.us" "S${SERVERNUM} (HTTP)"
+	uptimerobotCreateMonitor "https://s${SERVERNUM}.cl6.us" "S${SERVERNUM} (HTTPS)"
 
-	certbotCreateCert "s${SERVERNUM}.cl6.us" "s${SERVERNUM}.cl6web.com"
+	sleep 3s
 
 	systemServiceRestart "apache2"
 
-	uptimerobotCreateMonitor "http://s${SERVERNUM}.cl6.us" "S${SERVERNUM} (HTTP)"
-	uptimerobotCreateMonitor "https://s${SERVERNUM}.cl6.us" "S${SERVERNUM} (HTTPS)"
+	sleep 3s
+
+	certbotCreateCert "s${SERVERNUM}.cl6.us" "s${SERVERNUM}.cl6web.com"
 
 	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
 	
@@ -898,7 +902,6 @@ do
 			
 			installConfigureAPACHE
 			installConfigureMYSQL
-			
 			installConfigurePHP
 			installConfigurePHPMYADMIN
 			installConfigureCERTBOT
