@@ -923,10 +923,9 @@ do
             echo -e "${RED} >> RUNNING SPARKVPS INSTALL! ${NC}"
             ;;
         "Test Sequence")
-            echo -e "${RED} >> RUNNING TEST SEQUENCE! ${NC}"
-			cloudflareCreateA
-			
-			uptimerobotCreateMonitor
+	
+			uptimerobotCreateMonitor "http://s${SERVERNUM}.cl6.us" "S${SERVERNUM}.CL6.US (HTTP)"
+			uptimerobotCreateMonitor "https://s${SERVERNUM}.cl6.us" "S${SERVERNUM}.CL6.US (HTTPS)"
 			
 			setupReboot
             break
