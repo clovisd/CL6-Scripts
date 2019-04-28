@@ -165,6 +165,20 @@ basicSetupUtility () {
 
 }
 
+basicShutdownUtility () {
+
+	#Setup Updates for New Server
+	echo -e "${WHITE} >> ${BLUE}[basicShutdownUtility] ${GREEN}Running Updates, Upgrade, and AutoRemove. ${NC}"
+		
+	systemUpdate
+	systemUpgrade
+	systemAutoRemove
+	systemAutoClean
+
+	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
+
+}
+
 setupHostDirectories () {
 
 	#Setup Host Directories
@@ -408,6 +422,9 @@ installConfigurePHP () {
 	
 	systemInstall "libmcrypt-dev libapache2-modsecurity"
 	
+	systemInstall "gcc make autoconf libc-dev pkg-config"
+	
+	systemUpdate
 	# (apt-get install -qq libmcrypt-dev) >> ${logfile} & PID=$! 2>&1
 	#php-pecl
 		# printf  "${GREEN}[INSTALL 2:\n"
@@ -416,9 +433,9 @@ installConfigurePHP () {
 		# sleep 3
 	# done
 	# printf "${GREEN}]${NC} - Done\n"
-	
+	install --nodeps mcrypt-snapshot
 	#PHP 3rd Party Packages
-	(pecl -q install mcrypt-1.0.1) >> ${logfile} & PID=$! 2>&1
+	(pecl -q install mcrypt-snapshot) >> ${logfile} & PID=$! 2>&1
 		printf  "${GREEN}[INSTALL:\n"
 	while kill -0 $PID 2> /dev/null; do 
 		printf  "."
@@ -427,9 +444,9 @@ installConfigurePHP () {
 	printf "${GREEN}]${NC} - Done\n"
 	
 	echo -e "${YELLOW} Setting Up mcrypt ${NC}"
-	echo extension=/usr/lib/php/20170718/mcrypt.so > /etc/php/7.2/mods-available/mcrypt.ini
-	ln -s /etc/php/7.2/mods-available/mcrypt.ini /etc/php/7.2/cli/conf.d/20-mcrypt.ini
-	ln -s /etc/php/7.2/mods-available/mcrypt.ini /etc/php/7.2/apache2/conf.d/20-mcrypt.ini
+	echo extension=/usr/lib/php/20180731/mcrypt.so > /etc/php/7.3/mods-available/mcrypt.ini
+	ln -s /etc/php/7.3/mods-available/mcrypt.ini /etc/php/7.3/cli/conf.d/20-mcrypt.ini
+	ln -s /etc/php/7.3/mods-available/mcrypt.ini /etc/php/7.3/apache2/conf.d/20-mcrypt.ini
 	
 	#Setup PHP
 	echo -e "${BLUE}<== 3. Setup PHP ==> ${NC}"
@@ -930,6 +947,7 @@ do
 			websiteStatusPage
 			setupCleanUp
 			discordWebhook
+			basicShutdownUtility
 			setupReboot
             ;;
         "DigitalOcean")
@@ -956,6 +974,7 @@ do
 			websiteStatusPage
 			setupCleanUp
 			discordWebhook
+			basicShutdownUtility
 			setupReboot
             ;;
         "GoogleCloud")
@@ -982,6 +1001,7 @@ do
 			websiteStatusPage
 			setupCleanUp
 			discordWebhook
+			basicShutdownUtility
 			setupReboot
             ;;
         "SparkVPS")
@@ -1008,6 +1028,7 @@ do
 			websiteStatusPage
 			setupCleanUp
 			discordWebhook
+			basicShutdownUtility
 			setupReboot
             ;;
         "Test Sequence")
