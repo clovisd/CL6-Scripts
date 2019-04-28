@@ -531,17 +531,6 @@ certbotCreateCert () {
 	#Creating Cerbot Cert
 	echo -e "${WHITE} >> ${BLUE}[certbotCreateCert] ${GREEN}Setting up a new Cert. ${NC}"
 
-	echo -e "1 = $1"
-	echo -e "1B = ${1}"
-	echo -e "2 = $2"
-	echo -e "2B = ${2}"
-	echo -e "3 = $3"
-	echo -e "3B = ${3}"
-	echo -e "# = $#"
-	echo -e "#B = ${#}"
-	echo -e "* = $*"
-	echo -e "*B = ${*}"
-
 	echo -e "${YELLOW} Generating CertBot Certs ${NC}"
 	certbot run -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -a webroot -i apache -w /opt/cl6/hosting/$1/html -d $1 -d $2 >> ${logfile} 2>&1
 
