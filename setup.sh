@@ -914,6 +914,7 @@ do
             ;;
         "DigitalOcean")
             echo -e "${RED} >> RUNNING DIGITAL OCEAN INSTALL! ${NC}"
+			
             ;;
         "GoogleCloud")
             echo -e "${RED} >> RUNNING GCD INSTALL! ${NC}"
