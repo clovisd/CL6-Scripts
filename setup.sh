@@ -534,6 +534,8 @@ installPageSpeed () {
 	pkg -i mod-pagespeed-beta_current_amd64.deb 
 
 	apt-get -f install
+	
+	systemServiceRestart "apache2"
 
 }
 
