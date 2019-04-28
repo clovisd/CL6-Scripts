@@ -528,6 +528,9 @@ installConfigureCERTBOT () {
 
 installPageSpeed () {
 
+	#Installing & Setting Up Certbot
+	echo -e "${WHITE} >> ${BLUE}[installPageSpeed] ${GREEN}Installing & Setting Up PageSpeed. ${NC}"
+
 	cd /opt/cl6/setup || return
 
 	wget https://dl-ssl.google.com/dl/linux/direct/mod-pagespeed-beta_current_amd64.deb
@@ -536,6 +539,8 @@ installPageSpeed () {
 	apt-get -f install
 	
 	systemServiceRestart "apache2"
+
+	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
 
 }
 
