@@ -899,17 +899,15 @@ do
 			installConfigureAPACHE
 			installConfigureMYSQL
 			
-			echo -ne "${WHITE}PHP Install Cancelled!${NC}" ; read -r input
+			installConfigurePHP
+			installConfigurePHPMYADMIN
+			installConfigureCERTBOT
 			
-			#installConfigurePHP
-			#installConfigurePHPMYADMIN
-			#installConfigureCERTBOT
+			installPersonalPackages
 			
-			#installPersonalPackages
-			
-			#websiteStatusPage
-			#setupCleanUp
-			#discordWebhook
+			websiteStatusPage
+			setupCleanUp
+			discordWebhook
 			setupReboot
             ;;
         "DigitalOcean")
