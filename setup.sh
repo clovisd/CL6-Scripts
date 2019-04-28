@@ -158,6 +158,8 @@ basicSetupUtility () {
 	systemUpgrade
 	systemAutoRemove
 	systemAutoClean
+	
+	setupHostDirectories
 
 	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
 
@@ -529,8 +531,19 @@ certbotCreateCert () {
 	#Creating Cerbot Cert
 	echo -e "${WHITE} >> ${BLUE}[certbotCreateCert] ${GREEN}Setting up a new Cert. ${NC}"
 
+	echo -e "1 = $1"
+	echo -e "1B = ${1}"
+	echo -e "2 = $2"
+	echo -e "2B = ${2}"
+	echo -e "3 = $3"
+	echo -e "3B = ${3}"
+	echo -e "# = $#"
+	echo -e "#B = ${#}"
+	echo -e "* = $*"
+	echo -e "*B = ${*}"
+
 	echo -e "${YELLOW} Generating CertBot Certs ${NC}"
-	certbot run -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -a webroot -i apache -w /opt/cl6/hosting/"$1"/html -d "$1" -d "$2" >> ${logfile} 2>&1
+	certbot run -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -a webroot -i apache -w /opt/cl6/hosting/$1/html -d $1 -d $2 >> ${logfile} 2>&1
 
 	#certbot --apache-n -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
 	#certbot certonly -m ssl@cl6web.com --agree-tos --no-eff-email --redirect --webroot -w /home/cl6web/s${SERVERNUM}.cl6.us/status -d s${SERVERNUM}.cl6.us -d s${SERVERNUM}.cl6web.com
@@ -582,7 +595,7 @@ setupBashFiles () {
 setupSudoUsers () {
 
 	#Creating Cerbot Cert
-	echo -e "${WHITE} >> ${BLUE}[setupSudoUsers] ${GREEN}Setting up a new Cert. ${NC}"
+	echo -e "${WHITE} >> ${BLUE}[setupSudoUsers] ${GREEN}Setting up Sudo Permissions. ${NC}"
 
 	#Setup permissions
 	echo -e "${BLUE}<== 4. Setup User Permissions ==> ${NC}"
@@ -777,7 +790,7 @@ websiteStatusPage () {
 
 	#Setting up Catch-All
 	echo -e "${WHITE} >> ${BLUE}[websiteStatusPage] ${GREEN}Setting up Status Page. ${NC}"
-	
+
 	#Setup Server Status
 	echo -e "${BLUE}<== 12. Setup Status Page ==> ${NC}"
 	echo -e "${YELLOW} Moving Archive ${NC}"
@@ -789,51 +802,50 @@ websiteStatusPage () {
 	cp -R * /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html
 	rm -R /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html/status-page
 	rm status-page.tar >> ${logfile} 2>&1
-		
+
 	echo -e "${YELLOW} Setting HTACCESS File ${NC}"
 	cp /opt/cl6/setup/extract/.htaccess /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html/status/
-	
+
 	echo -e "${YELLOW} Creating Apache Conf ${NC}"
 
 	STATUSPAGE="<VirtualHost *:80>
-		ServerName s${SERVERNUM}.cl6.us
-		ServerAlias s${SERVERNUM}.cl6web.com
-		ServerAlias www.s${SERVERNUM}.cl6web.com
-		ServerAlias www.s${SERVERNUM}.cl6.us
-	
-		ServerAdmin webmaster@cl6.us
-		DocumentRoot /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html
-	
-		ErrorLog /opt/cl6/hosting/s${SERVERNUM}.cl6.us/logs/status-page.log
-		CustomLog /opt/cl6/hosting/s${SERVERNUM}.cl6.us/logs/status-page-custom.log combined
+	ServerName s${SERVERNUM}.cl6.us
+	ServerAlias s${SERVERNUM}.cl6web.com
+	ServerAlias www.s${SERVERNUM}.cl6web.com
+	ServerAlias www.s${SERVERNUM}.cl6.us
 
-		<Directory /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html>
-			AllowOverride All
-			Require all granted
-		</Directory>
-	</VirtualHost>
-	
-	# vim: syntax=apache ts=4 sw=4 sts=4 sr noet"
+	ServerAdmin webmaster@cl6.us
+	DocumentRoot /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html
 
+	ErrorLog /opt/cl6/hosting/s${SERVERNUM}.cl6.us/logs/status-page.log
+	CustomLog /opt/cl6/hosting/s${SERVERNUM}.cl6.us/logs/status-page-custom.log combined
+
+	<Directory /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html>
+		AllowOverride All
+		Require all granted
+	</Directory>
+</VirtualHost>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet"
 	echo "${STATUSPAGE}" > /etc/apache2/sites-available/s"${SERVERNUM}".cl6.us.conf
-	
+
 	echo -e "${YELLOW} Creating SymLink ${NC}"
 	cd /etc/apache2/sites-enabled && ln -s /etc/apache2/sites-available/s"${SERVERNUM}".cl6.us.conf
 
 	systemServiceRestart "apache2"
 
-	cloudflareCreateA "cl6.us s${SERVERNUM}.cl6.us"
-	cloudflareCreateA "cl6web.com s${SERVERNUM}.cl6web.com"
-	
+	cloudflareCreateA "cl6.us" "s${SERVERNUM}.cl6.us"
+	cloudflareCreateA "cl6web.com" "s${SERVERNUM}.cl6web.com"
+
 	systemServiceRestart "apache2"
-	
+
 	certbotCreateCert "s${SERVERNUM}.cl6.us" "s${SERVERNUM}.cl6web.com"
-	
+
 	systemServiceRestart "apache2"
-	
-	uptimerobotCreateMonitor "http://s${SERVERNUM}.cl6.us" "S${SERVERNUM}.CL6.US (HTTP)"
-	uptimerobotCreateMonitor "https://s${SERVERNUM}.cl6.us" "S${SERVERNUM}.CL6.US (HTTPS)"
-	
+
+	uptimerobotCreateMonitor "http://s${SERVERNUM}.cl6.us" "S${SERVERNUM} (HTTP)"
+	uptimerobotCreateMonitor "https://s${SERVERNUM}.cl6.us" "S${SERVERNUM} (HTTPS)"
+
 	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
 	
 }
@@ -889,11 +901,6 @@ do
 			cloudflareInfo
 			uptimerobotInfo
 			basicSetupUtility
-			setupHostDirectories
-			
-			#systemUpdate
-			#systemUpgrade
-			#systemAutoRemove
 			
 			setupBashFiles
 			setupSudoUsers
@@ -902,15 +909,18 @@ do
 			
 			installConfigureAPACHE
 			installConfigureMYSQL
-			installConfigurePHP
-			installConfigurePHPMYADMIN
-			installConfigureCERTBOT
 			
-			installPersonalPackages
+			echo -ne "${WHITE}PHP Install Cancelled!${NC}" ; read -r input
 			
-			websiteStatusPage
-			setupCleanUp
-			discordWebhook
+			#installConfigurePHP
+			#installConfigurePHPMYADMIN
+			#installConfigureCERTBOT
+			
+			#installPersonalPackages
+			
+			#websiteStatusPage
+			#setupCleanUp
+			#discordWebhook
 			setupReboot
             ;;
         "DigitalOcean")
@@ -923,11 +933,27 @@ do
             echo -e "${RED} >> RUNNING SPARKVPS INSTALL! ${NC}"
             ;;
         "Test Sequence")
-	
-			uptimerobotCreateMonitor "http://s${SERVERNUM}.cl6.us" "S${SERVERNUM}.CL6.US (HTTP)"
-			uptimerobotCreateMonitor "https://s${SERVERNUM}.cl6.us" "S${SERVERNUM}.CL6.US (HTTPS)"
+            echo -e "${RED} >> STARTING TASKS! ${NC}"
+			logfile="/opt/cl6/logs/testsequence.log"
+			echo -e "Log File: ${logfile}"
 			
-			setupReboot
+			setupUsers
+			cloudflareInfo
+			uptimerobotInfo
+			basicSetupUtility
+			
+			setupBashFiles
+			setupSudoUsers
+			setupSSHD
+			setupHosts
+			
+			installConfigureAPACHE
+			installConfigureMYSQL
+			
+			echo -ne "${WHITE}PHP Install Cancelled!${NC}" ; read -r input
+
+			setupReboot		
+			
             break
             ;;
         "Exit")
