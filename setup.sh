@@ -545,7 +545,7 @@ installConfigureCERTBOT () {
 
 installPageSpeed () {
 
-	#Installing & Setting Up Certbot
+	#Installing & Setting Up PageSpeed Module
 	echo -e "${WHITE} >> ${BLUE}[installPageSpeed] ${GREEN}Installing & Setting Up PageSpeed. ${NC}"
 
 	cd /opt/cl6/setup || return
