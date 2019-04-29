@@ -433,7 +433,7 @@ installConfigurePHP () {
 		# sleep 3
 	# done
 	# printf "${GREEN}]${NC} - Done\n"
-	install --nodeps mcrypt-snapshot
+	#install --nodeps mcrypt-snapshot
 	#PHP 3rd Party Packages
 	(pecl -q install mcrypt-snapshot) >> ${logfile} & PID=$! 2>&1
 		printf  "${GREEN}[INSTALL:\n"
@@ -451,8 +451,8 @@ installConfigurePHP () {
 	#Setup PHP
 	echo -e "${BLUE}<== 3. Setup PHP ==> ${NC}"
 	echo -e "${YELLOW} Copying Content to PHP.INI ${NC}"
-	cp /opt/cl6/setup/extract/php.ini /etc/php/7.2/apache2/php.ini
-	cp /opt/cl6/setup/extract/php.ini /etc/php/7.2/cli/php.ini
+	cp /opt/cl6/setup/extract/php.ini /etc/php/7.3/apache2/php.ini
+	cp /opt/cl6/setup/extract/php.ini /etc/php/7.3/cli/php.ini
 	
 	systemServiceRestart "mysql"
 	systemServiceRestart "apache2"
