@@ -1051,11 +1051,19 @@ do
 				echo "No Value Entered. Exiting.${NC}"
 				exit 1
 			else
-				echo "Using Domains $certRecord & www.$certRecord
+				echo "Using Domains $certRecord & www.$certRecord for cert."
+				certD1="$certRecord"
+				certD2="www.$certRecord"
 			fi
 			
 			echo -ne "${WHITE}Test Sequence Pause!${NC}" ; read -r input
+			echo "Variables: $certRecord $certDomain $certD1 $certD2"
+			echo -ne "${WHITE}Test Sequence Pause!${NC}" ; read -r input
+			
+			certbot run -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -a webroot -i apache -w /opt/cl6/hosting/$certDomain/html -d $certD1 -d $certD2
 
+			
+			echo -ne "${WHITE}Test Sequence Pause!${NC}" ; read -r input
 			setupReboot
             break
             ;;
