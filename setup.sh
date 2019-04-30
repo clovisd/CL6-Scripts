@@ -825,7 +825,8 @@ websiteStatusPage () {
 	cd status-page
 	cp -R * /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html
 	rm -R /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html/status-page
-	rm status-page.tar >> ${logfile} 2>&1
+	rm /opt/cl6/hosting/s6.cl6.us/html/status-page.tar >> ${logfile} 2>&1
+	chown -R www-data:www-data /opt/cl6/hosting/
 
 	echo -e "${YELLOW} Setting HTACCESS File ${NC}"
 	cp /opt/cl6/setup/extract/.htaccess /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html/status/
@@ -1035,7 +1036,26 @@ do
             echo -e "${RED} >> STARTING TASKS! ${NC}"
 			logfile="/opt/cl6/logs/testsequence.log"
 			echo -e "Log File: ${logfile}"
-			echo -ne "${WHITE}PHP Install Cancelled!${NC}" ; read -r input
+			echo -ne "${WHITE}Test Sequence Pause!${NC}" ; read -r input
+			
+			echo -ne "${WHITE}Please Enter Directory Domain: " ; read -r certDomain
+			if [[ -z $certDomain ]]; then
+				echo "No Value Entered. Exiting.${NC}"
+				exit 1
+			else
+				echo "Directory Set To: /opt/cl6/hosting/$certDomain/html/"
+			fi
+			
+			echo -ne "${WHITE}Please Enter Direct Directory Domain: " ; read -r certRecord
+			if [[ -z $certRecord ]]; then
+				echo "No Value Entered. Exiting.${NC}"
+				exit 1
+			else
+				echo "Using Domains $certRecord & www.$certRecord
+			fi
+			
+			echo -ne "${WHITE}Test Sequence Pause!${NC}" ; read -r input
+
 			setupReboot
             break
             ;;
