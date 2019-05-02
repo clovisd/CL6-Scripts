@@ -1,0 +1,162 @@
+# ENABLE DIRECTORY VIEWS
+Options +Indexes
+
+AddType image/svg+xml svg svgz
+AddEncoding gzip svgz
+
+# STRONG HTACCESS PROTECTION
+<Files ~ "^.*\.([Hh][Tt][Aa])">
+ order allow,deny
+ deny from all
+</Files>
+
+# DIRECTORY CUSTOMIZATION
+<IfModule mod_autoindex.c>
+
+  # SET INDEX OPTIONS
+  IndexOptions IgnoreCase FancyIndexing HTMLTable SuppressHTMLPreamble FoldersFirst VersionSort NameWidth=* DescriptionWidth=* XHTML IconHeight=16 IconWidth=16
+
+  # Other options.
+  # IconsAreLinks SuppressColumnSorting
+
+  # SET DISPLAY ORDER
+  IndexOrderDefault Ascending Name
+
+  IndexStyleSheet /opt/cl6/setup/fancy-index/style.css
+
+  # SPECIFY HEADER FILE
+  HeaderName /opt/cl6/setup/fancy-index/header.html
+
+  # SPECIFY FOOTER FILE
+  ReadmeName /opt/cl6/setup/fancy-index/footer.html
+
+  # IGNORE THESE FILES
+  IndexIgnoreReset ON
+  IndexIgnore .ftpquota .DS_Store .git
+
+  # DEFAULT ICON
+  DefaultIcon /opt/cl6/setup/fancy-index/icons/file-text.svg
+
+  AddIcon /opt/cl6/setup/fancy-index/icons/back.svg ..
+  AddIcon /opt/cl6/setup/fancy-index/icons/github.svg .github
+  AddIcon /opt/cl6/setup/fancy-index/icons/nodejs.svg node_modules
+  AddIcon /opt/cl6/setup/fancy-index/icons/file-directory.svg ^^DIRECTORY^^
+
+  # SPECIFIC FILE ICONS
+  # https://github.com/file-icons/source
+  AddIcon /opt/cl6/setup/fancy-index/icons/file-binary.svg .com .exe
+  AddIcon /opt/cl6/setup/fancy-index/icons/file-code.svg .c .h .mustache .rust .source .apache .yml .jade
+  AddIcon /opt/cl6/setup/fancy-index/icons/file-media.svg .png .jpg .jpeg .webp .gif .bmp .mp4 .webm .ogv .mov .ico
+  AddIcon /opt/cl6/setup/fancy-index/icons/file-pdf.svg .pdf
+  AddIcon /opt/cl6/setup/fancy-index/icons/file-text.svg .txt .srt README readme Procfile
+  AddIcon /opt/cl6/setup/fancy-index/icons/file-zip.svg .zip .z .gz .Z .tgz .tar.gz .tar .rar
+  AddIcon /opt/cl6/setup/fancy-index/icons/gear.svg .htaccess .env .env-dev .env-production .env-staging
+  AddIcon /opt/cl6/setup/fancy-index/icons/config.svg .conf .ini .cfg .prefs
+  AddIcon /opt/cl6/setup/fancy-index/icons/less.svg .less
+  AddIcon /opt/cl6/setup/fancy-index/icons/css.svg .css
+  AddIcon /opt/cl6/setup/fancy-index/icons/html.svg .html .htm
+  AddIcon /opt/cl6/setup/fancy-index/icons/coffee.svg .coffee
+  AddIcon /opt/cl6/setup/fancy-index/icons/java.svg .java
+  AddIcon /opt/cl6/setup/fancy-index/icons/markdown.svg .markdown .md
+  AddIcon /opt/cl6/setup/fancy-index/icons/eslint.svg *.eslintignore *.eslintrc.js *.eslintrc.json *.eslintrc *.eslintrc.yml
+  AddIcon /opt/cl6/setup/fancy-index/icons/webpack.svg webpack.config.js
+  AddIcon /opt/cl6/setup/fancy-index/icons/rollup.svg rollup.config.js
+  AddIcon /opt/cl6/setup/fancy-index/icons/postcss.svg postcss.config.js *.postcssrc *.postcssrc.json *.postcssrc.js *.postcssrc.yml
+  AddIcon /opt/cl6/setup/fancy-index/icons/grunt.svg gruntfile.js Gruntfile.js
+  AddIcon /opt/cl6/setup/fancy-index/icons/gulp.svg gulpfile.js Gulpfile.js
+  AddIcon /opt/cl6/setup/fancy-index/icons/js.svg .js
+  AddIcon /opt/cl6/setup/fancy-index/icons/composer.svg composer.json composer.lock composer.phar
+  AddIcon /opt/cl6/setup/fancy-index/icons/bower.svg bower.json
+  AddIcon /opt/cl6/setup/fancy-index/icons/npm.svg package.json package-lock.json
+  AddIcon /opt/cl6/setup/fancy-index/icons/settings.svg .json
+  AddIcon /opt/cl6/setup/fancy-index/icons/mustache.svg .mustache
+  AddIcon /opt/cl6/setup/fancy-index/icons/php.svg .php
+  AddIcon /opt/cl6/setup/fancy-index/icons/python.svg .py
+  AddIcon /opt/cl6/setup/fancy-index/icons/ruby.svg .rb
+  AddIcon /opt/cl6/setup/fancy-index/icons/rust.svg .rust
+  AddIcon /opt/cl6/setup/fancy-index/icons/sass.svg .sass
+  AddIcon /opt/cl6/setup/fancy-index/icons/scss.svg .scss
+  AddIcon /opt/cl6/setup/fancy-index/icons/svg.svg .svg .svgx .eps
+  AddIcon /opt/cl6/setup/fancy-index/icons/xml.svg .xml
+  AddIcon /opt/cl6/setup/fancy-index/icons/typescript.svg .ts
+  AddIcon /opt/cl6/setup/fancy-index/icons/vue.svg .vue
+  AddIcon /opt/cl6/setup/fancy-index/icons/yarn.svg yarn.lock
+  AddIcon /opt/cl6/setup/fancy-index/icons/babel.svg *.babelrc
+  AddIcon /opt/cl6/setup/fancy-index/icons/git.svg *.gitignore *.gitattributes
+  AddIcon /opt/cl6/setup/fancy-index/icons/editor-config.svg .editorconfig
+  AddIcon /opt/cl6/setup/fancy-index/icons/shopify.svg .liquid
+  AddIcon /opt/cl6/setup/fancy-index/icons/nunjucks.svg .nunjucks
+  AddIcon /opt/cl6/setup/fancy-index/icons/pug.svg .pug
+  AddIcon /opt/cl6/setup/fancy-index/icons/adobe-photoshop.svg .psd
+  AddIcon /opt/cl6/setup/fancy-index/icons/adobe-illustrator.svg .ai
+  AddIcon /opt/cl6/setup/fancy-index/icons/stylus.svg .styl
+  AddIcon /opt/cl6/setup/fancy-index/icons/terminal.svg .sh .bash
+  AddIcon /opt/cl6/setup/fancy-index/icons/database.svg .sql .mysql .sqlite .dsql .db
+  AddIcon /opt/cl6/setup/fancy-index/icons/vagrant.svg vagrantfile Vagrantfile
+  AddIcon /opt/cl6/setup/fancy-index/icons/file-word.svg .doc .docx
+  AddIcon /opt/cl6/setup/fancy-index/icons/file-excel.svg .xls .xlsx
+  AddIcon /opt/cl6/setup/fancy-index/icons/yaml.svg .yml .yaml
+  AddIcon /opt/cl6/setup/fancy-index/icons/brainfuck.svg .b
+  AddIcon /opt/cl6/setup/fancy-index/icons/cobol.svg .cbl .cob .cpy
+  AddIcon /opt/cl6/setup/fancy-index/icons/docker.svg docker-compose.yml
+  AddIcon /opt/cl6/setup/fancy-index/icons/VirtualBox.svg .ova .vbox
+
+  # FILE DESCRIPTIONS
+  AddDescription "MPEG Layer 3 Format" .mp3
+  AddDescription "MPEG Layer 4 Format" .mp4
+  AddDescription "SubRip subtitles format" .srt
+  AddDescription "GZIP compressed TAR archive" .tgz .tar.gz
+  AddDescription "GZIP compressed archive" .Z .z .gz .zip
+  AddDescription "RAR compressed archive" .rar
+  AddDescription "TAR compressed archive" .tar
+  AddDescription "ZIP compressed archive" .zip
+  AddDescription "Windows executable file" .exe
+  AddDescription "Common Gateway Interface" .cgi
+  AddDescription "Joint Photographics Experts Group" .jpg .jpeg .jpe
+  AddDescription "Graphic Interchange Format" .gif
+  AddDescription "Portable Network Graphic" .png
+  AddDescription "Vector graphic" .ps .ai .eps
+  AddDescription "Hypertext Markup Language" .html .shtml .htm
+  AddDescription "Cascading Style Sheet" .css
+  AddDescription "DocType Definition" .dtd
+  AddDescription "Extensible Markup Language" .xml
+  AddDescription "Win32 compressed HTML help" .chm
+  AddDescription "Adobe Portable Document Format" .pdf
+  AddDescription "Plain text file" .txt .nfo .faq .readme
+  AddDescription "Unix man page" .man
+  AddDescription "Email data" .eml .mbox
+  AddDescription "Microsoft Word document" .doc .docx
+  AddDescription "Microsoft Excel document" .xls .xlsx
+  AddDescription "PHP: Hypertext Preprocessor script" .php  .php3 .php4
+  AddDescription "PHP: Hypertext Preprocessor source code" .phps
+  AddDescription "JavaScript Object Notation" .json
+  AddDescription "JavaScript" .js
+  AddDescription "Java code"  .java
+  AddDescription "Unix shell script" .sh .shar .csh .ksh .command
+  AddDescription "Mac OS X shell script" .command
+  AddDescription "Configuration file" .conf
+  AddDescription "Mac OS X terminal" .term
+  AddDescription "BitTorrent file" .torrent
+  AddDescription "Windows link" .lnk .url
+  AddDescription "Scalable Vector Graphic" .svg
+  AddDescription "OpenDocument Text" .odt
+  AddDescription "OpenDocument Spreadsheet" .ods
+  AddDescription "OpenDocument Presentation" .odp
+  AddDescription "OpenDocument Graphics" .odg
+  AddDescription "OpenDocument Chart" .odc
+  AddDescription "OpenDocument Formula" .odf
+  AddDescription "OpenDocument Database" .odb
+  AddDescription "OpenDocument Image" .odi
+  AddDescription "OpenDocument Text Master" .odm
+  AddDescription "OpenDocument Text Template" .ott
+  AddDescription "OpenDocument Spreadsheet Template" .ots
+  AddDescription "OpenDocument Presentation Template" .otp
+  AddDescription "OpenDocument Graphics Template" .otg
+  AddDescription "YAML: Yet Another Markup Language" .yaml .yml
+  AddDescription "SASS: Syntactically Awesome Stylesheets" .sass
+  AddDescription "SCSS: Sassy Cascading Style Sheet" .scss
+  AddDescription "Travis configuration" .travis
+
+  # DEFAULT DESCRIPTION
+  # AddDescription "[<span class='description'>Unknown item</span>]" *
+</IfModule>

@@ -406,8 +406,8 @@ installConfigurePHP () {
 	echo -e "${YELLOW} Installing PHP Packages ${NC}"
 	
 	systemUpdate
-	#systemInstall "php7.2 php7.2-mysql php7.2-curl php7.2-xml php7.2-zip php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-gmp php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap"
-	systemInstall "php7.3 php7.3-mysql php7.3-curl php7.3-xml php7.3-zip php7.3-gd php7.3-common php7.3-json php7.3-opcache php7.3-readline php7.3-dev php7.3-gmp php7.3-mbstring php7.3-soap php7.3-xmlrpc php7.3-imap"
+	systemInstall "php7.2 php7.2-mysql php7.2-curl php7.2-xml php7.2-zip php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-gmp php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap"
+	#systemInstall "php7.3 php7.3-mysql php7.3-curl php7.3-xml php7.3-zip php7.3-gd php7.3-common php7.3-json php7.3-opcache php7.3-readline php7.3-dev php7.3-gmp php7.3-mbstring php7.3-soap php7.3-xmlrpc php7.3-imap"
 	#PHP Base Packages
 	# (apt-get install -qq php7.2 php7.2-mysql php7.2-curl php7.2-xml php7.2-zip php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-gmp php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap) >> ${logfile} & PID=$! 2>&1
 	#php-pear
@@ -420,9 +420,11 @@ installConfigurePHP () {
 	
 	#PHP Secondary Packages
 	
-	systemInstall "libmcrypt-dev libapache2-modsecurity"
+	systemInstall "libmcrypt-dev libapache2-mod-security2"
 	
-	systemInstall "gcc make autoconf libc-dev pkg-config"
+	systemInstall "pkg-config php-pear"
+	
+	#gcc make autoconf libc-dev 
 	
 	systemUpdate
 	# (apt-get install -qq libmcrypt-dev) >> ${logfile} & PID=$! 2>&1
@@ -435,7 +437,9 @@ installConfigurePHP () {
 	# printf "${GREEN}]${NC} - Done\n"
 	#install --nodeps mcrypt-snapshot
 	#PHP 3rd Party Packages
-	(pecl -q install mcrypt-snapshot) >> ${logfile} & PID=$! 2>&1
+
+	#(pecl -q install mcrypt-snapshot) >> ${logfile} & PID=$! 2>&1
+	(pecl -q install mcrypt-1.0.1 >> ${logfile} & PID=$! 2>&1
 		printf  "${GREEN}[INSTALL:\n"
 	while kill -0 $PID 2> /dev/null; do 
 		printf  "."
@@ -444,15 +448,22 @@ installConfigurePHP () {
 	printf "${GREEN}]${NC} - Done\n"
 	
 	echo -e "${YELLOW} Setting Up mcrypt ${NC}"
-	echo extension=/usr/lib/php/20180731/mcrypt.so > /etc/php/7.3/mods-available/mcrypt.ini
-	ln -s /etc/php/7.3/mods-available/mcrypt.ini /etc/php/7.3/cli/conf.d/20-mcrypt.ini
-	ln -s /etc/php/7.3/mods-available/mcrypt.ini /etc/php/7.3/apache2/conf.d/20-mcrypt.ini
+	
+	echo extension=/usr/lib/php/20170718/mcrypt.so > /etc/php/7.2/mods-available/mcrypt.ini
+	ln -s /etc/php/7.2/mods-available/mcrypt.ini /etc/php/7.2/cli/conf.d/20-mcrypt.ini
+	ln -s /etc/php/7.2/mods-available/mcrypt.ini /etc/php/7.2/apache2/conf.d/20-mcrypt.ini
+	
+	#echo extension=/usr/lib/php/20180731/mcrypt.so > /etc/php/7.3/mods-available/mcrypt.ini
+	##ln -s /etc/php/7.3/mods-available/mcrypt.ini /etc/php/7.3/apache2/conf.d/20-mcrypt.ini
 	
 	#Setup PHP
 	echo -e "${BLUE}<== 3. Setup PHP ==> ${NC}"
 	echo -e "${YELLOW} Copying Content to PHP.INI ${NC}"
-	cp /opt/cl6/setup/extract/php.ini /etc/php/7.3/apache2/php.ini
-	cp /opt/cl6/setup/extract/php.ini /etc/php/7.3/cli/php.ini
+	cp /opt/cl6/setup/extract/php.ini /etc/php/7.2/apache2/php.ini
+	cp /opt/cl6/setup/extract/php.ini /etc/php/7.2/cli/php.ini
+	
+	#cp /opt/cl6/setup/extract/php.ini /etc/php/7.3/apache2/php.ini
+	#cp /opt/cl6/setup/extract/php.ini /etc/php/7.3/cli/php.ini
 	
 	systemServiceRestart "mysql"
 	systemServiceRestart "apache2"
@@ -533,8 +544,10 @@ installConfigureCERTBOT () {
 
 	#CRON SSL Renew
 	crontab="0 0 1 * * certbot renew  >/dev/null 2>&1"
+	crontab2="0 0 1 * * certbot renew  >/dev/null 2>&1"
 	#crontab -e root
 	crontab -u root -l; echo "$crontab" | crontab -u root - >> ${logfile} 2>&1
+	crontab -u clovisd -l; echo "$crontab2" | crontab -u clovisd - >> ${logfile} 2>&1
 	
 	systemServiceRestart "mysql"
 	systemServiceRestart "apache2"

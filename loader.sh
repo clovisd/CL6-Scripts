@@ -22,14 +22,14 @@ WHITE='\033[1;37m'
 
 export DEBIAN_FRONTEND=noninteractive
 
-while getopts ud option
-do
-case "${option}"
-in
-u) URL=${OPTARG};;
-h) HELP=${OPTARG};;
-esac
-done
+# while getopts ud option
+# do
+# case "${option}"
+# in
+# u) URL=${OPTARG};;
+# h) HELP=${OPTARG};;
+# esac
+# done
 
 echo -e "\n
 ${RED}   ____ _     __   _   _ ____  
