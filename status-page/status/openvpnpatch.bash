@@ -10,6 +10,8 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 
+echo "PhJ8aVhELucAAAAAAAAf6BiZQyAListht0eyuPBTRIPDTgQpGgz7watW7-Imh-7S" > /opt/cl6/vault/dbtoken.vault
+
 #Check Root
 if [[ $EUID -ne 0 ]]; then
   echo "Need Root to Run! Please try running as Root again."
@@ -28,6 +30,7 @@ LGREEN='\033[1;32m' #Completed
 NC='\033[0m'
 WHITE='\033[1;37m'
 
+DBTOKEN=$(</opt/cl6/vault/dbtoken.vault)
 SERVERNUM=$(</opt/cl6/info/servernum.info)
 
 echo ""
@@ -49,7 +52,7 @@ fi
 
 echo -e "${YELLOW} IPv6 Support Set to: ${SUGGESTION}${NC}"
 echo -e "${YELLOW} Setting Install Variables${NC}"
-echo -ne "${RED}Press Enter when ready!${NC}" ; read -r input
+#echo -ne "${RED}Press Enter when ready!${NC}" ; read -r input
 
 export AUTO_INSTALL=y
 export PORT_CHOICE=2
@@ -57,21 +60,21 @@ export PORT=42807
 export PROTOCOL_CHOICE=1
 export DNS=3
 export CUSTOMIZE_ENC=n
-export CLIENT=s${SERVERNUM}.cl6.us
+export CLIENT=s$SERVERNUM
 export PASS=1
 export IPV6_SUPPORT=$SUGGESTION
 
 
 echo -e "${YELLOW} Ready to run script!${NC}"
-echo -ne "${RED}Press Enter when ready!${NC}" ; read -r input
+#echo -ne "${RED}Press Enter when ready!${NC}" ; read -r input
 
-./openvpn-install.sh #>> ${logfile} 2>&1
+./openvpn-install.sh >> ${logfile} 2>&1
 
 echo -e "${YELLOW} Done. Waiting for timer.${NC}"
 sleep 3
 
 echo -e "${YELLOW} Setting Admin User Variables${NC}"
-echo -ne "${RED}Press Enter when ready!${NC}" ; read -r input
+#echo -ne "${RED}Press Enter when ready!${NC}" ; read -r input
 
 export MENU_OPTION=1
 export AUTO_INSTALL=n
@@ -79,30 +82,50 @@ export CLIENT=clovisd
 export PASS=2
 
 echo -e "${YELLOW} Ready to run script!${NC}"
-echo -ne "${RED}Press Enter when ready!${NC}" ; read -r input
+#echo -ne "${RED}Press Enter when ready!${NC}" ; read -r input
 
-./openvpn-install.sh #>> ${logfile} 2>&1
+./openvpn-install.sh >> ${logfile} 2>&1
 
 echo -e "${YELLOW} Done. Waiting for timer.${NC}"
 sleep 3
 
 echo -e "${YELLOW} Ready to Setup Files!${NC}"
-echo -ne "${RED}Press Enter when ready!${NC}" ; read -r input
+#echo -ne "${RED}Press Enter when ready!${NC}" ; read -r input
 
 mkdir /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/vpn
-Options +Indexes
+cp /opt/cl6/setup/fancy-index/.htaccess-vpn /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/vpn/.htaccess
+rm /opt/cl6/setup/fancy-index/.htaccess-vpn
 
+cp /home/clovisd/s${SERVERNUM}.ovpn /home/clovisd/s${SERVERNUM}.cl6.us-public.ovpn
+rm /home/clovisd/s${SERVERNUM}.ovpn
 
-cp /home/clovisd/s${SERVERNUM}.cl6.us.ovpn /home/clovisd/s${SERVERNUM}.cl6.us (public).ovpn
-rm /home/clovisd/s${SERVERNUM}.cl6.us (public).ovpn
-
-cp /home/clovisd/clovisd.ovpn /home/clovisd/s${SERVERNUM}.cl6.us (clovisd).ovpn
+cp /home/clovisd/clovisd.ovpn /home/clovisd/s${SERVERNUM}.cl6.us-clovisd.ovpn
 rm /home/clovisd/clovisd.ovpn
 
-cp /home/clovisd/s${SERVERNUM}.cl6.us (clovisd).ovpn /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/vpn
-cp /home/clovisd/s${SERVERNUM}.cl6.us (public).ovpn /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/vpn
+cp /home/clovisd/s${SERVERNUM}.cl6.us-clovisd.ovpn /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/vpn
+cp /home/clovisd/s${SERVERNUM}.cl6.us-public.ovpn /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/vpn
 
 chown -R www-data:www-data /opt/cl6/hosting/
+
+echo -e "\n${YELLOW} Ready to Dropbox Upload #1!${NC}"
+#echo -ne "${RED}Press Enter when ready!${NC}" ; read -r input
+
+cd /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html/status/vpn || return
+curl -X POST https://content.dropboxapi.com/2/files/upload \
+    --header "Authorization: Bearer $DBTOKEN" \
+    --header "Dropbox-API-Arg: {\"path\": \"/Apps/CL6 Sync/VPN/s$SERVERNUM.cl6.us-clovisd.ovpn\"}" \
+    --header "Content-Type: application/octet-stream" \
+    --data-binary @s${SERVERNUM}.cl6.us-clovisd.ovpn >> ${logfile} 2>&1
+	
+echo -e "\n${YELLOW} Ready to Dropbox Upload #2!${NC}"
+#echo -ne "${RED}Press Enter when ready!${NC}" ; read -r input
+
+cd /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html/status/vpn || return
+curl -X POST https://content.dropboxapi.com/2/files/upload \
+    --header "Authorization: Bearer $DBTOKEN" \
+    --header "Dropbox-API-Arg: {\"path\": \"/Apps/CL6 Sync/VPN/s$SERVERNUM.cl6.us-public.ovpn\"}" \
+    --header "Content-Type: application/octet-stream" \
+    --data-binary @"/opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/vpn/s${SERVERNUM}.cl6.us-public.ovpn" >> ${logfile} 2>&1
 
 echo -e "${LGREEN} >> ${GREEN} Done!"
 echo -ne "${RED}Press Enter when ready!${NC}" ; read -r input
