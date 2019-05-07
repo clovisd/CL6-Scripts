@@ -145,24 +145,24 @@ systemAutoRemove () {
 
 systemServiceRestart () {
 
-	echo -e "${BLUE}┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Restarting Service $1 ${NC}"
+	echo -e "${BLUE}├─┬${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Restarting Service $1 ${NC}"
 	service "$1" restart >> ${logfile} 2>&1
-	echo -e "${BLUE}└${GREEN} Done Restarting $1 ${NC}"
+	echo -e "${BLUE}│ └${GREEN} Done Restarting $1 ${NC}"
 }
 
 systemServiceStop () {
 
-	echo -e "${BLUE}┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Stopping Service $1 ${NC}"
+	echo -e "${BLUE}├─┬${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Stopping Service $1 ${NC}"
 	service "$1" stop >> ${logfile} 2>&1
-	echo -e "${BLUE}└${GREEN} Done Stopping $1 ${NC}"
+	echo -e "${BLUE}│ └${GREEN} Done Stopping $1 ${NC}"
 
 }
 
 systemServiceStart () {
 
-	echo -e "${BLUE}┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Starting Service $1 ${NC}"
+	echo -e "${BLUE}├─┬${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Starting Service $1 ${NC}"
 	service "$1" start >> ${logfile} 2>&1cd 
-	echo -e "${BLUE}└${GREEN} Done Starting $1 ${NC}"
+	echo -e "${BLUE}│ └${GREEN} Done Starting $1 ${NC}"
 
 }
 
@@ -338,11 +338,10 @@ uptimerobotInfo () {
 installConfigureAPACHE () {
 
 	#Setup Apache
-	echo -e "${BLUE}┬ ${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Running Apache Setup and Install. ${NC}"
+	echo -e "${BLUE}┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${LGREEN}Running Apache Setup and Install. ${NC}"
 
 	systemUpdate
-	
-	echo -e "${BLUE}├ ${GREEN} Installing Apache. ${NC}"
+	echo -e "${BLUE}├─${LGREEN} Installing Apache. ${NC}"
 	systemInstall "apache2"
 	# (apt-get install -qq apache2) >> ${logfile} & PID=$! 2>&1
 		# printf  "${GREEN}[INSTALL:\n"
@@ -352,18 +351,18 @@ installConfigureAPACHE () {
 	# done
 	# printf "${GREEN}]${NC} - Done\n"
 
-	echo -e "${BLUE}├ ${GREEN} Cleaning Up Apache Directories. ${NC}"
+	echo -e "${BLUE}}├─${LGREEN} Cleaning Up Apache Directories. ${NC}"
 	cd /var/ && rm -R www
 	cd /etc/apache2/sites-enabled/ && rm -R ./*
 	cd /etc/apache2/sites-available/ && rm -R ./*
 	
 	systemServiceRestart "apache2"
 
-	echo -e "${BLUE}├ ${GREEN} Setting up HTPASSWD Files. ${NC}"
+	echo -e "${BLUE}├─${LGREEN} Setting up HTPASSWD Files. ${NC}"
 	htpasswd -c -b /opt/cl6/vault/.htpasswd clovisd "${CLPASSWD}" >> ${logfile} 2>&1
 	htpasswd -b /opt/cl6/vault/.htpasswd cl6web "${C6PASSWD}" >> ${logfile} 2>&1
 
-	echo -e "${BLUE}└ ${GREEN}Done ${NC}"	
+	echo -e "${BLUE}└─${LGREEN}Done ${NC}"	
 	
 }
 
