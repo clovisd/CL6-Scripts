@@ -864,6 +864,10 @@ websiteStatusPage () {
 	echo -e "${YELLOW} Setting HTACCESS File ${NC}"
 	cp /opt/cl6/setup/extract/.htaccess /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html/status/
 
+	echo -e "${YELLOW} Setting up Downloads Dir ${NC}"
+	mkdir /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/dl
+	cp /opt/cl6/setup/fancy-index/.htaccess /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/dl
+
 	echo -e "${YELLOW} Creating Apache Conf ${NC}"
 
 	STATUSPAGE="<VirtualHost *:80>
