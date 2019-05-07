@@ -61,63 +61,63 @@ echo "${SERVERIP}" > /opt/cl6/info/serverip.info
 
 systemRemove () {
 
-	echo -e "${BLUE}| ┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Removing $1 ${NC}"
+	echo -e "${BLUE}│ ┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Removing $1 ${NC}"
 	(apt-get remove -qq $1) >> ${logfile} & PID=$! 2>&1
-		printf  "${BLUE}| |${GREEN}UPDATE:"
+		printf  "${BLUE}│ │${GREEN}UPDATE:"
 	while kill -0 $PID 2> /dev/null; do 
 		printf  "▄"
 		sleep 3
 	done
 	printf "${GREEN}${NC} - Done\n"
-	echo -e "${BLUE}| └${GREEN} Done Removing $1 ${NC}"
+	echo -e "${BLUE}│ └${GREEN} Done Removing $1 ${NC}"
 
 }
 
 systemInstall () {
 
-	echo -e "${BLUE}| ┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Installing $1 ${NC}"
+	echo -e "${BLUE}│ ┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Installing $1 ${NC}"
 	(apt-get install -qq $1) >> ${logfile} & PID=$! 2>&1
-		printf  "${BLUE}| |${GREEN}INSTALL:"
+		printf  "${BLUE}│ │${GREEN}INSTALL:"
 	while kill -0 $PID 2> /dev/null; do 
 		printf  "▄"
 		sleep 3
 	done
 	printf "${GREEN}${NC} - Done\n"
-	echo -e "${BLUE}| └${GREEN} Done installing $1 ${NC}"
+	echo -e "${BLUE}│ └${GREEN} Done installing $1 ${NC}"
 
 }
 
 systemUpdate () {
 
-	echo -e "${BLUE}| ┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Updating ${NC}"
+	echo -e "${BLUE}│ ┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Updating ${NC}"
 	(apt-get update) >> ${logfile} & PID=$! 2>&1
-		printf  "${BLUE}| |${GREEN}UPDATE:"
+		printf  "${BLUE}│ │${GREEN}UPDATE:"
 	while kill -0 $PID 2> /dev/null; do 
 		printf  "▄"
 		sleep 3
 	done
 	printf "${GREEN}${NC} - Done\n"
-	echo -e "${BLUE}| └${GREEN} Done Updating ${NC}"
+	echo -e "${BLUE}│ └${GREEN} Done Updating ${NC}"
 
 }
 
 systemUpgrade () {
 
-	echo -e "${BLUE}| ┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Upgrading ${NC}"
+	echo -e "${BLUE}│ ┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Upgrading ${NC}"
 	(DEBIAN_FRONTEND=readline apt-get upgrade -y) >> ${logfile} & PID=$! 2>&1
-		printf  "${BLUE}| |${GREEN}UPGRADE:"
+		printf  "${BLUE}│ │${GREEN}UPGRADE:"
 	while kill -0 $PID 2> /dev/null; do 
 		printf  "▄"
 		sleep 3
 	done
 	printf "${GREEN}${NC} - Done\n"
-	echo -e "${BLUE}| └${GREEN} Done Upgrading ${NC}"
+	echo -e "${BLUE}│ └${GREEN} Done Upgrading ${NC}"
 
 }
 
 systemAutoClean () {
 
-	echo -e "${BLUE}| ┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}AutoClean ${NC}"
+	echo -e "${BLUE}│ ┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}AutoClean ${NC}"
 	(apt-get autoclean -qq) >> ${logfile} & PID=$! 2>&1
 		printf  "${BLUE}├── ${GREEN}[AUTOCLEAN:"
 	while kill -0 $PID 2> /dev/null; do 
@@ -125,13 +125,13 @@ systemAutoClean () {
 		sleep 3
 	done
 	printf "${GREEN}${NC} - Done\n"
-	echo -e "${BLUE}| └${GREEN} Done AutoClean ${NC}"
+	echo -e "${BLUE}│ └${GREEN} Done AutoClean ${NC}"
 
 }
 
 systemAutoRemove () {
 
-	echo -e "${BLUE}| ┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}AutoRemove ${NC}"
+	echo -e "${BLUE}│ ┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}AutoRemove ${NC}"
 	(apt-get autoremove -qq) >> ${logfile} & PID=$! 2>&1
 		printf  "${BLUE}├── ${GREEN}[AUTOREMOVE:"
 	while kill -0 $PID 2> /dev/null; do 
@@ -139,7 +139,7 @@ systemAutoRemove () {
 		sleep 3
 	done
 	printf "${GREEN}${NC} - Done\n"
-	echo -e "${BLUE}| └${GREEN} Done AutoRemove ${NC}"
+	echo -e "${BLUE}│ └${GREEN} Done AutoRemove ${NC}"
 	
 }
 
