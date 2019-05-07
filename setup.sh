@@ -63,7 +63,7 @@ systemRemove () {
 
 	echo -e "${BLUE}│ ┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Removing $1 ${NC}"
 	(apt-get remove -qq $1) >> ${logfile} & PID=$! 2>&1
-		printf  "${BLUE}│ │${GREEN}UPDATE:"
+		printf  "${BLUE}│ │${GREEN} REMOVE:"
 	while kill -0 $PID 2> /dev/null; do 
 		printf  "▄"
 		sleep 3
@@ -75,9 +75,9 @@ systemRemove () {
 
 systemInstall () {
 
-	echo -e "${BLUE}│ ┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Installing $1 ${NC}"
+	echo -e "${BLUE}├─┬${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Installing $1 ${NC}"
 	(apt-get install -qq $1) >> ${logfile} & PID=$! 2>&1
-		printf  "${BLUE}│ │${GREEN}INSTALL:"
+		printf  "${BLUE}│ │${GREEN} INSTALL:"
 	while kill -0 $PID 2> /dev/null; do 
 		printf  "▄"
 		sleep 3
@@ -89,9 +89,9 @@ systemInstall () {
 
 systemUpdate () {
 
-	echo -e "${BLUE}│ ┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Updating ${NC}"
+	echo -e "${BLUE}├─┬${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Updating ${NC}"
 	(apt-get update) >> ${logfile} & PID=$! 2>&1
-		printf  "${BLUE}│ │${GREEN}UPDATE:"
+		printf  "${BLUE}│ │${GREEN} UPDATE:"
 	while kill -0 $PID 2> /dev/null; do 
 		printf  "▄"
 		sleep 3
@@ -103,9 +103,9 @@ systemUpdate () {
 
 systemUpgrade () {
 
-	echo -e "${BLUE}│ ┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Upgrading ${NC}"
+	echo -e "${BLUE}├─┬${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Upgrading ${NC}"
 	(DEBIAN_FRONTEND=readline apt-get upgrade -y) >> ${logfile} & PID=$! 2>&1
-		printf  "${BLUE}│ │${GREEN}UPGRADE:"
+		printf  "${BLUE}│ │${GREEN} UPGRADE:"
 	while kill -0 $PID 2> /dev/null; do 
 		printf  "▄"
 		sleep 3
@@ -117,9 +117,9 @@ systemUpgrade () {
 
 systemAutoClean () {
 
-	echo -e "${BLUE}│ ┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}AutoClean ${NC}"
+	echo -e "${BLUE}├─┬${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}AutoClean ${NC}"
 	(apt-get autoclean -qq) >> ${logfile} & PID=$! 2>&1
-		printf  "${BLUE}├── ${GREEN}[AUTOCLEAN:"
+		printf  "${BLUE}│ │${GREEN} AUTOCLEAN:"
 	while kill -0 $PID 2> /dev/null; do 
 		printf  "▄"
 		sleep 3
@@ -131,9 +131,9 @@ systemAutoClean () {
 
 systemAutoRemove () {
 
-	echo -e "${BLUE}│ ┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}AutoRemove ${NC}"
+	echo -e "${BLUE}├─┬${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}AutoRemove ${NC}"
 	(apt-get autoremove -qq) >> ${logfile} & PID=$! 2>&1
-		printf  "${BLUE}├── ${GREEN}[AUTOREMOVE:"
+		printf  "${BLUE}│ │${GREEN} AUTOREMOVE:"
 	while kill -0 $PID 2> /dev/null; do 
 		printf  "▄"
 		sleep 3
@@ -353,7 +353,7 @@ installConfigureAPACHE () {
 	# done
 	# printf "${GREEN}]${NC} - Done\n"
 
-	echo -e "${BLUE}}├─${LGREEN} Cleaning Up Apache Directories. ${NC}"
+	echo -e "${BLUE}├─${LGREEN} Cleaning Up Apache Directories. ${NC}"
 	cd /var/ && rm -R www
 	cd /etc/apache2/sites-enabled/ && rm -R ./*
 	cd /etc/apache2/sites-available/ && rm -R ./*
@@ -364,7 +364,7 @@ installConfigureAPACHE () {
 	htpasswd -c -b /opt/cl6/vault/.htpasswd clovisd "${CLPASSWD}" >> ${logfile} 2>&1
 	htpasswd -b /opt/cl6/vault/.htpasswd cl6web "${C6PASSWD}" >> ${logfile} 2>&1
 
-	echo -e "${BLUE}└─${LGREEN}Done ${NC}"
+	echo -e "${BLUE}└─${LGREEN} Done ${NC}"
 
 	echo -e "\n===\n===\n==="	
 	echo -e "${RED}!!!!!!!!!! NEW UI TEST END !!!!!!!!!!${NC}"
