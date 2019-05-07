@@ -65,13 +65,28 @@ export PASS=1
 export IPV6_SUPPORT=$SUGGESTION
 
 
+echo -e "${YELLOW} Setting Up Tun!${NC}"
+cd /dev || return
+mkdir net
+mknod net/tun c 10 200
+chmod 0666 net/tun
+
 echo -e "${YELLOW} Ready to run script!${NC}"
 #echo -ne "${RED}Press Enter when ready!${NC}" ; read -r input
 
 cd /opt/cl6/setup || return
 wget https://raw.githubusercontent.com/Nyr/openvpn-install/master/openvpn-install.sh
 chmod a+x openvpn-install.sh
-./openvpn-install.sh >> ${logfile} 2>&1
+
+./openvpn-install.sh >> ${logfile} & PID=$! 2>&1
+	printf  "${GREEN}RUNNING SCRIPT:"
+while kill -0 $PID 2> /dev/null; do 
+	printf  "▄"
+	sleep 3
+done
+printf "${GREEN}${NC} - Done\n"
+
+#./openvpn-install.sh >> ${logfile} 2>&1
 
 echo -e "${YELLOW} Done. Waiting for timer.${NC}"
 sleep 3
