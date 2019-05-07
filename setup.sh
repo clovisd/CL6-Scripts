@@ -439,7 +439,7 @@ installConfigurePHP () {
 	#PHP 3rd Party Packages
 
 	#(pecl -q install mcrypt-snapshot) >> ${logfile} & PID=$! 2>&1
-	(pecl -q install mcrypt-1.0.1 >> ${logfile} & PID=$! 2>&1
+	(pecl -q install mcrypt-1.0.1) >> ${logfile} & PID=$! 2>&1
 		printf  "${GREEN}[INSTALL:\n"
 	while kill -0 $PID 2> /dev/null; do 
 		printf  "."
@@ -469,6 +469,7 @@ installConfigurePHP () {
 	systemServiceRestart "apache2"
 
 	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
+
 }
 
 installConfigurePHPMYADMIN() {
