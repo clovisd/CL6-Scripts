@@ -336,6 +336,8 @@ uptimerobotInfo () {
 }
 
 installConfigureAPACHE () {
+	echo -e "${RED}!!!!!!!!!! NEW UI TEST START !!!!!!!!!!${NC}"
+	echo -e "\n===\n===\n==="
 
 	#Setup Apache
 	echo -e "${BLUE}┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${LGREEN}Running Apache Setup and Install. ${NC}"
@@ -362,7 +364,10 @@ installConfigureAPACHE () {
 	htpasswd -c -b /opt/cl6/vault/.htpasswd clovisd "${CLPASSWD}" >> ${logfile} 2>&1
 	htpasswd -b /opt/cl6/vault/.htpasswd cl6web "${C6PASSWD}" >> ${logfile} 2>&1
 
-	echo -e "${BLUE}└─${LGREEN}Done ${NC}"	
+	echo -e "${BLUE}└─${LGREEN}Done ${NC}"
+
+	echo -e "\n===\n===\n==="	
+	echo -e "${RED}!!!!!!!!!! NEW UI TEST END !!!!!!!!!!${NC}"
 	
 }
 
