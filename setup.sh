@@ -350,14 +350,14 @@ installConfigureAPACHE () {
 	cd /var/ && rm -R www
 	cd /etc/apache2/sites-enabled/ && rm -R ./*
 	cd /etc/apache2/sites-available/ && rm -R ./*
-	echo -e "${BLUE}└ ${GREEN}Done ${NC}"
 	
 	systemServiceRestart "apache2"
 
-	htpasswd -c -b /opt/cl6/vault/.htpasswd clovisd "${CLPASSWD}"
-	htpasswd -b /opt/cl6/vault/.htpasswd cl6web "${C6PASSWD}"
+	echo -e "${BLUE}├ ${GREEN} Setting up HTPASSWD Files. ${NC}"
+	htpasswd -c -b /opt/cl6/vault/.htpasswd clovisd "${CLPASSWD}" >> ${logfile} 2>&1
+	htpasswd -b /opt/cl6/vault/.htpasswd cl6web "${C6PASSWD}" >> ${logfile} 2>&1
 
-	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
+	echo -e "${BLUE}└ ${GREEN}Done ${NC}"	
 	
 }
 
