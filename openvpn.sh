@@ -68,6 +68,9 @@ export IPV6_SUPPORT=$SUGGESTION
 echo -e "${YELLOW} Ready to run script!${NC}"
 #echo -ne "${RED}Press Enter when ready!${NC}" ; read -r input
 
+cd /opt/cl6/setup || return
+wget https://raw.githubusercontent.com/Nyr/openvpn-install/master/openvpn-install.sh
+chmod a+x openvpn-install.sh
 ./openvpn-install.sh >> ${logfile} 2>&1
 
 echo -e "${YELLOW} Done. Waiting for timer.${NC}"

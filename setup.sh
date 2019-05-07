@@ -321,7 +321,7 @@ uptimerobotInfo () {
 installConfigureAPACHE () {
 
 	#Setup Apache
-	echo -e "${WHITE} >> ${BLUE}[installConfigureAPACHE] ${GREEN}Setting up Apache. ${NC}"
+	echo -e "${WHITE}┬ ${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Setting up Apache. ${NC}"
 
 	systemUpdate
 	systemInstall "apache2"
@@ -934,7 +934,7 @@ echo -e "Please select Install Type:"
 
 #Setup Base Programs
 PS3='Select Install Type: '
-options=("Test Sequence" "Full" "DigitalOcean" "GoogleCloud" "SparkVPS" "Exit")
+options=("Test Sequence" "Full" "DigitalOcean" "GoogleCloud" "SparkVPS" "Setup VPN" "Add Subdomain" "Exit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -1019,6 +1019,12 @@ do
 			basicShutdownUtility
 			setupReboot
             ;;
+        "Setup VPN")
+            echo -e "${RED} >> RUNNING VPN Setup! ${NC}"
+			cd /opt/cl6/setup || return
+			chmod a+x openvpn.sh
+			./openvpn.sh >> ${logfile} 2>&1
+            ;;
         "SparkVPS")
             echo -e "${RED} >> RUNNING SPARKVPS INSTALL! ${NC}"
 			setupUsers
@@ -1046,11 +1052,11 @@ do
 			basicShutdownUtility
 			setupReboot
             ;;
-        "Test Sequence")
-            echo -e "${RED} >> STARTING TASKS! ${NC}"
-			logfile="/opt/cl6/logs/testsequence.log"
+        "Add Subdomain")
+            echo -e "${RED} >> Adding Single Domain + SSL! ${NC}"
+			logfile="/opt/cl6/logs/domainadd.log"
 			echo -e "Log File: ${logfile}"
-			echo -ne "${WHITE}Test Sequence Pause!${NC}" ; read -r input
+			echo -ne "${WHITE}Certbot Sequence Pause!${NC}" ; read -r input
 			
 			echo -ne "${WHITE}Please Enter Directory Domain: " ; read -r certDomain
 			if [[ -z $certDomain ]]; then
@@ -1070,12 +1076,22 @@ do
 				certD2="www.$certRecord"
 			fi
 			
-			echo -ne "${WHITE}Test Sequence Pause!${NC}" ; read -r input
+			echo -ne "${WHITE}Certbot Sequence Pause!${NC}" ; read -r input
 			echo "Variables: $certRecord $certDomain $certD1 $certD2"
-			echo -ne "${WHITE}Test Sequence Pause!${NC}" ; read -r input
+			echo -ne "${WHITE}Certbot Sequence Pause!${NC}" ; read -r input
 			
 			certbot run -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -a webroot -i apache -w /opt/cl6/hosting/$certDomain/html -d $certD1 -d $certD2
 
+			
+			echo -ne "${WHITE}Certbot Sequence Pause!${NC}" ; read -r input
+			setupReboot
+            break
+            ;;
+        "Test Sequence")
+            echo -e "${RED} >> STARTING TASKS! ${NC}"
+			logfile="/opt/cl6/logs/testsequence.log"
+			echo -e "Log File: ${logfile}"
+			echo -ne "${WHITE}Test Sequence Pause!${NC}" ; read -r input
 			
 			echo -ne "${WHITE}Test Sequence Pause!${NC}" ; read -r input
 			setupReboot
