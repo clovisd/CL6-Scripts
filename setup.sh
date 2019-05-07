@@ -869,8 +869,8 @@ websiteStatusPage () {
 	cp /opt/cl6/setup/extract/.htaccess /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html/status/
 
 	echo -e "${YELLOW} Setting up Downloads Dir ${NC}"
-	mkdir /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/dl
-	cp /opt/cl6/setup/fancy-index/.htaccess /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/dl
+	mkdir /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/dl
+	cp /opt/cl6/setup/fancy-index/.htaccess /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/dl
 
 	echo -e "${YELLOW} Creating Apache Conf ${NC}"
 
