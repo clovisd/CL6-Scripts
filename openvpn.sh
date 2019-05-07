@@ -117,8 +117,9 @@ echo -e "${YELLOW} Ready to Setup Files!${NC}"
 #echo -ne "${RED}Press Enter when ready!${NC}" ; read -r input
 
 mkdir /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/vpn
-cp /opt/cl6/setup/fancy-index/.htaccess-vpn /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/vpn/.htaccess
-rm /opt/cl6/setup/fancy-index/.htaccess-vpn
+cp /opt/cl6/setup/index/.htaccess-vpn /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/vpn/.htaccess
+rm /opt/cl6/setup/index/.htaccess-vpn
+cp -R /opt/cl6/setup/index /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/vpn/
 
 cp /home/clovisd/s${SERVERNUM}.ovpn /home/clovisd/s${SERVERNUM}.cl6.us-public.ovpn
 rm /home/clovisd/s${SERVERNUM}.ovpn

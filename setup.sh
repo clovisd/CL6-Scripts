@@ -870,7 +870,8 @@ websiteStatusPage () {
 
 	echo -e "${YELLOW} Setting up Downloads Dir ${NC}"
 	mkdir /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/dl
-	cp /opt/cl6/setup/fancy-index/.htaccess /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/dl
+	cp /opt/cl6/setup/index/.htaccess /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/dl
+	cp -R /opt/cl6/setup/index /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/dl/
 
 	echo -e "${YELLOW} Creating Apache Conf ${NC}"
 
