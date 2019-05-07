@@ -161,7 +161,7 @@ systemServiceStop () {
 systemServiceStart () {
 
 	echo -e "${BLUE}├─┐ ${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Starting Service $1 ${NC}"
-	service "$1" start >> ${logfile} 2>&1
+	service "$1" start >> ${logfile} 2>&1cd 
 	echo -e "${BLUE}├─┘ ${GREEN} Done Starting $1 ${NC}"
 
 }
@@ -858,7 +858,7 @@ websiteStatusPage () {
 	cd status-page
 	cp -R * /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html
 	rm -R /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html/status-page
-	rm /opt/cl6/hosting/s6.cl6.us/html/status-page.tar >> ${logfile} 2>&1
+	rm /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html/status-page.tar >> ${logfile} 2>&1
 	chown -R www-data:www-data /opt/cl6/hosting/
 
 	echo -e "${YELLOW} Setting HTACCESS File ${NC}"
@@ -1042,7 +1042,7 @@ do
             echo -e "${RED} >> RUNNING VPN Setup! ${NC}"
 			cd /opt/cl6/setup || return
 			chmod a+x openvpn.sh
-			./openvpn.sh >> ${logfile} 2>&1
+			./openvpn.sh
             ;;
         "SparkVPS")
             echo -e "${RED} >> RUNNING SPARKVPS INSTALL! ${NC}"
