@@ -145,19 +145,24 @@ systemAutoRemove () {
 
 systemServiceRestart () {
 
+	echo -e "${BLUE}├─┐ ${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Restarting Service $1 ${NC}"
 	service "$1" restart >> ${logfile} 2>&1
-
+	echo -e "${BLUE}├─┘ ${GREEN} Done Restarting $1 ${NC}"
 }
 
 systemServiceStop () {
 
+	echo -e "${BLUE}├─┐ ${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Stopping Service $1 ${NC}"
 	service "$1" stop >> ${logfile} 2>&1
+	echo -e "${BLUE}├─┘ ${GREEN} Done Stopping $1 ${NC}"
 
 }
 
 systemServiceStart () {
 
+	echo -e "${BLUE}├─┐ ${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Starting Service $1 ${NC}"
 	service "$1" start >> ${logfile} 2>&1
+	echo -e "${BLUE}├─┘ ${GREEN} Done Starting $1 ${NC}"
 
 }
 
@@ -336,6 +341,7 @@ installConfigureAPACHE () {
 	echo -e "${BLUE}┬ ${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Running Apache Setup and Install. ${NC}"
 
 	systemUpdate
+	
 	echo -e "${BLUE}├ ${GREEN} Installing Apache. ${NC}"
 	systemInstall "apache2"
 	# (apt-get install -qq apache2) >> ${logfile} & PID=$! 2>&1
