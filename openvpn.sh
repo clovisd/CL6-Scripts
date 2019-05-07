@@ -75,7 +75,7 @@ echo -e "${YELLOW} Ready to run script!${NC}"
 #echo -ne "${RED}Press Enter when ready!${NC}" ; read -r input
 
 cd /opt/cl6/setup || return
-wget https://raw.githubusercontent.com/Nyr/openvpn-install/master/openvpn-install.sh
+wget https://raw.githubusercontent.com/angristan/openvpn-install/master/openvpn-install.sh
 chmod a+x openvpn-install.sh
 
 ./openvpn-install.sh >> ${logfile} & PID=$! 2>&1
