@@ -102,7 +102,13 @@ export PASS=2
 echo -e "${YELLOW} Ready to run script!${NC}"
 #echo -ne "${RED}Press Enter when ready!${NC}" ; read -r input
 
-./openvpn-install.sh >> ${logfile} 2>&1
+./openvpn-install.sh >> ${logfile} & PID=$! 2>&1
+	printf  "${GREEN}RUNNING SCRIPT:"
+while kill -0 $PID 2> /dev/null; do 
+	printf  "▄"
+	sleep 3
+done
+printf "${GREEN}${NC} - Done\n"
 
 echo -e "${YELLOW} Done. Waiting for timer.${NC}"
 sleep 3
