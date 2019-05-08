@@ -79,7 +79,6 @@ fi
 
 loaderExecute () {
 
-
 #Setup Files & Directories
 #echo -e "${YELLOW} >> Setting up Directories"
 if [ ! -d /opt/cl6 ]; then mkdir /opt/cl6 ; fi
@@ -210,6 +209,8 @@ echo "$LOADERV" > /opt/cl6/info/loaderv.info
 
 cp /opt/loader.log /opt/cl6/setup/
 
+echo -e "${LGREEN} >> Done"
+
 }
 
 loaderLaunchSetup () {
@@ -219,10 +220,13 @@ loaderLaunchSetup () {
 cd /opt/cl6/setup && ./setup.sh
 
 }
-
+echo -e "${LGREEN} >> loaderPrint"
 loaderPrint
+echo -e "${LGREEN} >> loaderRoot"
 loaderRoot
+echo -e "${LGREEN} >> loaderRu"
 loaderRun
+echo -e "${LGREEN} >> loaderLaunchSetup"
 loaderLaunchSetup
 
 exit
