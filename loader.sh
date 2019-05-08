@@ -71,8 +71,8 @@ if [[ $EUID -ne 0 ]]; then
   echo "${RED} Need Root to Run! Please try running as Root again."
   exit 1
 else
-  return
-  #echo -e "${LGREEN} Running with Root."
+  #return
+  echo -e "${LGREEN} Running with Root."
 fi
 
 }
@@ -94,7 +94,6 @@ if [ ! -d /opt/cl6/locks ]; then mkdir /opt/cl6/locks ; fi
 #echo -e "${YELLOW} >> Checking Setup Packs"
 
 if [[ -z $URL ]]; then
-	return
 	#echo -e "${LGREEN} No Setup Pack to Load${NC}"
 else
 	mkdir /opt/cl6/setup/autoload
@@ -142,21 +141,21 @@ export LANGUAGE=en_US.UTF-8
 (apt-get update -qq) >> ${logfile} & PID=$! 2>&1
     #printf  "${GREEN}[UPDATE:"
 while kill -0 $PID 2> /dev/null; do 
-    #printf  "."
+    printf  "▄"
     sleep 3
 done
 #printf "${GREEN}]${NC} - Done\n"
 (apt-get remove --purge -qq postfix* apache2*) >> ${logfile} & PID=$! 2>&1
     #printf  "${GREEN}[REMOVE:"
 while kill -0 $PID 2> /dev/null; do 
-    #printf  "."
+    printf  "▄"
     sleep 3
 done
 #printf "${GREEN}]${NC} - Done\n"
 (apt-get install -qq git software-properties-common apt-transport-https dnsutils dbus tzdata nano jq curl) >> ${logfile} & PID=$! 2>&1
     #printf  "${GREEN}[INSTALL:\n"
 while kill -0 $PID 2> /dev/null; do 
-    #printf  "."
+    printf  "▄"
     sleep 3
 done
 #printf "${GREEN}]${NC} - Done\n"
