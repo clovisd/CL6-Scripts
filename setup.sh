@@ -682,6 +682,8 @@ setupSSHD () {
 	echo -e "${BLUE}<== 5. Setup SSH Settings ==> ${NC}"
 	echo -e "${YELLOW} Setting SSHD settings ${NC}"
 
+	cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
+
 	cp /opt/cl6/setup/extract/sshd_config /etc/ssh
 
 	echo -e "${YELLOW} Restarting SSH Service ${NC}"
@@ -740,6 +742,29 @@ ff02::3 ip6-allhosts
 	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
 
 }
+
+setupSwapDisk () {
+
+	cp /etc/sysctl.conf /etc/sysctl.conf.bak
+	cp /etc/fstab /etc/fstab.bak
+	
+	fallocate -l 2G /swapfile
+	chmod 600 /swapfile
+	mkswap /swapfile
+	swapon /swapfile
+	echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+	cp /opt/cl6/setup/extract/sysctl.conf /etc/sysctl.conf
+	
+}
+
+setupOpenVPN () {
+
+}
+
+setupTweekPacks () {
+
+}
+
 
 cloudflareCreateA () {
 
@@ -969,6 +994,10 @@ do
     case $opt in
         "Full")
             echo -e "${RED} >> RUNNING FULL INSTALL! ${NC}"
+			CURRENTINSTALL="$OPT"
+			echo -e "${RED} >> Selected $OPT or ${OPT}!"
+			echo -e "${RED} >> Selected $CURRENTINSTALL or ${CURRENTINSTALL}!"
+			
 			setupUsers
 			cloudflareInfo
 			uptimerobotInfo
@@ -978,6 +1007,7 @@ do
 			setupSudoUsers
 			setupSSHD
 			setupHosts
+			setupSwapDisk
 			
 			installConfigureAPACHE
 			installConfigureMYSQL
@@ -996,6 +1026,10 @@ do
             ;;
         "DigitalOcean")
             echo -e "${RED} >> RUNNING DIGITAL OCEAN INSTALL! ${NC}"
+			CURRENTINSTALL="$OPT"
+			echo -e "${RED} >> Selected $OPT or ${OPT}!"
+			echo -e "${RED} >> Selected $CURRENTINSTALL or ${CURRENTINSTALL}!"
+			
 			setupUsers
 			cloudflareInfo
 			uptimerobotInfo
@@ -1005,6 +1039,7 @@ do
 			setupSudoUsers
 			setupSSHD
 			setupHosts
+			setupSwapDisk
 			
 			installConfigureAPACHE
 			installConfigureMYSQL
@@ -1023,6 +1058,10 @@ do
             ;;
         "GoogleCloud")
             echo -e "${RED} >> RUNNING GCD INSTALL! ${NC}"
+			CURRENTINSTALL="$OPT"
+			echo -e "${RED} >> Selected $OPT or ${OPT}!"
+			echo -e "${RED} >> Selected $CURRENTINSTALL or ${CURRENTINSTALL}!"
+			
 			setupUsers
 			cloudflareInfo
 			uptimerobotInfo
@@ -1032,6 +1071,39 @@ do
 			#setupSudoUsers
 			#setupSSHD
 			setupHosts
+			setupSwapDisk
+			
+			installConfigureAPACHE
+			installConfigureMYSQL
+			installConfigurePHP
+			installConfigurePHPMYADMIN
+			installConfigureCERTBOT
+			installPageSpeed
+			
+			installPersonalPackages
+			
+			websiteStatusPage
+			setupCleanUp
+			discordWebhook
+			basicShutdownUtility
+			setupReboot
+            ;;
+        "SparkVPS")
+            echo -e "${RED} >> RUNNING SPARKVPS INSTALL! ${NC}"
+			CURRENTINSTALL="$OPT"
+			echo -e "${RED} >> Selected $OPT or ${OPT}!"
+			echo -e "${RED} >> Selected $CURRENTINSTALL or ${CURRENTINSTALL}!"
+			
+			setupUsers
+			cloudflareInfo
+			uptimerobotInfo
+			basicSetupUtility
+			
+			setupBashFiles
+			setupSudoUsers
+			setupSSHD
+			#setupSwapDisk
+			#setupHosts
 			
 			installConfigureAPACHE
 			installConfigureMYSQL
@@ -1053,33 +1125,6 @@ do
 			cd /opt/cl6/setup || return
 			chmod a+x openvpn.sh
 			./openvpn.sh
-            ;;
-        "SparkVPS")
-            echo -e "${RED} >> RUNNING SPARKVPS INSTALL! ${NC}"
-			setupUsers
-			cloudflareInfo
-			uptimerobotInfo
-			basicSetupUtility
-			
-			setupBashFiles
-			setupSudoUsers
-			setupSSHD
-			#setupHosts
-			
-			installConfigureAPACHE
-			installConfigureMYSQL
-			installConfigurePHP
-			installConfigurePHPMYADMIN
-			installConfigureCERTBOT
-			installPageSpeed
-			
-			installPersonalPackages
-			
-			websiteStatusPage
-			setupCleanUp
-			discordWebhook
-			basicShutdownUtility
-			setupReboot
             ;;
         "Add Subdomain")
             echo -e "${RED} >> Adding Single Domain + SSL! ${NC}"
