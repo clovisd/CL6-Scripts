@@ -46,7 +46,7 @@ ${RED}  \____|_____\___${BLUE}(_)${RED}___/|____/ \n"
 
 echo -e "${GREEN}<== CL6 Server Loader Script ==>"
 echo -e "   ${YELLOW} Loader ${LOADERV} ${GREEN}- ${YELLOW}Setup ${SETUPV}"
-echo -e "/n/n"
+#echo -e "\n"
 #echo -ne "${RED}Press Enter when ready!${NC}" ; read input
 
 }
@@ -54,25 +54,31 @@ echo -e "/n/n"
 loaderRun () {
 
 	loaderExecute >> ${logfile} & PID=$! 2>&1
-		#printf  "${GREEN} RUNNING:"
+		printf  "${GREEN} RUNNING:"
 	while kill -0 $PID 2> /dev/null; do 
-		#printf  "▄"
+		printf  "▄"
 		sleep 3
 	done
-	#printf "${GREEN}${NC} - Done!\n\n"
+	printf "${GREEN}${NC} - Done!\n"
 
 }
 
-loaderExecute () {
+loaderRoot () {
 
 #echo -e "${YELLOW} >> Checking Root"
 #Check Root
 if [[ $EUID -ne 0 ]]; then
   echo "${RED} Need Root to Run! Please try running as Root again."
   exit 1
-#else
+else
+  return
   #echo -e "${LGREEN} Running with Root."
-#fi
+fi
+
+}
+
+loaderExecute () {
+
 
 #Setup Files & Directories
 #echo -e "${YELLOW} >> Setting up Directories"
@@ -87,32 +93,34 @@ if [ ! -d /opt/cl6/locks ]; then mkdir /opt/cl6/locks ; fi
 
 #Load Config Zip
 #echo -e "${YELLOW} >> Checking Setup Packs"
+
 if [[ -z $URL ]]; then
+	return
 	#echo -e "${LGREEN} No Setup Pack to Load${NC}"
 else
 	mkdir /opt/cl6/setup/autoload
-	cd /opt/cl6/setup/autoload && wget $URL
+	cd /opt/cl6/setup/autoload && wget "$URL"
 	unzip pack.zip
 	if [[ -f servernum.info ]]; then
-		echo "/n"
+		return
 		#echo -e "${YELLOW}   >> No ServerNum Found"
 	else
 		cp servernum.info /opt/cl6/info
 	fi
 	if [[ -f cfemail.vault ]]; then
-		echo "/n"
+		return
 		#echo -e "${YELLOW}   >> No CFEmail Found"
 	else
 		cp cfemail.vault /opt/cl6/vault
 	fi
 	if [[ -f cfkey.vault ]]; then
-		echo "/n"
+		return
 		#echo -e "${YELLOW}   >> No CFKey Found"
 	else
 		cp cfkey.vault /opt/cl6/vault
 	fi
 	if [[ -f uptimekey.vault ]]; then
-		echo "/n"
+		return
 		#echo -e "${YELLOW}   >> No UTKey Found"
 	else
 		cp uptimekey.vault /opt/cl6/vault
@@ -185,20 +193,20 @@ elif [ -f /etc/debian_version ]; then
     VER=$(cat /etc/debian_version)
 elif [ -f /etc/SuSe-release ]; then
     # Older SuSE/etc.
-    ...
+    OS=SuSE
 elif [ -f /etc/redhat-release ]; then
     # Older Red Hat, CentOS, etc.
-    ...
+    OS=RedHat
 else
     # Fall back to uname, e.g. "Linux <version>", also works for BSD, etc.
     OS=$(uname -s)
     VER=$(uname -r)
 fi
 
-echo "${OS}" > /opt/cl6/info/os.info
-echo "${VER}" > /opt/cl6/info/ver.info
-echo "${V}" > /opt/cl6/info/setupv.info
-echo "${LOADERV}" > /opt/cl6/info/loaderv.info
+echo "$OS" > /opt/cl6/info/os.info
+echo "$VER" > /opt/cl6/info/ver.info
+echo "$SETUPV" > /opt/cl6/info/setupv.info
+echo "$LOADERV" > /opt/cl6/info/loaderv.info
 
 cp /opt/loader.log /opt/cl6/setup/
 
@@ -213,6 +221,7 @@ cd /opt/cl6/setup && ./setup.sh
 }
 
 loaderPrint
+loaderRoot
 loaderRun
 loaderLaunchSetup
 
