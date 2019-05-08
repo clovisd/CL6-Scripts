@@ -54,28 +54,28 @@ echo -e "/n/n"
 loaderRun () {
 
 	loaderExecute >> ${logfile} & PID=$! 2>&1
-		printf  "${GREEN} RUNNING:"
+		#printf  "${GREEN} RUNNING:"
 	while kill -0 $PID 2> /dev/null; do 
-		printf  "▄"
+		#printf  "▄"
 		sleep 3
 	done
-	printf "${GREEN}${NC} - Done!\n\n"
+	#printf "${GREEN}${NC} - Done!\n\n"
 
 }
 
 loaderExecute () {
 
-echo -e "${YELLOW} >> Checking Root"
+#echo -e "${YELLOW} >> Checking Root"
 #Check Root
 if [[ $EUID -ne 0 ]]; then
   echo "${RED} Need Root to Run! Please try running as Root again."
   exit 1
 else
-  echo -e "${LGREEN} Running with Root."
+  #echo -e "${LGREEN} Running with Root."
 fi
 
 #Setup Files & Directories
-echo -e "${YELLOW} >> Setting up Directories"
+#echo -e "${YELLOW} >> Setting up Directories"
 if [ ! -d /opt/cl6 ]; then mkdir /opt/cl6 ; fi
 if [ ! -d /opt/cl6/setup ]; then mkdir /opt/cl6/setup ; fi
 if [ ! -d /opt/cl6/logs ]; then mkdir /opt/cl6/logs ; fi
@@ -83,82 +83,82 @@ if [ ! -d /opt/cl6/info ]; then mkdir /opt/cl6/info ; fi
 if [ ! -d /opt/cl6/vault ]; then mkdir /opt/cl6/vault ; fi
 if [ ! -d /opt/cl6/hosting ]; then mkdir /opt/cl6/hosting ; fi
 if [ ! -d /opt/cl6/locks ]; then mkdir /opt/cl6/locks ; fi
-echo -e "${LGREEN} >> Done"
+#echo -e "${LGREEN} >> Done"
 
 #Load Config Zip
-echo -e "${YELLOW} >> Checking Setup Packs"
+#echo -e "${YELLOW} >> Checking Setup Packs"
 if [[ -z $URL ]]; then
-	echo -e "${LGREEN} No Setup Pack to Load${NC}"
+	#echo -e "${LGREEN} No Setup Pack to Load${NC}"
 else
 	mkdir /opt/cl6/setup/autoload
 	cd /opt/cl6/setup/autoload && wget $URL
 	unzip pack.zip
 	if [[ -f servernum.info ]]; then
-		echo -e "${YELLOW}   >> No ServerNum Found"
+		#echo -e "${YELLOW}   >> No ServerNum Found"
 	else
 		cp servernum.info /opt/cl6/info
 	fi
 	if [[ -f cfemail.vault ]]; then
-		echo -e "${YELLOW}   >> No CFEmail Found"
+		#echo -e "${YELLOW}   >> No CFEmail Found"
 	else
 		cp cfemail.vault /opt/cl6/vault
 	fi
 	if [[ -f cfkey.vault ]]; then
-		echo -e "${YELLOW}   >> No CFKey Found"
+		#echo -e "${YELLOW}   >> No CFKey Found"
 	else
 		cp cfkey.vault /opt/cl6/vault
 	fi
 	if [[ -f uptimekey.vault ]]; then
-		echo -e "${YELLOW}   >> No UTKey Found"
+		#echo -e "${YELLOW}   >> No UTKey Found"
 	else
 		cp uptimekey.vault /opt/cl6/vault
 	fi
-	echo -e "${LGREEN} Setup Packs Loaded${NC}"
+	#echo -e "${LGREEN} Setup Packs Loaded${NC}"
 fi
-echo -e "${LGREEN} >> Done"
+#echo -e "${LGREEN} >> Done"
 
 #SetTimeZone
-echo -e "${YELLOW} >> Setting Timezone"
+#echo -e "${YELLOW} >> Setting Timezone"
 timedatectl set-timezone America/Denver >> ${logfile} 2>&1
 locale-gen en_US.UTF-8 >> ${logfile} 2>&1
 #export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
-echo -e "${LGREEN} >> Done"
+#echo -e "${LGREEN} >> Done"
 
 #Setup Base Programs
-echo -e "${YELLOW} >> Installing Programs"
+#echo -e "${YELLOW} >> Installing Programs"
 (apt-get update -qq) >> ${logfile} & PID=$! 2>&1
-    printf  "${GREEN}[UPDATE:"
+    #printf  "${GREEN}[UPDATE:"
 while kill -0 $PID 2> /dev/null; do 
-    printf  "."
+    #printf  "."
     sleep 3
 done
-printf "${GREEN}]${NC} - Done\n"
+#printf "${GREEN}]${NC} - Done\n"
 (apt-get remove --purge -qq postfix* apache2*) >> ${logfile} & PID=$! 2>&1
-    printf  "${GREEN}[REMOVE:"
+    #printf  "${GREEN}[REMOVE:"
 while kill -0 $PID 2> /dev/null; do 
-    printf  "."
+    #printf  "."
     sleep 3
 done
-printf "${GREEN}]${NC} - Done\n"
+#printf "${GREEN}]${NC} - Done\n"
 (apt-get install -qq git software-properties-common apt-transport-https dnsutils dbus tzdata nano jq curl) >> ${logfile} & PID=$! 2>&1
-    printf  "${GREEN}[INSTALL:\n"
+    #printf  "${GREEN}[INSTALL:\n"
 while kill -0 $PID 2> /dev/null; do 
-    printf  "."
+    #printf  "."
     sleep 3
 done
-printf "${GREEN}]${NC} - Done\n"
-echo -e "${LGREEN} >> Done"
+#printf "${GREEN}]${NC} - Done\n"
+#echo -e "${LGREEN} >> Done"
 
-echo -e "${YELLOW} >> Cloning from GitHub"
+#echo -e "${YELLOW} >> Cloning from GitHub"
 git clone https://github.com/clovisd/CL6-Scripts.git /opt/cl6/setup >> ${logfile} 2>&1
-echo -e "${LGREEN} >> Done"
+#echo -e "${LGREEN} >> Done"
 
-echo -e "${YELLOW} >> Setting Permissions"
+#echo -e "${YELLOW} >> Setting Permissions"
 chmod a+x -R /opt/cl6/setup/setup.sh
 chmod a+x -R /opt/cl6/setup/discord.sh
-echo -e "${LGREEN} >> Done"
+#echo -e "${LGREEN} >> Done"
 
 #DetectOS
 if [ -f /etc/os-release ]; then
