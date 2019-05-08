@@ -21,6 +21,9 @@ BLUE='\033[1;34m'
 LGREEN='\033[1;32m'
 WHITE='\033[1;37m'
 
+#Log File
+logfile="/opt/cl6/logs/loader.log"
+
 export DEBIAN_FRONTEND=noninteractive
 
 # while getopts ud option
@@ -42,7 +45,7 @@ ${RED} | |___| |__| (_) | |_| |___) |
 ${RED}  \____|_____\___${BLUE}(_)${RED}___/|____/ \n"
 
 echo -e "${GREEN}<== CL6 Server Loader Script ==>"
-echo -e "${LGREEN}.    ${YELLOW} 📜 ${LOADERV} ${GREEN}- 💾 ${YELLOW}${SETUPV}    ."
+echo -e "${LGREEN}${YELLOW} Loader Version: ${LOADERV} ${GREEN}- Setup Version: ${YELLOW}${SETUPV}"
 #echo -ne "${RED}Press Enter when ready!${NC}" ; read input
 
 }
@@ -112,9 +115,6 @@ else
 	echo -e "${LGREEN} Setup Packs Loaded${NC}"
 fi
 echo -e "${LGREEN} >> Done"
-
-#Log File
-logfile="/opt/cl6/logs/loader.log"
 
 #SetTimeZone
 echo -e "${YELLOW} >> Setting Timezone"
