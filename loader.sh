@@ -70,9 +70,9 @@ loaderExecute () {
 if [[ $EUID -ne 0 ]]; then
   echo "${RED} Need Root to Run! Please try running as Root again."
   exit 1
-else
+#else
   #echo -e "${LGREEN} Running with Root."
-fi
+#fi
 
 #Setup Files & Directories
 #echo -e "${YELLOW} >> Setting up Directories"
@@ -94,21 +94,25 @@ else
 	cd /opt/cl6/setup/autoload && wget $URL
 	unzip pack.zip
 	if [[ -f servernum.info ]]; then
+		echo "/n"
 		#echo -e "${YELLOW}   >> No ServerNum Found"
 	else
 		cp servernum.info /opt/cl6/info
 	fi
 	if [[ -f cfemail.vault ]]; then
+		echo "/n"
 		#echo -e "${YELLOW}   >> No CFEmail Found"
 	else
 		cp cfemail.vault /opt/cl6/vault
 	fi
 	if [[ -f cfkey.vault ]]; then
+		echo "/n"
 		#echo -e "${YELLOW}   >> No CFKey Found"
 	else
 		cp cfkey.vault /opt/cl6/vault
 	fi
 	if [[ -f uptimekey.vault ]]; then
+		echo "/n"
 		#echo -e "${YELLOW}   >> No UTKey Found"
 	else
 		cp uptimekey.vault /opt/cl6/vault
