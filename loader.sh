@@ -22,7 +22,7 @@ LGREEN='\033[1;32m'
 WHITE='\033[1;37m'
 
 #Log File
-logfile="/opt/cl6/logs/loader.log"
+logfile="/opt/loader.log"
 
 export DEBIAN_FRONTEND=noninteractive
 
@@ -194,6 +194,8 @@ echo "${OS}" > /opt/cl6/info/os.info
 echo "${VER}" > /opt/cl6/info/ver.info
 echo "${V}" > /opt/cl6/info/setupv.info
 echo "${LOADERV}" > /opt/cl6/info/loaderv.info
+
+cp /opt/loader.log /opt/cl6/setup/
 
 }
 
