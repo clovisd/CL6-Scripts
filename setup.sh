@@ -21,13 +21,14 @@ WHITE='\033[1;37m'
 
 OS=$(</opt/cl6/info/os.info)
 VER=$(</opt/cl6/info/ver.info)
-V=$(</opt/cl6/info/cl6v.info)
+SETUPV=$(</opt/cl6/info/setupv.info)
+LOADERV=$(</opt/cl6/info/loaderv.info)
 
 echo -e "OS: ${OS}"
 echo -e "VER: ${VER}"
 
 echo -e "${GREEN}<== CL6 Server Setup Script ==>"
-echo -e "${LGREEN} ${V} - clovisd"
+echo -e "${LGREEN} ${SETUPV} - clovisd"
 echo -ne "${RED}Press Enter when ready!${NC}" ; read -r input
 
 #Log File

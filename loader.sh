@@ -9,7 +9,8 @@
 #bash <(wget -O- -q https://goo.gl/yf18Rh)
 #clear && bash <(wget -O- -q https://goo.gl/yf18Rh)
 
-V='v3.5.5'
+SETUPV='v3.6'
+LOADERV='v2.0'
 
 #Color Codes
 RED='\033[0;31m'
@@ -31,15 +32,35 @@ export DEBIAN_FRONTEND=noninteractive
 # esac
 # done
 
+loaderPrint () {
+
 echo -e "\n
 ${RED}   ____ _     __   _   _ ____  
 ${RED}  / ___| |   / /_ | | | / ___| 
 ${RED} | |   | |  | '_ \| | | \___ \ 
 ${RED} | |___| |__| (_) | |_| |___) |
-${RED}  \____|_____\___(_)___/|____/ \n"
+${RED}  \____|_____\___${BLUE}(_)${RED}___/|____/ \n"
+
 echo -e "${GREEN}<== CL6 Server Loader Script ==>"
-echo -e "${LGREEN} ${V} - clovisd"
-echo -ne "${RED}Press Enter when ready!${NC}" ; read input
+echo -e "${LGREEN}.    ${YELLOW} 📜 ${LOADERV} ${GREEN}- 💾 ${YELLOW}${SETUPV}    ."
+#echo -ne "${RED}Press Enter when ready!${NC}" ; read input
+
+}
+
+loaderRun () {
+
+	loaderExecute >> ${logfile} & PID=$! 2>&1
+		printf  "${GREEN} RUNNING:"
+	while kill -0 $PID 2> /dev/null; do 
+		printf  "▄"
+		sleep 3
+	done
+	printf "${GREEN}${NC} - Done!\n\n"
+
+}
+
+loaderExecute () {
+
 echo -e "${YELLOW} >> Checking Root"
 #Check Root
 if [[ $EUID -ne 0 ]]; then
@@ -171,8 +192,21 @@ fi
 
 echo "${OS}" > /opt/cl6/info/os.info
 echo "${VER}" > /opt/cl6/info/ver.info
-echo "${V}" > /opt/cl6/info/cl6v.info
+echo "${V}" > /opt/cl6/info/setupv.info
+echo "${LOADERV}" > /opt/cl6/info/loaderv.info
+
+}
+
+loaderLaunchSetup () {
 
 #Run Install
-echo -e "${BLUE} ===>> Running Setup Script <<===${NC}"
+#echo -e "${BLUE} ===>> Running Setup Script <<===${NC}"
 cd /opt/cl6/setup && ./setup.sh
+
+}
+
+loaderPrint
+loaderRun
+loaderLaunchSetup
+
+exit
