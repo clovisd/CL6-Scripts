@@ -94,6 +94,7 @@ if [ ! -d /opt/cl6/locks ]; then mkdir /opt/cl6/locks ; fi
 #echo -e "${YELLOW} >> Checking Setup Packs"
 
 if [[ -z $URL ]]; then
+	echo ""
 	#echo -e "${LGREEN} No Setup Pack to Load${NC}"
 else
 	mkdir /opt/cl6/setup/autoload
@@ -219,13 +220,13 @@ loaderLaunchSetup () {
 cd /opt/cl6/setup && ./setup.sh
 
 }
-echo -e "${LGREEN} >> loaderPrint"
+#echo -e "${LGREEN} >> loaderPrint"
 loaderPrint
-echo -e "${LGREEN} >> loaderRoot"
+#echo -e "${LGREEN} >> loaderRoot"
 loaderRoot
-echo -e "${LGREEN} >> loaderRu"
+#echo -e "${LGREEN} >> loaderRu"
 loaderRun
-echo -e "${LGREEN} >> loaderLaunchSetup"
+#echo -e "${LGREEN} >> loaderLaunchSetup"
 loaderLaunchSetup
 
 exit
