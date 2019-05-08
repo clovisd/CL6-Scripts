@@ -45,14 +45,15 @@ ${RED} | |___| |__| (_) | |_| |___) |
 ${RED}  \____|_____\___${BLUE}(_)${RED}___/|____/ \n"
 
 echo -e "${GREEN}<== CL6 Server Loader Script ==>"
-echo -e "${LGREEN}${YELLOW} Loader ${LOADERV} ${GREEN}- ${YELLOW}Setup ${SETUPV}"
+echo -e "   ${YELLOW} Loader ${LOADERV} ${GREEN}- ${YELLOW}Setup ${SETUPV}"
+echo -e "/n/n"
 #echo -ne "${RED}Press Enter when ready!${NC}" ; read input
 
 }
 
 loaderRun () {
 
-	loaderExecute & PID=$! 2>&1
+	loaderExecute >> ${logfile} & PID=$! 2>&1
 		printf  "${GREEN} RUNNING:"
 	while kill -0 $PID 2> /dev/null; do 
 		printf  "▄"
