@@ -758,11 +758,11 @@ setupSwapDisk () {
 }
 
 setupOpenVPN () {
-
+	echo "Pineapple"
 }
 
 setupTweekPacks () {
-
+	echo "Pineapple"
 }
 
 

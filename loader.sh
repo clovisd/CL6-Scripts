@@ -9,7 +9,7 @@
 #bash <(wget -O- -q https://goo.gl/yf18Rh)
 #clear && bash <(wget -O- -q https://goo.gl/yf18Rh)
 
-SETUPV='v3.6'
+SETUPV='v3.8'
 LOADERV='v2.0'
 
 #Color Codes
