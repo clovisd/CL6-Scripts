@@ -614,7 +614,7 @@ certbotCreateCert () {
 
 	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
 	
-	}
+}
 
 installPersonalPackages () {
 
@@ -743,27 +743,6 @@ ff02::3 ip6-allhosts
 
 }
 
-setupSwapDisk () {
-
-	cp /etc/sysctl.conf /etc/sysctl.conf.bak
-	cp /etc/fstab /etc/fstab.bak
-	
-	fallocate -l 2G /swapfile
-	chmod 600 /swapfile
-	mkswap /swapfile
-	swapon /swapfile
-	echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
-	cp /opt/cl6/setup/extract/sysctl.conf /etc/sysctl.conf
-	
-}
-
-setupOpenVPN () {
-	echo "Pineapple"
-}
-
-setupTweekPacks () {
-	echo "Pineapple"
-}
 
 
 cloudflareCreateA () {
