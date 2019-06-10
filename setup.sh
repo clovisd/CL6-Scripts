@@ -587,6 +587,8 @@ installPageSpeed () {
 	echo -e "${WHITE} >> ${BLUE}[installPageSpeed] ${GREEN}Installing & Setting Up PageSpeed. ${NC}"
 
 	cd /opt/cl6/setup || return
+	
+	wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
 
 	wget https://dl-ssl.google.com/dl/linux/direct/mod-pagespeed-beta_current_amd64.deb
 	dpkg -i mod-pagespeed-beta_current_amd64.deb 
