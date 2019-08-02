@@ -65,7 +65,7 @@ systemRemove () {
 	echo -e "${BLUE}│ ┌${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Removing $1 ${NC}"
 	(apt-get remove -qq $1) >> ${logfile} & PID=$! 2>&1
 		printf  "${BLUE}│ │${GREEN} REMOVE:"
-	while kill -0 $PID 2> /dev/null; do 
+	while kill -0 $PID 2> /dev/null; do
 		printf  "▄"
 		sleep 3
 	done
@@ -79,7 +79,7 @@ systemInstall () {
 	echo -e "${BLUE}├─┬${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Installing $1 ${NC}"
 	(apt-get install -qq $1) >> ${logfile} & PID=$! 2>&1
 		printf  "${BLUE}│ │${GREEN} INSTALL:"
-	while kill -0 $PID 2> /dev/null; do 
+	while kill -0 $PID 2> /dev/null; do
 		printf  "▄"
 		sleep 3
 	done
@@ -93,7 +93,7 @@ systemUpdate () {
 	echo -e "${BLUE}├─┬${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Updating ${NC}"
 	(apt-get update) >> ${logfile} & PID=$! 2>&1
 		printf  "${BLUE}│ │${GREEN} UPDATE:"
-	while kill -0 $PID 2> /dev/null; do 
+	while kill -0 $PID 2> /dev/null; do
 		printf  "▄"
 		sleep 3
 	done
@@ -107,7 +107,7 @@ systemUpgrade () {
 	echo -e "${BLUE}├─┬${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Upgrading ${NC}"
 	(DEBIAN_FRONTEND=readline apt-get upgrade -y) >> ${logfile} & PID=$! 2>&1
 		printf  "${BLUE}│ │${GREEN} UPGRADE:"
-	while kill -0 $PID 2> /dev/null; do 
+	while kill -0 $PID 2> /dev/null; do
 		printf  "▄"
 		sleep 3
 	done
@@ -121,7 +121,7 @@ systemAutoClean () {
 	echo -e "${BLUE}├─┬${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}AutoClean ${NC}"
 	(apt-get autoclean -qq) >> ${logfile} & PID=$! 2>&1
 		printf  "${BLUE}│ │${GREEN} AUTOCLEAN:"
-	while kill -0 $PID 2> /dev/null; do 
+	while kill -0 $PID 2> /dev/null; do
 		printf  "▄"
 		sleep 3
 	done
@@ -135,13 +135,13 @@ systemAutoRemove () {
 	echo -e "${BLUE}├─┬${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}AutoRemove ${NC}"
 	(apt-get autoremove -qq) >> ${logfile} & PID=$! 2>&1
 		printf  "${BLUE}│ │${GREEN} AUTOREMOVE:"
-	while kill -0 $PID 2> /dev/null; do 
+	while kill -0 $PID 2> /dev/null; do
 		printf  "▄"
 		sleep 3
 	done
 	printf "${GREEN}${NC} - Done\n"
 	echo -e "${BLUE}│ └${GREEN} Done AutoRemove ${NC}"
-	
+
 }
 
 systemServiceRestart () {
@@ -162,7 +162,7 @@ systemServiceStop () {
 systemServiceStart () {
 
 	echo -e "${BLUE}├─┬${RED}[${YELLOW}${FUNCNAME[0]}${RED}] - ${GREEN}Starting Service $1 ${NC}"
-	service "$1" start >> ${logfile} 2>&1cd 
+	service "$1" start >> ${logfile} 2>&1cd
 	echo -e "${BLUE}│ └${GREEN} Done Starting $1 ${NC}"
 
 }
@@ -171,12 +171,12 @@ basicSetupUtility () {
 
 	#Setup Updates for New Server
 	echo -e "${WHITE} >> ${BLUE}[basicSetupUtility] ${GREEN}Running Updates, Upgrade, and AutoRemove. ${NC}"
-		
+
 	systemUpdate
 	systemUpgrade
 	systemAutoRemove
 	systemAutoClean
-	
+
 	setupHostDirectories
 
 	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
@@ -187,7 +187,7 @@ basicShutdownUtility () {
 
 	#Setup Updates for New Server
 	echo -e "${WHITE} >> ${BLUE}[basicShutdownUtility] ${GREEN}Running Updates, Upgrade, and AutoRemove. ${NC}"
-		
+
 	systemUpdate
 	systemUpgrade
 	systemAutoRemove
@@ -201,7 +201,7 @@ setupHostDirectories () {
 
 	#Setup Host Directories
 	echo -e "${WHITE} >> ${BLUE}[setupHostDirectories] ${GREEN}Setup CL6 OPT Directory. ${NC}"
-	
+
 	if [ ! -d /opt/cl6/hosting/ ]; then mkdir /opt/cl6/hosting/ ; fi
 	if [ ! -d /opt/cl6/hosting/s"${SERVERNUM}".cl6.us ]; then mkdir /opt/cl6/hosting/s"${SERVERNUM}".cl6.us ; fi
 	if [ ! -d /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/logs ]; then mkdir /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/logs ; fi
@@ -224,7 +224,7 @@ setupUsers () {
 
 	echo -ne "\n${RED}>> clovisd account info:${NC}\n"
 	read -r -s -p "Enter Password: " CLPASSWD
-	
+
 	if [[ -z $CLPASSWD ]]; then
 		echo "No Value Entered. Exiting.${NC}"
 		exit 1
@@ -232,10 +232,10 @@ setupUsers () {
 		echo "clovisd:$CLPASSWD" > /opt/cl6/vault/clovisd-string.vault
 		echo "$CLPASSWD" > /opt/cl6/vault/clovisd-passwd.vault
 	fi
-	
+
 	echo -ne "\n${RED}>> Cl6Web account info:${NC}\n"
 	read -r -s -p "Enter Password: " C6PASSWD
-	
+
 	if [[ -z $C6PASSWD ]]; then
 		echo "No Value Entered. Using clovisd password.${NC}"
 		echo "cl6web:$CLPASSWD" > /opt/cl6/vault/cl6-string.vault
@@ -254,7 +254,7 @@ setupUsers () {
 	#else
 
 	ROOTPASSWD=$C6PASSWD
-	
+
 	echo "root:$ROOTPASSWD" > /opt/cl6/vault/root-string.vault
 	echo "$ROOTPASSWD" > /opt/cl6/vault/root-passwd.vault
 
@@ -270,7 +270,7 @@ setupUsers () {
 	echo -e "${YELLOW} Setup User: cl6web ${NC}"
 	useradd cl6web -G www-data -s /bin/bash
 	chpasswd<<<"cl6web:${C6PASSWD}"
-	
+
 	echo -e "${YELLOW} Setup User: root ${NC}"
 	sudo passwd -dl root
 	#echo "${ROOTPASSWD}" | passwd --stdin root
@@ -348,7 +348,7 @@ installConfigureAPACHE () {
 	systemInstall "apache2"
 	# (apt-get install -qq apache2) >> ${logfile} & PID=$! 2>&1
 		# printf  "${GREEN}[INSTALL:\n"
-	# while kill -0 $PID 2> /dev/null; do 
+	# while kill -0 $PID 2> /dev/null; do
 		# printf  "."
 		# sleep 3
 	# done
@@ -358,7 +358,7 @@ installConfigureAPACHE () {
 	cd /var/ && rm -R www
 	cd /etc/apache2/sites-enabled/ && rm -R ./*
 	cd /etc/apache2/sites-available/ && rm -R ./*
-	
+
 	systemServiceRestart "apache2"
 
 	echo -e "${BLUE}├─${LGREEN} Setting up HTPASSWD Files. ${NC}"
@@ -367,9 +367,9 @@ installConfigureAPACHE () {
 
 	echo -e "${BLUE}└─${LGREEN} Done ${NC}"
 
-	echo -e "\n===\n===\n==="	
+	echo -e "\n===\n===\n==="
 	echo -e "${RED}!!!!!!!!!! NEW UI TEST END !!!!!!!!!!${NC}"
-	
+
 }
 
 installConfigureMYSQL () {
@@ -386,7 +386,7 @@ installConfigureMYSQL () {
 
 	# (apt-get install -qq mysql-server) >> ${logfile} & PID=$! 2>&1
 		# printf  "${GREEN}[INSTALL:\n"
-	# while kill -0 $PID 2> /dev/null; do 
+	# while kill -0 $PID 2> /dev/null; do
 		# printf  "."
 		# sleep 3
 	# done
@@ -396,25 +396,25 @@ installConfigureMYSQL () {
 	mysql_secure_installation --use-default --password="${ROOTPASSWD}" >> ${logfile} 2>&1
 
 	systemServiceRestart "mysql"
-	
+
 	echo -e "${YELLOW}Configure MySQL ${NC}"
-	
+
 	mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO 'clovisd'@'localhost' IDENTIFIED BY '${CLPASSWD}';" >> ${logfile} 2>&1
 	mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO 'cl6web'@'localhost' IDENTIFIED BY '${C6PASSWD}';" >> ${logfile} 2>&1
 	mysql -u root -p"${ROOTPASSWD}" -e "FLUSH PRIVILEGES;" >> ${logfile} 2>&1
-	
+
 	#mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '${ROOTPASSWD}';"
 	#mysql -u root -p"${ROOTPASSWD}" -e "FLUSH PRIVILEGES;"
 	#mysql -u root -p"${ROOTPASSWD}" -e "CREATE USER ‘clovisd’@’%’ IDENTIFIED BY ‘${CLPASSWD}’;"
 	#mysql -u root -p"${ROOTPASSWD}" -e "CREATE USER cl6@’%’ IDENTIFIED BY ‘${C6PASSWD}’;"
 	#mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO ‘clovisd’@’%’;"
 	#mysql -u root -p"${ROOTPASSWD}" -e "GRANT ALL PRIVILEGES ON *.* TO ‘cl6web’@’%’;"
-	
+
 	echo -e "${LGREEN} == Done == ${NC}"
-	
+
 	systemServiceRestart "mysql"
 	systemServiceRestart "apache2"
-	
+
 	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
 
 }
@@ -423,12 +423,12 @@ installConfigurePHP () {
 
 	#Installing & Setting Up PHP + Modules
 	echo -e "${WHITE} >> ${BLUE}[installConfigurePHP] ${GREEN}Installing & Setting Up PHP and its Modules. ${NC}"
-	
+
 	echo -e "${YELLOW} Setting up PHP Repo ${NC}"
 	add-apt-repository -y ppa:ondrej/php >> ${logfile} 2>&1
-	
+
 	echo -e "${YELLOW} Installing PHP Packages ${NC}"
-	
+
 	systemUpdate
 	systemInstall "php7.2 php7.2-mysql php7.2-curl php7.2-xml php7.2-zip php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-gmp php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap"
 	#systemInstall "php7.3 php7.3-mysql php7.3-curl php7.3-xml php7.3-zip php7.3-gd php7.3-common php7.3-json php7.3-opcache php7.3-readline php7.3-dev php7.3-gmp php7.3-mbstring php7.3-soap php7.3-xmlrpc php7.3-imap"
@@ -436,25 +436,25 @@ installConfigurePHP () {
 	# (apt-get install -qq php7.2 php7.2-mysql php7.2-curl php7.2-xml php7.2-zip php7.2-gd php7.2-common php7.2-json php7.2-opcache php7.2-readline php7.2-dev php7.2-gmp php7.2-mbstring php7.2-soap php7.2-xmlrpc php7.2-imap) >> ${logfile} & PID=$! 2>&1
 	#php-pear
 		# printf  "${GREEN}[INSTALL 1:\n"
-	# while kill -0 $PID 2> /dev/null; do 
+	# while kill -0 $PID 2> /dev/null; do
 		# printf  "."
 		# sleep 3
 	# done
 	# printf "${GREEN}]${NC} - Done\n"
-	
+
 	#PHP Secondary Packages
-	
+
 	systemInstall "libmcrypt-dev libapache2-mod-security2"
-	
+
 	systemInstall "pkg-config php-pear"
-	
-	#gcc make autoconf libc-dev 
-	
+
+	#gcc make autoconf libc-dev
+
 	systemUpdate
 	# (apt-get install -qq libmcrypt-dev) >> ${logfile} & PID=$! 2>&1
 	#php-pecl
 		# printf  "${GREEN}[INSTALL 2:\n"
-	# while kill -0 $PID 2> /dev/null; do 
+	# while kill -0 $PID 2> /dev/null; do
 		# printf  "."
 		# sleep 3
 	# done
@@ -465,30 +465,30 @@ installConfigurePHP () {
 	#(pecl -q install mcrypt-snapshot) >> ${logfile} & PID=$! 2>&1
 	(pecl -q install mcrypt-1.0.1) >> ${logfile} & PID=$! 2>&1
 		printf  "${GREEN}[INSTALL:\n"
-	while kill -0 $PID 2> /dev/null; do 
+	while kill -0 $PID 2> /dev/null; do
 		printf  "."
 		sleep 3
 	done
 	printf "${GREEN}]${NC} - Done\n"
-	
+
 	echo -e "${YELLOW} Setting Up mcrypt ${NC}"
-	
+
 	echo extension=/usr/lib/php/20170718/mcrypt.so > /etc/php/7.2/mods-available/mcrypt.ini
 	ln -s /etc/php/7.2/mods-available/mcrypt.ini /etc/php/7.2/cli/conf.d/20-mcrypt.ini
 	ln -s /etc/php/7.2/mods-available/mcrypt.ini /etc/php/7.2/apache2/conf.d/20-mcrypt.ini
-	
+
 	#echo extension=/usr/lib/php/20180731/mcrypt.so > /etc/php/7.3/mods-available/mcrypt.ini
 	##ln -s /etc/php/7.3/mods-available/mcrypt.ini /etc/php/7.3/apache2/conf.d/20-mcrypt.ini
-	
+
 	#Setup PHP
 	echo -e "${BLUE}<== 3. Setup PHP ==> ${NC}"
 	echo -e "${YELLOW} Copying Content to PHP.INI ${NC}"
 	cp /opt/cl6/setup/extract/php.ini /etc/php/7.2/apache2/php.ini
 	cp /opt/cl6/setup/extract/php.ini /etc/php/7.2/cli/php.ini
-	
+
 	#cp /opt/cl6/setup/extract/php.ini /etc/php/7.3/apache2/php.ini
 	#cp /opt/cl6/setup/extract/php.ini /etc/php/7.3/cli/php.ini
-	
+
 	systemServiceRestart "mysql"
 	systemServiceRestart "apache2"
 
@@ -503,7 +503,7 @@ installConfigurePHPMYADMIN() {
 
 	echo -e "${YELLOW} Setting up PHPMyAdmin Repo ${NC}"
 	add-apt-repository -y ppa:nijel/phpmyadmin >> ${logfile} 2>&1
-	
+
 	systemUpdate
 
 	echo "phpmyadmin phpmyadmin/dbconfig-install boolean false" | debconf-set-selections >> ${logfile} 2>&1
@@ -516,16 +516,16 @@ installConfigurePHPMYADMIN() {
 	#SetupPHPAdmin
 	echo -e "${BLUE}<== 8. PHPMyAdmin ==> ${NC}"
 	echo -e "${YELLOW} Installing PHPMyAdmin ${NC}"
-	
+
 	systemInstall "phpmyadmin"
 	# (DEBIAN_FRONTEND=noninteractive apt-get install -qq phpmyadmin) >> ${logfile} & PID=$! 2>&1
 		# printf  "${GREEN}[INSTALL:\n"
-	# while kill -0 $PID 2> /dev/null; do 
+	# while kill -0 $PID 2> /dev/null; do
 		# printf  "."
 		# sleep 3
 	# done
 	# printf "${GREEN}]${NC} - Done\n"
-	
+
 	echo -e "${YELLOW}Setting Auth File ${NC}"
 
 	cp /opt/cl6/setup/extract/.htaccess /usr/share/phpmyadmin
@@ -534,16 +534,16 @@ installConfigurePHPMYADMIN() {
 	#echo -e "${YELLOW} Set ${GREEN}AllowOverride All${YELLOW} for PHPMYAdmin ${NC}"
 	#echo -ne "${WHITE}Press Enter when read -ry!" ; read -r input
 	#mysql -u root -p"Q~NE!p9#PnC2m6Su" < /usr/share/doc/phpmyadmin/examples/create_tables.sql
-	
+
 	echo -e "${YELLOW} Enable Plugins ${NC}"
 	phpenmod mbstring
 	phpenmod mcrypt
-	
+
 	systemServiceRestart "mysql"
 	systemServiceRestart "apache2"
-	
+
 	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
-	
+
 }
 
 installConfigureCERTBOT () {
@@ -558,7 +558,7 @@ installConfigureCERTBOT () {
 
 	# (apt-get install -qq python-certbot-apache) >> ${logfile} & PID=$! 2>&1
 		# printf  "${GREEN}[INSTALL:\n"
-	# while kill -0 $PID 2> /dev/null; do 
+	# while kill -0 $PID 2> /dev/null; do
 		# printf  "."
 		# sleep 3
 	# done
@@ -573,7 +573,7 @@ installConfigureCERTBOT () {
 	#crontab -e root
 	crontab -u root -l; echo "$crontab" | crontab -u root - >> ${logfile} 2>&1
 	crontab -u clovisd -l; echo "$crontab2" | crontab -u clovisd - >> ${logfile} 2>&1
-	
+
 	systemServiceRestart "mysql"
 	systemServiceRestart "apache2"
 
@@ -587,14 +587,14 @@ installPageSpeed () {
 	echo -e "${WHITE} >> ${BLUE}[installPageSpeed] ${GREEN}Installing & Setting Up PageSpeed. ${NC}"
 
 	cd /opt/cl6/setup || return
-	
+
 	wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
 
 	wget https://dl-ssl.google.com/dl/linux/direct/mod-pagespeed-beta_current_amd64.deb
-	dpkg -i mod-pagespeed-beta_current_amd64.deb 
+	dpkg -i mod-pagespeed-beta_current_amd64.deb
 
 	apt-get -f install
-	
+
 	systemServiceRestart "apache2"
 
 	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
@@ -615,7 +615,7 @@ certbotCreateCert () {
 	systemServiceRestart "apache2"
 
 	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
-	
+
 }
 
 installPersonalPackages () {
@@ -624,13 +624,13 @@ installPersonalPackages () {
 	echo -e "${WHITE} >> ${BLUE}[installPersonalPackages] ${GREEN}Setting up Personal / QOL Packages. ${NC}"
 
 	echo -e "${YELLOW} Installing Other QOL Packages ${NC}"
-	
+
 	systemUpdate
 	systemInstall "mc sl screen htop fish"
-	
+
 	# (apt-get install -qq mc sl screen htop fish) >> ${logfile} & PID=$! 2>&1
 		# printf  "${GREEN}[INSTALL:\n"
-	# while kill -0 $PID 2> /dev/null; do 
+	# while kill -0 $PID 2> /dev/null; do
 		# printf  "."
 		# sleep 3
 	# done
@@ -663,14 +663,14 @@ setupSudoUsers () {
 
 	#Setup permissions
 	echo -e "${BLUE}<== 4. Setup User Permissions ==> ${NC}"
-	
+
 	SUDO="clovisd    ALL=(ALL:ALL) NOPASSWD:ALL
 	cl6web    ALL=(ALL:ALL) ALL
 	"
 
 	echo "${SUDO}" > /etc/sudoers.d/cl6
 	echo -e "${LGREEN} == Done == ${NC}"
-	
+
 	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
 
 }
@@ -690,11 +690,11 @@ setupSSHD () {
 
 	echo -e "${YELLOW} Restarting SSH Service ${NC}"
 	echo "d /run/sshd 0755 root root" > /usr/lib/tmpfiles.d/sshd.conf
-	
+
 	systemServiceRestart "sshd"
-	
+
 	echo -e "${LGREEN} == Done == ${NC}"
-	
+
 	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
 
 }
@@ -712,7 +712,7 @@ setupHosts () {
 
 	echo "${HOSTNAME}" > /etc/hostname
 	#nano /etc/hostname
-	
+
 	echo -e "${GREEN} Set Hosts ${NC}"
 
 	HOSTS="# Basic Hosts
@@ -737,10 +737,10 @@ ff02::3 ip6-allhosts
 ​${SERVERIP} S${SERVERNUM}.CL6WEB.COM"
 
 	echo "${HOSTS}" > /etc/hosts
-	
+
 	#nano /etc/hosts
 	echo -e "${LGREEN} == Done == ${NC}"
-	
+
 	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
 
 }
@@ -769,9 +769,9 @@ cloudflareCreateA () {
 	--data '{"type":"A","name":"'"$DNSRECORD"'","content":"'"$SERVERIP"'","proxied":false}' >> ${logfile} 2>&1
 
 	echo -e "${LGREEN} == Done == ${NC}"
-	
+
 	sleep 3s
-	
+
 	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
 
 }
@@ -787,17 +787,17 @@ uptimerobotCreateMonitor () {
 		-H "Cache-Control: no-cache" \
 		-H "Content-Type: application/x-www-form-urlencoded" \
 		-d 'api_key='"$UPTIMEKEY"'&format=json&type=4&sub_type=1&url='"$1"'&friendly_name='"$2"'' "https://api.uptimerobot.com/v2/newMonitor" >> ${logfile} 2>&1
-	
+
 	printf "\n"
-	
+
 	# curl -X POST \
 		# -H "Cache-Control: no-cache" \
 		# -H "Content-Type: application/x-www-form-urlencoded" \
 		# -d 'api_key='$UPTIMEKEY'&format=json&type=4&sub_type=2&url=https://s'${SERVERNUM}'.cl6.us&friendly_name=S'${SERVERNUM}' (HTTPS)&http_username=cl6web&http_password='$C6PASSWD'' "https://api.uptimerobot.com/v2/newMonitor" >> ${logfile} 2>&1
-	
+
 	echo -e "${LGREEN} == Done == ${NC}"
 	#sudo rm -R /home/scripts/setup
-	
+
 	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
 
 }
@@ -830,7 +830,7 @@ websiteCatchAll () {
 
 #	ServerAdmin webmaster@cl6.us
 #	DocumentRoot /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/catch-all
-	
+
 #	ErrorLog /opt/cl6/hosting/s${SERVERNUM}.cl6.us/logs/catch.log
 #	CustomLog /opt/cl6/hosting/s${SERVERNUM}.cl6.us/logs/catch-custom.log combined
 
@@ -847,9 +847,9 @@ websiteCatchAll () {
 
 	echo -e "${YELLOW} Creating SymLink ${NC}"
 	echo -e "${YELLOW} Restarting Apache ${NC}"
-	
+
 	systemServiceRestart "apache2"
-	
+
 	echo -e "${LGREEN} == Done == ${NC}"
 
 }
@@ -912,7 +912,7 @@ websiteStatusPage () {
 	cloudflareCreateA "cl6web.com" "s${SERVERNUM}.cl6web.com"
 
 	systemServiceRestart "apache2"
-	
+
 	uptimerobotCreateMonitor "http://s${SERVERNUM}.cl6.us" "S${SERVERNUM} (HTTP)"
 	uptimerobotCreateMonitor "https://s${SERVERNUM}.cl6.us" "S${SERVERNUM} (HTTPS)"
 
@@ -925,7 +925,7 @@ websiteStatusPage () {
 	certbotCreateCert "s${SERVERNUM}.cl6.us" "s${SERVERNUM}.cl6web.com"
 
 	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
-	
+
 }
 
 setupCleanUp () {
@@ -936,7 +936,7 @@ setupCleanUp () {
 	#CleanUp
 	rm /opt/cl6/vault/clovisd-passwd.vault
 	rm /opt/cl6/vault/clovisd-string.vault
-	
+
 	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
 
 }
@@ -948,7 +948,7 @@ discordWebhook () {
 
 	echo -e "${YELLOW} Discord Ping ${NC}"
 	cd /opt/cl6/setup && ./discord.sh
-	
+
 	echo -e "${WHITE} << ${GREEN} Done! ${NC}"
 
 }
@@ -974,32 +974,56 @@ select opt in "${options[@]}"
 do
     case $opt in
         "Full")
-            echo -e "${RED} >> RUNNING FULL INSTALL! ${NC}"
+          echo -e "${RED} >> RUNNING FULL INSTALL! ${NC}"
 			CURRENTINSTALL="$OPT"
 			echo -e "${RED} >> Selected $OPT or ${OPT}!"
 			echo -e "${RED} >> Selected $CURRENTINSTALL or ${CURRENTINSTALL}!"
-			
+
 			setupUsers
 			cloudflareInfo
 			uptimerobotInfo
 			basicSetupUtility
-			
+
 			setupBashFiles
 			setupSudoUsers
 			setupSSHD
 			setupHosts
 			setupSwapDisk
-			
+
 			installConfigureAPACHE
 			installConfigureMYSQL
 			installConfigurePHP
 			installConfigurePHPMYADMIN
 			installConfigureCERTBOT
 			installPageSpeed
-			
+
 			installPersonalPackages
-			
+
 			websiteStatusPage
+			setupCleanUp
+			discordWebhook
+			basicShutdownUtility
+			setupReboot
+            ;;
+
+        "Minimal")
+          echo -e "${RED} >> RUNNING FULL INSTALL! ${NC}"
+          CURRENTINSTALL="$OPT"
+          echo -e "${RED} >> Selected $OPT or ${OPT}!"
+          echo -e "${RED} >> Selected $CURRENTINSTALL or ${CURRENTINSTALL}!"
+
+			setupUsers
+			basicSetupUtility
+
+			setupBashFiles
+			setupSudoUsers
+			setupSSHD
+			setupHosts
+			setupSwapDisk
+
+			installPersonalPackages
+
+
 			setupCleanUp
 			discordWebhook
 			basicShutdownUtility
@@ -1010,27 +1034,27 @@ do
 			CURRENTINSTALL="$OPT"
 			echo -e "${RED} >> Selected $OPT or ${OPT}!"
 			echo -e "${RED} >> Selected $CURRENTINSTALL or ${CURRENTINSTALL}!"
-			
+
 			setupUsers
 			cloudflareInfo
 			uptimerobotInfo
 			basicSetupUtility
-			
+
 			setupBashFiles
 			setupSudoUsers
 			setupSSHD
 			setupHosts
 			setupSwapDisk
-			
+
 			installConfigureAPACHE
 			installConfigureMYSQL
 			installConfigurePHP
 			installConfigurePHPMYADMIN
 			installConfigureCERTBOT
 			installPageSpeed
-			
+
 			installPersonalPackages
-			
+
 			websiteStatusPage
 			setupCleanUp
 			discordWebhook
@@ -1042,77 +1066,80 @@ do
 			CURRENTINSTALL="$OPT"
 			echo -e "${RED} >> Selected $OPT or ${OPT}!"
 			echo -e "${RED} >> Selected $CURRENTINSTALL or ${CURRENTINSTALL}!"
-			
+
 			setupUsers
 			cloudflareInfo
 			uptimerobotInfo
 			basicSetupUtility
-			
+
 			setupBashFiles
 			#setupSudoUsers
 			#setupSSHD
 			setupHosts
 			setupSwapDisk
-			
+
 			installConfigureAPACHE
 			installConfigureMYSQL
 			installConfigurePHP
 			installConfigurePHPMYADMIN
 			installConfigureCERTBOT
 			installPageSpeed
-			
+
 			installPersonalPackages
-			
+
 			websiteStatusPage
 			setupCleanUp
 			discordWebhook
 			basicShutdownUtility
 			setupReboot
             ;;
+
         "SparkVPS")
             echo -e "${RED} >> RUNNING SPARKVPS INSTALL! ${NC}"
 			CURRENTINSTALL="$OPT"
 			echo -e "${RED} >> Selected $OPT or ${OPT}!"
 			echo -e "${RED} >> Selected $CURRENTINSTALL or ${CURRENTINSTALL}!"
-			
+
 			setupUsers
 			cloudflareInfo
 			uptimerobotInfo
 			basicSetupUtility
-			
+
 			setupBashFiles
 			setupSudoUsers
 			setupSSHD
 			#setupSwapDisk
 			#setupHosts
-			
+
 			installConfigureAPACHE
 			installConfigureMYSQL
 			installConfigurePHP
 			installConfigurePHPMYADMIN
 			installConfigureCERTBOT
 			installPageSpeed
-			
+
 			installPersonalPackages
-			
+
 			websiteStatusPage
 			setupCleanUp
 			discordWebhook
 			basicShutdownUtility
 			setupReboot
             ;;
+
         "Setup VPN")
             echo -e "${RED} >> RUNNING VPN Setup! ${NC}"
 			cd /opt/cl6/setup || return
 			chmod a+x openvpn.sh
 			./openvpn.sh
             ;;
+
         "Add Subdomain")
             echo -e "${RED} >> Adding Single Domain + SSL! ${NC}"
 			logfile="/opt/cl6/logs/domainadd.log"
 			echo -e "Log File: ${logfile}"
 			echo -ne "${WHITE}Certbot Sequence Pause!${NC}" ; read -r input
-			
+
 			echo -ne "${WHITE}Please Enter Directory Domain: " ; read -r certDomain
 			if [[ -z $certDomain ]]; then
 				echo "No Value Entered. Exiting.${NC}"
@@ -1120,7 +1147,7 @@ do
 			else
 				echo "Directory Set To: /opt/cl6/hosting/$certDomain/html/"
 			fi
-			
+
 			echo -ne "${WHITE}Please Enter Direct Directory Domain: " ; read -r certRecord
 			if [[ -z $certRecord ]]; then
 				echo "No Value Entered. Exiting.${NC}"
@@ -1130,14 +1157,14 @@ do
 				certD1="$certRecord"
 				certD2="www.$certRecord"
 			fi
-			
+
 			echo -ne "${WHITE}Certbot Sequence Pause!${NC}" ; read -r input
 			echo "Variables: $certRecord $certDomain $certD1 $certD2"
 			echo -ne "${WHITE}Certbot Sequence Pause!${NC}" ; read -r input
-			
+
 			certbot run -m ssl@cl6web.com --agree-tos --no-eff-email --redirect -a webroot -i apache -w /opt/cl6/hosting/$certDomain/html -d $certD1 -d $certD2
 
-			
+
 			echo -ne "${WHITE}Certbot Sequence Pause!${NC}" ; read -r input
 			setupReboot
             break
@@ -1147,7 +1174,7 @@ do
 			logfile="/opt/cl6/logs/testsequence.log"
 			echo -e "Log File: ${logfile}"
 			echo -ne "${WHITE}Test Sequence Pause!${NC}" ; read -r input
-			
+
 			echo -ne "${WHITE}Test Sequence Pause!${NC}" ; read -r input
 			setupReboot
             break
