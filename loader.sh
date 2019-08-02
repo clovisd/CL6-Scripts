@@ -88,6 +88,8 @@ if [ ! -d /opt/cl6/info ]; then mkdir /opt/cl6/info ; fi
 if [ ! -d /opt/cl6/vault ]; then mkdir /opt/cl6/vault ; fi
 if [ ! -d /opt/cl6/hosting ]; then mkdir /opt/cl6/hosting ; fi
 if [ ! -d /opt/cl6/locks ]; then mkdir /opt/cl6/locks ; fi
+
+cp /opt/loader.log /opt/cl6/logs
 #echo -e "${LGREEN} >> Done"
 
 #Load Config Zip

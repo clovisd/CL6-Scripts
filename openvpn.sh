@@ -80,7 +80,7 @@ chmod a+x openvpn-install.sh
 
 ./openvpn-install.sh >> ${logfile} & PID=$! 2>&1
 	printf  "${GREEN}RUNNING SCRIPT:"
-while kill -0 $PID 2> /dev/null; do 
+while kill -0 $PID 2> /dev/null; do
 	printf  "▄"
 	sleep 3
 done
@@ -104,7 +104,7 @@ echo -e "${YELLOW} Ready to run script!${NC}"
 
 ./openvpn-install.sh >> ${logfile} & PID=$! 2>&1
 	printf  "${GREEN}RUNNING SCRIPT:"
-while kill -0 $PID 2> /dev/null; do 
+while kill -0 $PID 2> /dev/null; do
 	printf  "▄"
 	sleep 3
 done
@@ -113,13 +113,13 @@ printf "${GREEN}${NC} - Done\n"
 echo -e "${YELLOW} Done. Waiting for timer.${NC}"
 sleep 3
 
-echo -e "${YELLOW} Ready to Setup Files!${NC}"
+ echo -e "${YELLOW} Ready to Setup Files!${NC}"
 #echo -ne "${RED}Press Enter when ready!${NC}" ; read -r input
 
-mkdir /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/vpn
-cp /opt/cl6/setup/index/.htaccess-vpn /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/vpn/.htaccess
-rm /opt/cl6/setup/index/.htaccess-vpn
-cp -R /opt/cl6/setup/index /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/vpn/
+# mkdir /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/vpn
+# cp /opt/cl6/setup/index/.htaccess-vpn /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/vpn/.htaccess
+# rm /opt/cl6/setup/index/.htaccess-vpn
+# cp -R /opt/cl6/setup/index /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/vpn/
 
 cp /home/clovisd/s${SERVERNUM}.ovpn /home/clovisd/s${SERVERNUM}.cl6.us-public.ovpn
 rm /home/clovisd/s${SERVERNUM}.ovpn
@@ -127,25 +127,29 @@ rm /home/clovisd/s${SERVERNUM}.ovpn
 cp /home/clovisd/clovisd.ovpn /home/clovisd/s${SERVERNUM}.cl6.us-clovisd.ovpn
 rm /home/clovisd/clovisd.ovpn
 
-cp /home/clovisd/s${SERVERNUM}.cl6.us-clovisd.ovpn /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/vpn
-cp /home/clovisd/s${SERVERNUM}.cl6.us-public.ovpn /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/vpn
+# cp /home/clovisd/s${SERVERNUM}.cl6.us-clovisd.ovpn /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/vpn
+# cp /home/clovisd/s${SERVERNUM}.cl6.us-public.ovpn /opt/cl6/hosting/s${SERVERNUM}.cl6.us/html/status/vpn
+mkdir /opt/cl6/vpn
 
-chown -R www-data:www-data /opt/cl6/hosting/
+cp /home/clovisd/s${SERVERNUM}.cl6.us-clovisd.ovpn /opt/cl6/vpn/
+cp /home/clovisd/s${SERVERNUM}.cl6.us-public.ovpn /opt/cl6/vpn/
+
+# chown -R www-data:www-data /opt/cl6/hosting/
 
 echo -e "\n${YELLOW} Ready to Dropbox Upload #1!${NC}"
 #echo -ne "${RED}Press Enter when ready!${NC}" ; read -r input
 
-cd /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html/status/vpn || return
+cd /opt/cl6/vpn || return
 curl -X POST https://content.dropboxapi.com/2/files/upload \
     --header "Authorization: Bearer $DBTOKEN" \
     --header "Dropbox-API-Arg: {\"path\": \"/Apps/CL6 Sync/VPN/s$SERVERNUM.cl6.us-clovisd.ovpn\"}" \
     --header "Content-Type: application/octet-stream" \
     --data-binary @s${SERVERNUM}.cl6.us-clovisd.ovpn >> ${logfile} 2>&1
-	
+
 echo -e "\n${YELLOW} Ready to Dropbox Upload #2!${NC}"
 #echo -ne "${RED}Press Enter when ready!${NC}" ; read -r input
 
-cd /opt/cl6/hosting/s"${SERVERNUM}".cl6.us/html/status/vpn || return
+cd /opt/cl6/vpn || return
 curl -X POST https://content.dropboxapi.com/2/files/upload \
     --header "Authorization: Bearer $DBTOKEN" \
     --header "Dropbox-API-Arg: {\"path\": \"/Apps/CL6 Sync/VPN/s$SERVERNUM.cl6.us-public.ovpn\"}" \
