@@ -969,7 +969,7 @@ echo -e "Please select Install Type:"
 
 #Setup Base Programs
 PS3='Select Install Type: '
-options=("Test Sequence" "Full" "DigitalOcean" "GoogleCloud" "SparkVPS" "Setup VPN" "Add Subdomain" "Exit")
+options=("Test Sequence" "Full" "Minimal" "DigitalOcean" "GoogleCloud" "SparkVPS" "Setup VPN" "Add Subdomain" "Exit")
 select opt in "${options[@]}"
 do
     case $opt in
