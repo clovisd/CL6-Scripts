@@ -1025,6 +1025,9 @@ do
 
 			setupCleanUp
 			discordWebhook
+
+      #TODO - clear bad openvpn service file for MicroVPS
+
 			basicShutdownUtility
 			setupReboot
             ;;
