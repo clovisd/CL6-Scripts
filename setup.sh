@@ -1013,6 +1013,8 @@ do
           echo -e "${RED} >> Selected $CURRENTINSTALL or ${CURRENTINSTALL}!"
 
 			setupUsers
+			cloudflareInfo
+			uptimerobotInfo
 			basicSetupUtility
 
 			setupBashFiles
