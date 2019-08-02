@@ -38,9 +38,9 @@ export DEBIAN_FRONTEND=noninteractive
 loaderPrint () {
 
 echo -e "\n
-${RED}   ____ _     __   _   _ ____  
-${RED}  / ___| |   / /_ | | | / ___| 
-${RED} | |   | |  | '_ \| | | \___ \ 
+${RED}   ____ _     __   _   _ ____
+${RED}  / ___| |   / /_ | | | / ___|
+${RED} | |   | |  | '_ \| | | \___ \
 ${RED} | |___| |__| (_) | |_| |___) |
 ${RED}  \____|_____\___${BLUE}(_)${RED}___/|____/ \n"
 
@@ -55,7 +55,7 @@ loaderRun () {
 
 	loaderExecute >> ${logfile} & PID=$! 2>&1
 		printf  "${GREEN} RUNNING:"
-	while kill -0 $PID 2> /dev/null; do 
+	while kill -0 $PID 2> /dev/null; do
 		printf  "▄"
 		sleep 3
 	done
@@ -141,21 +141,21 @@ export LANGUAGE=en_US.UTF-8
 #echo -e "${YELLOW} >> Installing Programs"
 (apt-get update -qq) >> ${logfile} & PID=$! 2>&1
     #printf  "${GREEN}[UPDATE:"
-while kill -0 $PID 2> /dev/null; do 
+while kill -0 $PID 2> /dev/null; do
     printf  "▄"
     sleep 3
 done
 #printf "${GREEN}]${NC} - Done\n"
 (apt-get remove --purge -qq postfix* apache2*) >> ${logfile} & PID=$! 2>&1
     #printf  "${GREEN}[REMOVE:"
-while kill -0 $PID 2> /dev/null; do 
+while kill -0 $PID 2> /dev/null; do
     printf  "▄"
     sleep 3
 done
 #printf "${GREEN}]${NC} - Done\n"
 (apt-get install -qq git software-properties-common apt-transport-https dnsutils dbus tzdata nano jq curl) >> ${logfile} & PID=$! 2>&1
     #printf  "${GREEN}[INSTALL:\n"
-while kill -0 $PID 2> /dev/null; do 
+while kill -0 $PID 2> /dev/null; do
     printf  "▄"
     sleep 3
 done
