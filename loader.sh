@@ -37,12 +37,11 @@ export DEBIAN_FRONTEND=noninteractive
 
 loaderPrint () {
 
-echo -e "\n
-${RED}   ____ _     __   _   _ ____
-${RED}  / ___| |   / /_ | | | / ___|
-${RED} | |   | |  | '_ \| | | \___ \
-${RED} | |___| |__| (_) | |_| |___) |
-${RED}  \____|_____\___${BLUE}(_)${RED}___/|____/ \n"
+echo -e "${RED}   ____ _     __   ${WHITE} _   _ ____ "
+echo -e "${RED}  / ___| |   / /_  ${WHITE}| | | / ___| "
+echo -e "${RED} | |   | |  | '_ \ ${WHITE}| | | \___ \ "
+echo -e "${RED} | |___| |__| (_) |${WHITE}| |_| |___) |"
+echo -e "${RED}  \____|_____\___${BLUE}(_)${WHITE}\___/|____/\n"
 
 echo -e "${GREEN}<== CL6 Server Loader Script ==>"
 echo -e "   ${YELLOW} Loader ${LOADERV} ${GREEN}- ${YELLOW}Setup ${SETUPV}"
