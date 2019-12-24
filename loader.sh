@@ -10,7 +10,7 @@
 #clear && bash <(wget -O- -q https://goo.gl/yf18Rh)
 
 SETUPV='v3.9'
-LOADERV='v2.0'
+LOADERV='v2.1'
 
 #Color Codes
 RED='\033[0;31m'
