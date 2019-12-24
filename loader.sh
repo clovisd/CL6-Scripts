@@ -38,10 +38,10 @@ export DEBIAN_FRONTEND=noninteractive
 loaderPrint () {
 
 echo -e "\n
-${RED}   ____ _     __   _   _ ____ \n
-${RED}  / ___| |   / /_ | | | / ___| \n
-${RED} | |   | |  | '_ \| | | \___ \ \n
-${RED} | |___| |__| (_) | |_| |___) | \n
+${RED}   ____ _     __   _   _ ____
+${RED}  / ___| |   / /_ | | | / ___|
+${RED} | |   | |  | '_ \| | | \___ \
+${RED} | |___| |__| (_) | |_| |___) |
 ${RED}  \____|_____\___${BLUE}(_)${RED}___/|____/ \n"
 
 echo -e "${GREEN}<== CL6 Server Loader Script ==>"
@@ -132,11 +132,14 @@ fi
 
 #SetTimeZone
 #echo -e "${YELLOW} >> Setting Timezone"
+
 timedatectl set-timezone America/Denver >> ${logfile} 2>&1
 locale-gen en_US.UTF-8 >> ${logfile} 2>&1
 #export LC_ALL=en_US.UTF-8
+
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
+
 #echo -e "${LGREEN} >> Done"
 
 #Setup Base Programs
